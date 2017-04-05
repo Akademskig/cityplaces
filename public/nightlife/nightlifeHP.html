@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8'/>
+  <meta name='viewport'content='width=device-width initial-scale=1.0'/>
+  <link href='https://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
+  <link href="https://fonts.googleapis.com/css?family=Raleway:400,700|Titillium+Web:400,700" rel="stylesheet">
+  <link href='https://fonts.googleapis.com/css?family=Cabin:400,600' rel='stylesheet' type='text/css'>
+   <link href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
+  <link href='public/css/nightlifeHP.css' rel='stylesheet' type='text/css'>
+</head>
+  
+<body>
+<div class='container-1'>
+  <div class="navbar"><a href="/" class="homepage nav">Homepage</a></div>
+  <h1 class='anim'>Nightlife Coordination App</h1>
+  <div class="container-2">
+    <div class="searchOpt">
+    <p>Search for a City</p
+    <form action="#" method='post' id='cityForm'>
+      <input type="text" id='city'placeholder='city to search' style=''s/>
+      <input type="submit" value='Go!' id='submit' class='b' style='display:inline-block' />
+      </form><p>or</p>
+    <button class="getLocation b">Get your current location</button>
+    <input type="text" id="keyword" placeholder="search">
+    <div class="dropdown-menu">
+      <p>Find by distance</p>
+      <select id='selectDistance'>Search by type:
+        <option value="100m">100 m</option>
+        <option value="500m">500 m</option>
+        <option value="1000m">1000 m</option>
+      </select>
+    </div>
+    
+    <p class="location"></p>
+    </div> 
+  </div> 
+  <div class="container-3">
+    
+  </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script type="text/javascript" src="controllers/nightlifeController.js"></script>
+</body>  
+</html>

@@ -1,0 +1,81 @@
+body{
+  background-color:black;
+  padding:0;
+  font-family: 'Raleway'
+}
+.container-1{
+  background:url('http://www.planwallpaper.com/static/images/abstract-wallpapers-1080p-hd.jpg');
+  margin:auto;
+  margin-top:0;
+  max-width:900px;
+  min-height:850px;
+  border: solid black 1px;
+  padding-bottom:50px;
+  text-align:center;
+    
+}
+
+h1{
+  background: #0489B1;
+  text-align:center;
+  border-bottom: solid 1px black;
+  padding:5px;
+}
+
+.form{
+  padding:15px;
+  background:#084B8A;
+  margin:auto;
+  margin-top:50px;
+  max-width:500px;
+  border-radius:5px;
+  border: solid 1px #084B8A;
+  font-size:19px;
+  font-weight: bold;
+}
+
+input{
+  margin:10px;
+  border-radius:5px;
+  padding:5px;
+  font-family: 'Raleway'
+}
+
+.text2{
+  position:relative;
+  top: 0px;
+  left:3px;
+}
+
+#submit{
+  font-size:17px;
+  font-family: "raleway";
+  padding:8px;
+  background:#142E42;
+  margin:10px;
+  cursor:pointer;
+}
+
+.b{
+  margin: 0 2px 0 0;
+  padding: 5px 10px;
+  color:white;
+  border: solid 1px black;
+  border-radius:5px;
+  font-size: 18px;
+  background:#142E42;
+  font-family: "raleway", "sans-serif";
+}
+
+.navbar {
+  text-align: right;
+  margin: 5px;
+  padding: 5px;
+  padding-right: 10px;
+}
+
+.nav {
+  padding: 4px 6px;
+  color: black;
+  border-radius: 0px;
+}

@@ -7,11 +7,16 @@ var User = new Schema({
 	github: {
 		id: String,
 		displayName: String,
-		username: String,
-      publicRepos: Number
+		username: String
 	},
-   nbrClicks: {
-      clicks: Number
+	facebook:{
+	    id: String,
+	    name: String,
+	},
+   local:{
+       id:Number,
+       username: String,
+       password: String
    }
 });
 

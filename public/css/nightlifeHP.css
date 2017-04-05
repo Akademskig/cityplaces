@@ -1,0 +1,176 @@
+body {
+  background-color: black;
+  padding: 0;
+  font-family: 'Raleway'
+}
+
+.container-1 {
+  background: url('http://www.planwallpaper.com/static/images/abstract-wallpaper-images-hiht.jpg') 900px;
+  margin: auto;
+  margin-top: 0;
+  max-width: 900px;
+  border: solid black 1px;
+  padding-bottom: 50px;
+  min-height:1000px;
+}
+
+h1 {
+  background: #DF7401;
+  text-align: center;
+  border-bottom: solid 1px black;
+  border-top: solid 1px black;
+  padding: 5px;
+}
+
+.container-2 {
+  padding: 5px;
+  background: #01A9DB;
+  margin: auto;
+  max-width: 500px;
+  border-radius: 5px;
+  border: solid 1px black;
+  padding: 10px;
+}
+
+ul {
+  margin: auto;
+  max-width: 300px;
+  padding: 10px;
+  font-size: 20px;
+}
+
+a {
+  color: black;
+  text-decoration: none;
+}
+
+
+/****NIGHTLIFE COORDINATION***/
+
+
+/****NAVIGATION*****
+*/
+
+.navbar {
+  text-align: right;
+  margin: 5px;
+  background: black;
+  padding: 5px;
+  padding-right: 0;
+}
+
+.nav {
+  /*background: #8000FF;*/
+  padding: 4px 6px;
+  color: #8000FF;
+  border-radius: 0px;
+  border-left: solid 1px;
+  border-right: solid 1px;
+}
+
+
+/***SEARCH LOCATION****/
+
+.b {
+  margin: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Raleway'
+}
+
+.searchOpt {
+  text-align: center;
+}
+
+#cityForm{
+  margin:10px;
+}
+
+#city{
+  padding:5px;
+  border-radius: 5px;
+  font-family: 'raleway'
+}
+.input{
+  display:inline-block;
+}
+
+#submit{
+  border-radius:6px;
+  padding:4px;
+  margin-left:6px;
+  font-size: 15px;
+  
+}
+
+/*****RESULTS*******/
+
+.container-3{
+  margin:auto;
+  margin-top:10px;
+  max-width:550px;
+  background:rgba(255,255,255,0.8);
+  border-radius:5px;
+  color:black;
+}
+.results{
+  padding:20px;
+  padding-bottom:0;
+  text-align:center;
+  font-weight:bold;
+  font-size:20px;
+}
+.results-list{
+ padding:20px;
+ margin:5px;
+}
+
+.place{
+  border-top: solid 1px black;
+  padding:5px;
+}
+
+.name{
+  font-weight:bold;
+}
+.icon{
+  display:inline-block;
+  text-align: right;
+}
+
+.photo img, .photo a{
+  float:right;
+}
+.photo a{
+  text-align:right;
+}
+
+/***FUNCTIONS***/
+.noDisplay{
+  display:none;
+}
+
+@keyframes wina {
+  0% {
+    color: black;
+  }
+  25% {
+    color: green;
+  }
+  50% {
+    color: red;
+  }
+  75% {
+    color: gray;
+  }
+  100% {
+    color: yellow;
+  }
+}
+
+.anim {
+  animation-name: wina;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+}

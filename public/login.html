@@ -1,27 +1,25 @@
 <!DOCTYPE html>
 
-<html>
-
-	<head>
-		<title>Clementine.js - The elegant and lightweight full stack JavaScript boilerplate.</title>
-		
-		<link href="/public/css/main.css" rel="stylesheet" type="text/css">
-	</head>
-
-	<body>
-		<div class="container">	
-			<div class="login">
-				<img src="/public/img/clementine_150.png" />
-				<br />
-				<p class="clementine-text">Clementine.js</p>
-				<a href="/auth/github">
-					<div class="btn" id="login-btn">
-						<img src="/public/img/github_32px.png" alt="github logo" />
-						<p>LOGIN WITH GITHUB</p>
-					</div>
-				</a>
-			</div>
-		</div>
-	</body>
-
+<html lang="en">
+<head>
+<title>Homepage</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="/imgs/bars-chart.svg">
+<link href="/public/css/login.css" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet">
+</head>
+<body>
+<div class="container-1">
+<div class="navbar"><a href="/" class="homepage nav">Homepage</a></div>
+<h1 class="title">Login</h1>  
+<div class="form">      
+<form action="/localLogin" method="post">
+<label>Username:</label><input class="text1"type="text" name="username" /><br>
+<label>Password:</label><input class="text2"type="password" name="password" /><br>
+<input id="submit" class="b"type="submit" value="Log in" />
+</form>  
+</div>  
+</div>
+</body>  
 </html>
