@@ -1,7 +1,8 @@
 body {
   background-color: black;
   padding: 0;
-  font-family: 'Raleway'
+  font-family: 'Raleway';
+  color:black;
 }
 
 .container-1 {
@@ -51,7 +52,7 @@ a {
 /****NAVIGATION*****
 */
 
-.navbar {
+.navig {
   text-align: right;
   margin: 5px;
   background: black;
@@ -59,7 +60,7 @@ a {
   padding-right: 0;
 }
 
-.nav {
+.nav2 {
   /*background: #8000FF;*/
   padding: 4px 6px;
   color: #8000FF;
@@ -92,8 +93,11 @@ a {
   border-radius: 5px;
   font-family: 'raleway'
 }
-.input{
+input{
   display:inline-block;
+  padding:5px;
+  border-radius: 5px;
+  font-family: 'raleway'
 }
 
 #submit{
@@ -122,7 +126,7 @@ a {
   font-size:20px;
 }
 .results-list{
- padding:20px;
+ padding:10px;
  margin:5px;
 }
 
@@ -139,11 +143,16 @@ a {
   text-align: right;
 }
 
-.photo img, .photo a{
+.photo img{
   float:right;
+  display:block;
 }
 .photo a{
+  clear:both;
+  float:right;
+  display:block;
   text-align:right;
+  margin-top:10px;
 }
 
 /***FUNCTIONS***/

@@ -23,7 +23,7 @@ $(document).ready(function(){
                     
                     var opened;
                     var attribution;
-                    console.log(data)
+                    console.log(data.places.results)
                     var places=data.places.results;
                     var photos=data.photos;
                     $('.results-list').empty();
@@ -51,7 +51,7 @@ $(document).ready(function(){
                         
                         $('.results-list').append('<div class=\'row place\'><div class=\'col-md-6 info\'><p class=\'name\'>'+place.name+'</p><p class=\'address\'>'+
                         place.vicinity+'</p><div class=\'opened \'>Opened: '+opened+'</div><img class=\'icon\'src=\'' +
-                        place.icon+'\'></div><div class=\'col-md-6\'><p class=\'photo\'>'+photo+'<br>'+attribution+'</p></div></div>')
+                        place.icon+'\'></div><div class=\'col-md-6\'><p class=\'photo\'>'+photo+'<br/>'+attribution+'</p></div></div>')
                     })
                     
                 })
