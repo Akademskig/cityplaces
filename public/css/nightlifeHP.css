@@ -137,6 +137,7 @@ input{
 
 .name{
   font-weight:bold;
+  cursor:pointer;
 }
 .icon{
   display:inline-block;
@@ -155,6 +156,40 @@ input{
   margin-top:10px;
 }
 
+/***MAP*******/
+.map{
+  position:fixed;
+  margin-top:10px;
+  margin-left:150px;
+  width: 600px;
+  z-index:10;
+}
+.hide{
+  background:#0040FF;
+  border-top-left-radius:10px;
+  border-top-right-radius:10px;
+  color:black;
+  margin:auto;
+  width: 50px;
+  text-align:center;
+  cursor:pointer;
+}
+#map{
+  padding:5px;
+  width: 600px;
+  height: 500px;
+  background-color: grey;
+  margin:auto;
+  border-radius:5px;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.showMap{
+  cursor:pointer;
+  color:#8000FF;
+}
 /***FUNCTIONS***/
 .noDisplay{
   display:none;

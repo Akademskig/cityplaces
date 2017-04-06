@@ -61,7 +61,7 @@ module.exports = function (app, passport) {
 	app.route('/nightlife')
 		.get(function(req,res){
 			res.setHeader('Access-Control-Allow-Origin', '*');
-			res.sendFile(path + '/public/nightlife/nightlifeHP.html')
+			res.render('nightlife/nightlifeHP',{'api_key': process.env.GOOGLE_MAPS_KEY})
 		})
 	
 	app.route('/nightlife/loc/')
@@ -92,7 +92,6 @@ module.exports = function (app, passport) {
             		if (item.photos){
             			var ref=item.photos[0].photo_reference;
             			var photosCall='https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&photoreference='+ref+'&key='+process.env.GOOGLE_PHOTOS_KEY;
-            			console.log(photosCall)
             			photosArray.push({'index':i, 'link':photosCall})
             		}
             	})
@@ -105,8 +104,6 @@ module.exports = function (app, passport) {
 		
 	app.route('https://api.yelp.com/oauth2/token/:credentials')
 		.post(function(req,res){
-			console.log(req)
-		 	console.log(res)
 		 })
 	
 
