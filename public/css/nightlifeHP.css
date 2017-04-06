@@ -159,9 +159,7 @@ input{
 /***MAP*******/
 .map{
   position:fixed;
-  margin-top:20px;
-  margin:auto;
-  top:15px;
+  top:50px;
   width: 60vw;
   left:20vw;
   z-index:10;
@@ -177,9 +175,9 @@ input{
   cursor:pointer;
 }
 #map{
-  padding:5px;
+  
   width: 60vw;
-  height: 600px;
+  height: 500px;
   background-color: grey;
   margin:auto;
   border-radius:5px;
@@ -223,12 +221,12 @@ input{
 
 @media screen and (max-width:1250px){
   .map{
-    left:10vw;
-    width:80vw;
+    left:15vw;
+    width:70vw;
   }
   
   #map{
-    width:80vw;
+    width:70vw;
   }
 }
 
@@ -242,3 +240,14 @@ input{
   }
 }
 
+@media screen and (max-width:600px){
+  .map{
+    left:5vw;
+    width:90vw;
+  }
+  #map{
+    width:90vw;
+    height:400px;
+  }
+  
+}
