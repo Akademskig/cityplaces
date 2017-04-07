@@ -41,11 +41,10 @@ var renderPlaces=function(data){
                         
         $('.results-list').append('<div class=\'row place\'><div class=\'position noDisplay\'><p id=\'lat\'>'+lat+'</p><p id=\'long\'>'+long+'</p></div><div class=\'col-md-6 info\'><p class=\'name '+i+'\'>'+place.name+'</p><p class=\'address\'>'+
         place.vicinity+'</p><div class=\'opened \'>Opened: '+opened+'</div><img class=\'icon\'src=\'' +
-        place.icon+'\'></div><div class=\'col-md-6\'><p class=\'photo\'>'+photo+'<br/>'+attribution+'</p></div></div>')
+        place.icon+'\'><a href=\'/nightlife/loc/details/'+place.place_id+' \'><p>Details</p></a></div><div class=\'col-md-6\'><p class=\'photo\'>'+photo+'<br/>'+attribution+'</p></div></div>')
         
          $('.name.'+i).on('click',function(){
            this.lat=lat;
-           console.log(this.lat)
            this.long=long;
            
            $('.map').fadeIn('slow');
@@ -54,6 +53,30 @@ var renderPlaces=function(data){
         })
     
     })
+    return
+}
+
+function renderDb(data){
+    $('.container-3').html('<div class=\'results-list\'></div>')
+    data.forEach(function(item,i){
+        var photo='<img src=\''+ item.photoRef+'\'>';
+        console.log(item.address)
+        $('.results-list').append('<div class=\'row place\'><div class=\'position noDisplay\'><p id=\'lat\'>'+item.lat+'</p><p id=\'long\'>'+item.long+'</p></div><div class=\'col-md-6 info\'><p class=\'name '+i+'\'>'+item.placeName+'</p><p class=\'address\'>'+
+     item.address+'</p><a href=\'/nightlife/loc/details/'+item.placeId+' \'><p>Details</p></a></div><div class=\'col-md-6\'><p class=\'photo\'>'+photo+'<br/>'+item.attribution+'</p></div></div>')
+     
+     var lat=Number(item.coordinates.lat)
+     var long=Number(item.coordinates.long)
+     $('.name.'+i).on('click',function(){
+        this.lat=lat;
+        console.log(this.lat)
+        this.long=long;
+           
+       $('.map').fadeIn('slow');
+        initMap(this.lat,this.long, 15);
+    })
+  })
+    
+     
 }
 
 function initMap(lat,long,zoom) {
@@ -70,4 +93,8 @@ function initMap(lat,long,zoom) {
             }); 
         /*})
     }*/
+}
+
+var getData=function(data){
+    console.log(data)
 }

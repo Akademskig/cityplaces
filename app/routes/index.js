@@ -3,6 +3,7 @@
 var request = require('request');
 var path = process.cwd();
 var Yelp = require('yelp');
+var Place=require('../models/places.js')
 
 module.exports = function (app, passport) {
 
@@ -67,40 +68,124 @@ module.exports = function (app, passport) {
 	app.route('/nightlife/loc/')
 		.post(function(req,res){
 			var callUrl;
+			console.log(req.body.reqData.cityName)
+			var cityName=req.body.reqData.cityName;
+			var city=req.body.reqData.city;
+			var keyword=req.body.reqData.keyword;
+			console.log(keyword)
+			var cityId=req.body.reqData.cityId;
+			var coords=req.body.reqData.location.split(',')
+			var lat=Number(coords[0])
+			var long=Number(coords[1])
 			console.log(req.body.reqData)
-			
 			if(req.body.reqData.keyword==null){
 				callUrl='https://maps.googleapis.com/maps/api/place/nearbysearch/json?location='+req.body.reqData.location+'&rankby=distance&key='+process.env.GOOGLE_LOC_KEY+'&callback=?';
 			}
 			else{
 				callUrl='https://maps.googleapis.com/maps/api/place/nearbysearch/json?location='+req.body.reqData.location+'&rankby=distance&keyword='+req.body.reqData.keyword+'&key='+process.env.GOOGLE_LOC_KEY+'&callback=?';
 			}
-		 
+		 console.log(callUrl)
 			 var opts= {
         		url:callUrl,
         		headers:{
-            	'Content-Type': 'application/x-www-form-urlencoded',
+        		'Accept-Charset':'utf-8',
+            	'Content-Type': ' charset=utf-8',
             	'Accept': 'application/json'
                 }};
                 
             request.get(opts, function(err,resp, body){
+            	
             	var photosArray=[]
+            	console.log(resp.body)
             	var results= JSON.parse(resp.body);
-            	//console.log(results)
+            	if (results.results==[]){
+            		res.send("No data found");
+            		return
+            	}
             	results.results.forEach(function(item,i){
+            		Place.findOneAndUpdate({'placeId': item.place_id, 'keyword':{'$ne': keyword}},{$push:{keyword:keyword}},function(err,data){
+            			if(err){
+            				throw err;
+            			}
+            			console.log(data)
+            			
+            			if(data==null){
+            				var newPlace=new Place();
+	            			newPlace.id=new Date().getTime();
+	            			newPlace.placeId=item.place_id;
+	            			newPlace.city=city;
+	            			newPlace.cityID=cityId;
+	            			newPlace.cityName=cityName;
+		            		newPlace.coordinates.lat=item.geometry.location.lat;
+		            		newPlace.coordinates.long=item.geometry.location.long;
+		            		newPlace.address=item.vicinity;
+		            		newPlace.placeName=item.name;
+		            		newPlace.keyword.push(keyword)
+		            		
+		            		if(item.photos){
+		            			newPlace.attrbutions=item.photos[0].html_attributions
+		            			newPlace.photoRef='https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&photoreference='+item.photos[0].photo_reference+'&key='+process.env.GOOGLE_PHOTOS_KEY;
+		            		}
+		            		newPlace.save(function(err){
+		    	                if(err){
+		    	                    throw err;
+		    	                }
+		    	            });
+            		   }
+            		})
+            		
             		//console.log(item)
-            		if (item.photos){
-            			var ref=item.photos[0].photo_reference;
-            			var photosCall='https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&photoreference='+ref+'&key='+process.env.GOOGLE_PHOTOS_KEY;
-            			photosArray.push({'index':i, 'link':photosCall})
-            		}
+            	if (item.photos){
+            		var ref=item.photos[0].photo_reference;
+            		var photosCall='https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&photoreference='+ref+'&key='+process.env.GOOGLE_PHOTOS_KEY;
+            		photosArray.push({'index':i, 'link':photosCall})
+            	}
+			})	
+			var respObj={'places': results, 'photos': photosArray}
+			console.log(respObj)
+            res.json(respObj)
+        })
+		})        
+    
+        
+    app.route('/dbSearch')
+    	.post(function(req,res){
+    		console.log(req.body.city)
+    		if(!req.body.city){
+    			var error="Think of a city"
+    			res.send(error)
+    			return
+    		}
+    		var query= (req.body.city.indexOf(',')==-1)? {'cityName': req.body.city}:{'city':req.body.city}
+    		if(req.body.keyword!=''){
+    			query.keyword=req.body.keyword
+    		}
+    		console.log(query)
+    		Place.find(query, function(err,data){
+    			if(err){
+    				throw err;
+    			}
+    			res.send(data)
+    		})
+    	})
+        
+    app.route('/nightlife/loc/details/:pid')
+    	.get(function(req,res){
+    		    var detailsUrl='https://maps.googleapis.com/maps/api/place/details/json?placeid='+req.params.pid+'&key='+process.env.GOOGLE_DETAILS+'&callback=?';
+            	console.log(detailsUrl)
+            	var opts={
+            		url: detailsUrl,
+            		headers:{
+            		'Content-Type': 'application/x-www-form-urlencoded',
+            		'Accept': 'application/json'
+                }}
+            	request.get(opts,function(data){
+            		res.send(data)
+            	
             	})
-            	//https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=CnRtAAAATLZNl354RwP_9UKbQ_5Psy40texXePv4oAlgP4qNEkdIrkyse7rPXYGd9D_Uj1rVsQdWT4oRz4QrYAJNpFX7rzqqMlZw2h2E2y5IKMUZ7ouD_SlcHxYq1yL4KbKUv3qtWgTK0A6QbGh87GB3sscrHRIQiG2RrmU_jF4tENr9wGS_YxoUSSDrYjWmrNfeEHSGSc3FyhNLlBU&key=YOUR_API_KEY
-            	//var photoObj=JSON.parse(photosArray)
-            	var respObj={'places': results, 'photos': photosArray}
-            	res.json(respObj)
             })
-        });
+    		
+    
 		
 	app.route('https://api.yelp.com/oauth2/token/:credentials')
 		.post(function(req,res){

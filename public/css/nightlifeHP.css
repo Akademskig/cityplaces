@@ -195,6 +195,20 @@ input{
   display:none;
 }
 
+
+
+/***ERROR****/
+
+.input-error{
+  color:red;
+  font-size:15px;
+  margin-left:-3vw;
+}
+
+.error{
+  border:solid 1px red;
+}
+
 @keyframes wina {
   0% {
     color: black;
@@ -247,7 +261,6 @@ input{
   }
   #map{
     width:90vw;
-    height:400px;
   }
   
 }

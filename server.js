@@ -33,6 +33,7 @@ app.use('/common', express.static(process.cwd() + '/app/common'));
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+app.set({'Content-Type': 'charset=UTF-8'})
 app.use(bodyParser.json());
 
 app.use(session({
