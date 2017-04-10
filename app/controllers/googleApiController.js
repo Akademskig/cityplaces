@@ -17,40 +17,41 @@ $(document).ready(function(){
                  $('.location').html(json.city + ', '+ json.country_name)
                     city=json.city + ','+ json.country_code;
                     cityName=json.city;
+                    console.log(json)
                     var getCityID='https://cors-anywhere.herokuapp.com/http://api.openweathermap.org/data/2.5/find?q='+city+'&type=like&appid='+LOC_API_KEY;
                     $.getJSON(getCityID, function(data){
                         cityID=data.list[0].id
                     })
             })
                     
-            /*   location.country_name, location.state, location.latitude, location.longitude, location.IPv4;
-                 
-                    */
+               
              
             $('.getLocation').on('click', function() {
+               $('.container-3').html('<div class=\'results-list\'></div>')
                var keyword=null;
-                if($('#keyword').val() !=null){
+                if($('#keyword').val() !=''){
                     keyword=$('#keyword').val();
                 }
-                console.log(cityID)
+                getMap(lat,long,15, keyword);
+               
                 var reqData={'location': lat + ','+long, 'keyword': keyword, 'city': city, 'cityId':cityID, 'cityName':cityName};
-                $('.container-3').html('<div class=\'results-list\'></div>')
-                $.post('/nightlife/loc/',{reqData},function(data){
-                    console.log(data)
-                    
-                    if(data.places.error_message){
-                        $('.results-list').html('No data found')
-                        return
-                    }
-                    renderPlaces(data)
-                    
-                })
+                 console.log(reqData)
+                
             })
-            
-            //--------SHOW-HIDE MAP------------
+            console.log($('container-3').val()+"some")
             $('.showMap').on('click',function(){
+                console.log($('.container-3').val())
+                if($('.container-3').is(':empty')){
+                    
+                     $('.map').fadeIn('slow')
+                    var showLocMap=new ShowLocMap(lat,long,15,'Your location');
+                }
+                else{
                  $('.map').fadeIn('slow')
-                 initMap(lat,long,15);
+                 getMap(lat,long,15,keyword)
+                }
+            //--------SHOW-HIDE MAP------------
+            
                     
             })
              $('body').dblclick(function(){
@@ -84,7 +85,7 @@ $(document).ready(function(){
     
     $('#submit').on('click',function(){
         
-        if($('#keyword').val() !=null){
+        if($('#keyword').val()){
         keyword=$('#keyword').val();
     }
         $.post('/dbSearch',{'city':location, 'keyword':keyword},function(data){
@@ -98,6 +99,7 @@ $(document).ready(function(){
                 this.val('');
                 this.removeClass('error')
             })
+            console.log(data)
             renderDb(data)
        })
     })

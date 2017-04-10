@@ -157,7 +157,7 @@ module.exports = function (app, passport) {
     			return
     		}
     		var query= (req.body.city.indexOf(',')==-1)? {'cityName': req.body.city}:{'city':req.body.city}
-    		if(req.body.keyword!=''){
+    		if(req.body.keyword){
     			query.keyword=req.body.keyword
     		}
     		console.log(query)
