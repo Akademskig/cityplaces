@@ -25,10 +25,10 @@ $(document).ready(function(){
             })
                     
                
-             
+              var keyword=null;
             $('.getLocation').on('click', function() {
                $('.container-3').html('<div class=\'results-list\'></div>')
-               var keyword=null;
+              
                 if($('#keyword').val() !=''){
                     keyword=$('#keyword').val();
                 }
@@ -38,7 +38,7 @@ $(document).ready(function(){
                  console.log(reqData)
                 
             })
-            console.log($('container-3').val()+"some")
+            
             $('.showMap').on('click',function(){
                 console.log($('.container-3').val())
                 if($('.container-3').is(':empty')){
