@@ -4,7 +4,7 @@ var renderPlaces=function(data){
     //console.log(data.places.results)
     var places=data;
     
-    $('.results-list').empty();
+    
     places.forEach(function(place,i){
         
         if(place.opening_hours != undefined){
@@ -40,12 +40,13 @@ var renderPlaces=function(data){
         place.icon+'\'><a href=\'/nightlife/loc/details/'+place.place_id+' \'><p>Details</p></a></div><div class=\'col-md-6\'><p class=\'photo\'><img src='+photo+'></img><br/>'+attribution+'</p></div></div>')
         
          $('.name.'+i).on('click',function(){
-           
-           console.log(lat)
            $('.map').fadeIn('slow');
            var showLocMap=new ShowLocMap(lat,long,15,place.name);
            
         })
+        if(i==places.length-1){
+            $('.more').html('<div id="more">More</div>');
+        }
     
     })
     return
@@ -129,15 +130,25 @@ function getMap(lat,long,zoom, key) {
         }, callback);
       }
 
-      function callback(results, status) {
+      function callback(results, status,pagination) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
           for (var i = 0; i < results.length; i++) {
             createMarker(results[i]);
           }
           renderPlaces(results)
         }
+        
+        if (pagination.hasNextPage) {
+            var moreButton = document.getElementById('more');
+            
+            moreButton.addEventListener('click', function() {
+            renderPlaces(pagination.nextPage());
+            });
+           
+        }
+       
+        
       }
-
       function createMarker(place) {
         var placeLoc = place.geometry.location;
         var marker = new google.maps.Marker({

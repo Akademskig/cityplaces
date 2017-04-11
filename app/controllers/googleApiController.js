@@ -54,18 +54,7 @@ $(document).ready(function(){
             
                     
             })
-             $('body').dblclick(function(){
-                 $('.map').fadeOut('slow')
-            })
-            $('.showMap').click(function(){
-                event.stopPropagation();
-            })
-            $('.map').click(function(){
-                event.stopPropagation();
-            })
-            $('.info .name').click(function(){
-                event.stopPropagation();
-            })
+           
         })
     }
     $('#city').on('click', function() {

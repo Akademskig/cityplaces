@@ -156,6 +156,15 @@ input{
   margin-top:10px;
 }
 
+#more{
+  max-width:100px;
+  margin:auto;
+  background:black;
+  text-align:center;
+  color:purple;
+  cursor:pointer;
+}
+
 /***MAP*******/
 .map{
   position:fixed;
@@ -169,8 +178,8 @@ input{
   border-top-left-radius:10px;
   border-top-right-radius:10px;
   color:black;
-  margin:auto;
-  width: 50px;
+  float:right;
+  width: 30px;
   text-align:center;
   cursor:pointer;
 }
