@@ -81,8 +81,21 @@ module.exports = function (app, passport) {
 				res.send('You are not logged in!')
 				return
 			}
-			console.log(user)
-			Going.findOneAndUpdate({placeID: req.body.placeId},{'$inc':{'numberOfPpl':1},$push:{users:user}}, function(err,data){
+			var isGoing=false;
+			Going.find({placeID:req.body.placeID, users:user},function(err,data){
+				if(err){
+					throw err;
+				}
+				console.log(data!=[])
+				if(data!=[]){
+					isGoing=true;
+				}
+			})
+			if(isGoing==true){
+				res.send("You are already listed!")
+				return
+			}
+			Going.findOneAndUpdate({placeID: req.body.placeId, users:{$ne:user}},{'$inc':{'numberOfPpl':1},$push:{users:user}}, function(err,data){
 				console.log(data)
 				if (data==null){
 					var going= new Going()
@@ -188,9 +201,9 @@ module.exports = function (app, passport) {
     		})
     	})
         
-    app.route('/nightlife/loc/details/:pid')
-    	.get(function(req,res){
-    		    var detailsUrl='https://maps.googleapis.com/maps/api/place/details/json?placeid='+req.params.pid+'&key='+process.env.GOOGLE_DETAILS+'&callback=?';
+    app.route('/nightlife/details')
+    	.post(function(req,res){
+    		    var detailsUrl=req.body.url;
             	console.log(detailsUrl)
             	var opts={
             		url: detailsUrl,
@@ -199,7 +212,7 @@ module.exports = function (app, passport) {
             		'Accept': 'application/json'
                 }}
             	request.get(opts,function(data){
-            		res.send(data)
+            		res.json(JSON.parse(data))
             	
             	})
             })

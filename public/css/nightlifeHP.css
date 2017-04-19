@@ -277,11 +277,15 @@ input#distance{
 }
 
 .all{
-  margin-right:40px;
+  margin-right:50px;
+  padding:10px;
+  border-radius:5px;
 }
 
 .my{
-  margin-left:40px;
+  margin-left:50px;
+  padding:10px;
+  border-radius:5px;
 }
 
 .go{

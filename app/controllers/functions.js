@@ -46,7 +46,7 @@ var renderPlaces=function(data,index){
                            alert(data)
                            return
                        }
-                       $(this).children().addClass("active")
+                       $('.going'+i).children().addClass("active")
                     })
                 }else{
                     $(this).children().removeClass("active")
@@ -66,8 +66,8 @@ var renderPlaces=function(data,index){
         
         $('#details'+i).on('click',function(){
             if($('.details'+i).is(':empty')){
-                var detailsUrl='https://maps.googleapis.com/maps/api/place/details/json?placeid='+place.place_id+'&key=AIzaSyBsEIashHje_Mirls38eHsplMXbdrxaFLI'
-                $.get(detailsUrl,function(data){
+                var detailsUrl={url:'https://maps.googleapis.com/maps/api/place/details/json?placeid='+place.place_id+'&key=AIzaSyBsEIashHje_Mirls38eHsplMXbdrxaFLI'}
+                $.post('/nightlife/details',detailsUrl,function(data){
                     console.log(data)
                     if(data.status=='OK' && data.result.opening_hours){
                        $('.details'+i).html("<p class='opened' style='border-bottom: solid 1px black'>Opened: </p>")
@@ -138,7 +138,7 @@ function renderDb(data){
   }
   $('.remove-'+i).on('click',function(){
       
-      var removeData={placeID:item.placeID}
+      var removeData={placeId:item.placeID}
       console.log(removeData)
       $.post('/nightlife/removeGoing',removeData,function(data){
           

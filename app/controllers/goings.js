@@ -10,8 +10,8 @@ $(document).ready(function(){
        $.get('/nightlife/myGoings',function(data){
        console.log(data)
        $('.results-list').empty()
-       $('.my').addClass('active')
-       $('.all').removeClass('active');
+       $('.my, .numPpl').addClass('active')
+       $('.all, .info').removeClass('active');
        renderDb(data);
    })
    })
@@ -19,8 +19,9 @@ $(document).ready(function(){
        $.get('/nightlife/goings',function(data){
        console.log(data)
        $('.results-list').empty()
-       $('.all').addClass('active')
-       $('.my').removeClass('active');
+       $('.all, .info').addClass('active')
+        
+       $('.my, .numPpl').removeClass('active');
        renderDb(data);
    })
    })
