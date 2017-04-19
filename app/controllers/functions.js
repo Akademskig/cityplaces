@@ -1,8 +1,13 @@
 var renderPlaces=function(data,index){
     var opened;
     var attribution;
-    console.log(data)
-    var places=data.results;
+    var dataJson=data;
+    if(typeof data != 'object'){
+        dataJson=JSON.parse(data)
+    }
+    
+    console.log(data.results)
+    var places=dataJson.results;
     var photosKey='AIzaSyBXLMrmKqkc4CJijlW73FHU3hoAsGOyws0'
     
     places.forEach(function(place,i){
@@ -35,9 +40,13 @@ var renderPlaces=function(data,index){
         
             $('.going'+i).on('click',function(){
                 if(!$(this).children().hasClass("active")){
-                    $(this).children().addClass("active")
+                    
                     $.post('nightlife/going',goingData,function(data){
-                       
+                       if(typeof data == 'string'){
+                           alert(data)
+                           return
+                       }
+                       $(this).children().addClass("active")
                     })
                 }else{
                     $(this).children().removeClass("active")

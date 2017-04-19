@@ -73,10 +73,13 @@ module.exports = function (app, passport) {
 		
 	app.route('/nightlife/going')
 		.post(function(req,res){
-			console.log(req.body)
 			var user;
 			if(req.user!=undefined){
 				user = req.user.local.username || req.user.github.username || req.user.facebook.name;
+			}
+			else{
+				res.send('You are not logged in!')
+				return
 			}
 			console.log(user)
 			Going.findOneAndUpdate({placeID: req.body.placeId},{'$inc':{'numberOfPpl':1},$push:{users:user}}, function(err,data){
@@ -149,88 +152,20 @@ module.exports = function (app, passport) {
 			console.log(req.body.address)
 		})
 	
-	/*app.route('/nightlife/loc/')
+	app.route('/nightlife/loc/')
 		.post(function(req,res){
-			var callUrl;
-			console.log(req.body.reqData.cityName)
-			var cityName=req.body.reqData.cityName;
-			var city=req.body.reqData.city;
-			var keyword=req.body.reqData.keyword;
-			console.log(keyword)
-			var cityId=req.body.reqData.cityId;
-			var coords=req.body.reqData.location.split(',')
-			var lat=Number(coords[0])
-			var long=Number(coords[1])
-			console.log(req.body.reqData)
-			if(req.body.reqData.keyword==null){
-				callUrl='https://maps.googleapis.com/maps/api/place/nearbysearch/json?location='+req.body.reqData.location+'&rankby=distance&key='+process.env.GOOGLE_LOC_KEY+'&callback=?';
-			}
-			else{
-				callUrl='https://maps.googleapis.com/maps/api/place/nearbysearch/json?location='+req.body.reqData.location+'&rankby=distance&keyword='+req.body.reqData.keyword+'&key='+process.env.GOOGLE_LOC_KEY+'&callback=?';
-			}
-		 console.log(callUrl)
-			 var opts= {
-        		url:callUrl,
-        		headers:{
-        		'Accept-Charset':'utf-8',
-            	'Content-Type': ' charset=utf-8',
-            	'Accept': 'application/json'
-                }};
-                
-            request.get(opts, function(err,resp, body){
-            	
-            	var photosArray=[]
-            	console.log(resp.body)
-            	var results= JSON.parse(resp.body);
-            	if (results.results==[]){
-            		res.send("No data found");
-            		return
-            	}
-            	results.results.forEach(function(item,i){
-            		Place.findOneAndUpdate({'placeId': item.place_id, 'keyword':{'$ne': keyword}},{$push:{keyword:keyword}},function(err,data){
-            			if(err){
-            				throw err;
-            			}
-            			console.log(data)
-            			
-            			if(data==null){
-            				var newPlace=new Place();
-	            			newPlace.id=new Date().getTime();
-	            			newPlace.placeId=item.place_id;
-	            			newPlace.city=city;
-	            			newPlace.cityID=cityId;
-	            			newPlace.cityName=cityName;
-		            		newPlace.coordinates.lat=item.geometry.location.lat;
-		            		newPlace.coordinates.long=item.geometry.location.long;
-		            		newPlace.address=item.vicinity;
-		            		newPlace.placeName=item.name;
-		            		newPlace.keyword.push(keyword)
-		            		
-		            		if(item.photos){
-		            			newPlace.attrbutions=item.photos[0].html_attributions
-		            			newPlace.photoRef='https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&photoreference='+item.photos[0].photo_reference+'&key='+process.env.GOOGLE_PHOTOS_KEY;
-		            		}
-		            		newPlace.save(function(err){
-		    	                if(err){
-		    	                    throw err;
-		    	                }
-		    	            });
-            		   }
-            		})
-            		
-            		//console.log(item)
-            	if (item.photos){
-            		var ref=item.photos[0].photo_reference;
-            		var photosCall='https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&photoreference='+ref+'&key='+process.env.GOOGLE_PHOTOS_KEY;
-            		photosArray.push({'index':i, 'link':photosCall})
-            	}
-			})	
-			var respObj={'places': results, 'photos': photosArray}
-			console.log(respObj)
-            res.json(respObj)
-        })
-		})        
-    */
+			var opts= {
+	        		url:req.body.url,
+	        		headers:{
+	        		'Accept-Charset':'utf-8',
+	            	'Content-Type': ' charset=utf-8',
+	            	'Accept': 'application/json'
+	                }};
+	                
+	            request.get(opts, function(err,resp, body){
+	            	res.json(resp.body)
+			})        
+		})
         
     app.route('/dbSearch')
     	.post(function(req,res){

@@ -5,13 +5,13 @@ var routes = require('./app/routes/index.js');
 var mongoose = require('mongoose');
 var passport = require('passport');
 var session = require('express-session');
-
+var cors = require('cors');
 var bodyParser=require("body-parser");
 
 var app = express();
 require('dotenv').load();
 
-var cors = require('cors');
+
 app.use(cors({origin: true, credentials: true}));
 app.options('*', cors())
 

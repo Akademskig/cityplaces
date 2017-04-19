@@ -45,9 +45,9 @@ $(document).ready(function(){
                     
                     distance=Number($('#distance').val());
                 }
-                var placesUrl='https://maps.googleapis.com/maps/api/place/nearbysearch/json?location='+lat+','+long+'&radius='+distance+keyword+'&key=AIzaSyAJRnPCMCZ9ViyoX36Ijvho3DCTEv3QVI0';
+                var placesUrl={url:'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location='+lat+','+long+'&radius='+distance+keyword+'&key=AIzaSyAJRnPCMCZ9ViyoX36Ijvho3DCTEv3QVI0'};
                 
-                $.get(placesUrl, function(data){
+                $.post('/nightlife/loc',placesUrl, function(data){
                     renderPlaces(data, 0)
                     
                     $('.showMap').on('click',function(){
