@@ -1,7 +1,7 @@
 console.log(user)
-if(user==undefined){
+if(user=='undefined'){
     $('ul').addClass('noDisplay')
-    $('.container-2').html("Please login to see the apps")
+    $('.container-2').html("<p style='text-align:center; font-size:18px'>Please login to see the apps</p>")
 }
 else{
     $('ul').removeClass('noDisplay')
