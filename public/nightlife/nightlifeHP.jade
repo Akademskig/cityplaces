@@ -13,41 +13,39 @@
 <body>
 <div class='container-1'>
 <div class='map noDisplay'><div class="hide">X</div><div id="map"></div></div>
-<div class="navig"><a href="/" class="homepage nav2">Homepage</a></div>
-<h1 class='anim'>Nightlife Coordination App</h1>
+<div class="navig"><a href="/" class="homepage nav2">Homepage</a><a href="/nightlife/putData" class="homepage nav2">New Data</a><a href="/nightlife/going" class="homepage nav2">Goings</a></div>
+<h1 class='anim'>City Places</h1>
 <div class="container-2">
+<div class="locBox">Your location:<p class="location"></p></div>
 <div class="searchOpt">
-<p>Search for a City</p>
+<p class="searchText">Search for a City</p>
 <input type="text" id="location" placeholder='e.g. Zagreb,HR' />
 <button id='submit' class='b' style='display:inline-block'>Go!</button>
 p(class='input-error')
 <p>or</p>
-<button class="getLocation b">Use current location</button>
-<p><input type="text" id="keyword" placeholder="search by keyword"></p>
+<button class="getLocation b">Use current location</button><br>
+<img src='public/img/google_logo.png' width='150px'/>
+<p><input type="text" id="keyword" placeholder="what are you looking for?"></p>
 
-<div class="dropdown-menu">
-<p>Find by distance</p>
-<select id='selectDistance'>Search by type:
-<option value="100m">100 m</option>
-<option value="500m">500 m</option>
-<option value="1000m">1000 m</option>
-</select>
+<div class="distance">
+<p class='distText'>Find by distance</p>
+<input id='distance' placeholder='radius'/>
 </div>
-<p class="location"></p>
+
 div.showMap Show map  
 </div> 
 </div> 
 
 <div class="container-3"></div>
 div(class="more anim")
-
+div(id="numPpl") !{numPpl}
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <script type="text/javascript" src="controllers/functions.js"></script>
 <script type="text/javascript" src="controllers/googleApiController.js"></script>
 <script async defer type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=!{api_key}&libraries=places&callback=getMap"></script>
-<script type="text/javascript" src="controllers/dbSearch.js"></script>
+
 </script>
 
 </body>  

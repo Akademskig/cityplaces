@@ -1,12 +1,13 @@
-var renderPlaces=function(data){
+var renderPlaces=function(data,index){
     var opened;
     var attribution;
-    //console.log(data.places.results)
-    var places=data;
-    
+    console.log(data)
+    var places=data.results;
+    var photosKey='AIzaSyBXLMrmKqkc4CJijlW73FHU3hoAsGOyws0'
     
     places.forEach(function(place,i){
         
+        i=i+index
         if(place.opening_hours != undefined){
             opened=(place.opening_hours.open_now==true)? 'yes :)':'no :(';
         }
@@ -17,152 +18,183 @@ var renderPlaces=function(data){
         var photo='';
         if(place.photos){
             attribution=place.photos[0].html_attributions;
-            photo=place.photos[0].getUrl({maxWidth:200, maxHeigth: 200})
+            photo='https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&photoreference='+place.photos[0].photo_reference+'&key='+photosKey;
         }
         else{
             attribution=""
         }
         
-        if(place.photos){
-            
-        }
-        var lat=place.geometry.location.lat() 
-        var long=place.geometry.location.lng()
-        
-        var nameEle=document.createElement('p')
-        nameEle.className="name";
-        var text=document.createTextNode(place.name);
-        nameEle.appendChild(text);
-        
+        var lat=place.geometry.location.lat
+        var long=place.geometry.location.lng
         
         $('.results-list').append('<div class=\'row place\'><div class=\'position noDisplay\'><p id=\'lat\'>'+lat+'</p><p id=\'long\'>'+long+'</p></div><div class=\'col-md-6 info\'><p class=\'name '+i+'\'>'+place.name+'</p><p class=\'address\'>'+
         place.vicinity+'</p><div class=\'opened \'>Opened: '+opened+'</div><img class=\'icon\'src=\'' +
-        place.icon+'\'><a href=\'/nightlife/loc/details/'+place.place_id+' \'><p>Details</p></a></div><div class=\'col-md-6\'><p class=\'photo\'><img src='+photo+'></img><br/>'+attribution+'</p></div></div>')
+        place.icon+'\'><p id="details'+i+'" class="detailsH">Details</p><ul class="det details'+i+'"></ul></div><div class=\'col-md-6\'><p class=\'photo\'><img src='+photo+'></img><br/>'+attribution+'</p><div class="going going'+i+'"><button id="going"class="">Going</button></div></div></div>')
+        
+        var goingData={'place': place.name, 'placeId': place.place_id}
+        
+            $('.going'+i).on('click',function(){
+                if(!$(this).children().hasClass("active")){
+                    $(this).children().addClass("active")
+                    $.post('nightlife/going',goingData,function(data){
+                       
+                    })
+                }else{
+                    $(this).children().removeClass("active")
+                    $.post('nightlife/removeGoing',goingData,function(data){
+                    
+                })
+               
+            }
+        })
         
          $('.name.'+i).on('click',function(){
            $('.map').fadeIn('slow');
-           var showLocMap=new ShowLocMap(lat,long,15,place.name);
+           var showLocMap=new ShowLocMap(lat,long,place.name);
            
         })
+        
+        
+        $('#details'+i).on('click',function(){
+            if($('.details'+i).is(':empty')){
+                var detailsUrl='https://maps.googleapis.com/maps/api/place/details/json?placeid='+place.place_id+'&key=AIzaSyBsEIashHje_Mirls38eHsplMXbdrxaFLI'
+                $.get(detailsUrl,function(data){
+                    console.log(data)
+                    if(data.status=='OK' && data.result.opening_hours){
+                       $('.details'+i).html("<p class='opened' style='border-bottom: solid 1px black'>Opened: </p>")
+                       
+                       data.result.opening_hours.weekday_text.forEach(function(val){
+                           $('.details'+i).append("<li>"+val+"</li>")
+                       })
+                   }
+                   else{
+                       $('.details'+i).html("<p>No details found</p>")
+                   }
+                   $('.details'+i).append("<a href="+data.result.url+"><p style='color:purple; margin-top:10px'>See on map</p></a>")
+                })
+            }
+            else{
+                $('.details'+i).toggle()
+            }
+        })
+        
         if(i==places.length-1){
             $('.more').html('<div id="more">More</div>');
+            $('.more').on('click',function(){
+                
+                if(data.next_page_token){
+                    var placesNextUrl='https://maps.googleapis.com/maps/api/place/nearbysearch/json?pagetoken='+data.next_page_token+'&key=AIzaSyAJRnPCMCZ9ViyoX36Ijvho3DCTEv3QVI0'
+                    $.get(placesNextUrl, function(data){
+                        i++;
+                        renderPlaces(data, i);
+                    })
+                }
+            })
         }
-    
     })
     return
 }
 
 function renderDb(data){
-    $('.container-3').html('<div class=\'results-list\'></div>')
     data.forEach(function(item,i){
         console.log(item)
-        var photo='<img src=\''+ item.photoRef+'\'>';
-        console.log(item.address)
-        $('.results-list').append('<div class=\'row place\'><div class=\'position noDisplay\'><p id=\'lat\'>'+item.lat+'</p><p id=\'long\'>'+item.long+'</p></div><div class=\'col-md-6 info\'><p class=\'name '+i+'\'>'+item.placeName+'</p><p class=\'address\'>'+
-     item.address+'</p><a href=\'/nightlife/loc/details/'+item.placeId+' \'><p>Details</p></a></div><div class=\'col-md-6\'><p class=\'photo\'>'+photo+'<br/>'+item.attribution+'</p></div></div>')
+        var detailsUrl='https://maps.googleapis.com/maps/api/place/details/json?placeid='+item.placeID+'&key=AIzaSyBsEIashHje_Mirls38eHsplMXbdrxaFLI'
+        $('.results-list').append('<div class=\'row place place-'+i+'\'><div class=\'col-md-7 info\'><p class=\'name '+i+'\'>'+item.placeName+'</p><p class="det details'+i+'"></p></div><div class="numPpl col-md-4"><p class=\'numOPpl\'>People going: '+
+     item.numberOfPpl+'</p></div>')
      
-     var lat=Number(item.coordinates.lat)
-     var long=Number(item.coordinates.long)
-     $('.name.'+i).on('click',function(){
-         console.log(lat)
-        this.lat=lat;
-        this.long=long;
-           
-       $('.map').fadeIn('slow');
-        initMap(lat,long, 15);
-    })
-  })
     
-     
+     $('.name.'+i).on('click',function(){
+         if($('.details'+i).is(':empty')){
+        $.get(detailsUrl,function(data){
+            if(data.status=='OK' && data.result.opening_hours){
+                       $('.details'+i).html("<p class='opened' style='border-bottom: solid 1px black'>Opened: </p>")
+                       
+                       data.result.opening_hours.weekday_text.forEach(function(val){
+                           $('.details'+i).append("<li>"+val+"</li>")
+                       })
+                   }
+                   else{
+                       $('.details'+i).html("<p>No details found</p>")
+                   }
+                   $('.details'+i).append("<a href="+data.result.url+"><p style='color:purple; margin-top:10px'>See on map</p></a>")
+        })
+    }
+     else{
+         $('.details'+i).toggle()
+     }
+  })
+  
+  if($('.my').hasClass('active')){
+      $('.place-'+i).append('<div class="col-md-1"><button class="remove-'+i+'">X</button></div>')
+  }
+  $('.remove-'+i).on('click',function(){
+      
+      var removeData={placeID:item.placeID}
+      console.log(removeData)
+      $.post('/nightlife/removeGoing',removeData,function(data){
+          
+      })
+      $(this).parent().parent().remove();
+  })
+    })
 }
 
-function ShowLocMap(lat,long,zoom,place){
+
+
+function ShowLocMap(lat,long,place){
     this.lat=lat
     this.long=long
-    this.zoom=zoom
+    
     var place=place 
     this.loc = {lat: this.lat, lng: this.long};
-    console.log(this.place)
-    this.map = new google.maps.Map(document.getElementById('map'), {
+    console.log(typeof place)
+     var map = new google.maps.Map(document.getElementById('map'), {
     center: this.loc,
-    zoom: this.zoom
+    zoom: 15
     });
     
-    
-    this.marker = new google.maps.Marker({
-        map: this.map,
+    if(typeof place == 'string'){
+        this.marker = new google.maps.Marker({
+        map: map,
         position: this.loc
-    });
+        });
     
-    var infowindow = new google.maps.InfoWindow();
-    google.maps.event.addListener(this.marker, 'click', function() {
-        infowindow.setContent(place);
-        infowindow.open(this.map, this);
-    });
-       
- 
-}
-
-function getMap(lat,long,zoom, key) {
-      var map;
-      var infowindow;
-      var initMarker;
-      
-     
-      initMap(lat,long,zoom,key)
-
-      function initMap(lat,long,zoom,key) {
-        var loc = {lat: lat, lng: long};
-
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: loc,
-          zoom: zoom
+        var infowindow = new google.maps.InfoWindow();
+        google.maps.event.addListener(this.marker, 'click', function() {
+            infowindow.setContent(place);
+            infowindow.open(this.map, this);
         });
-
-        infowindow = new google.maps.InfoWindow();
-        var service = new google.maps.places.PlacesService(map);
-        google.maps.places.RankBy.DISTANCE
-        
-        service.nearbySearch({
-          location: loc,
-          radius: 500,
-          keyword: key
-        }, callback);
-      }
-
-      function callback(results, status,pagination) {
-        if (status === google.maps.places.PlacesServiceStatus.OK) {
-          for (var i = 0; i < results.length; i++) {
-            createMarker(results[i]);
-          }
-          renderPlaces(results)
-        }
-        
-        if (pagination.hasNextPage) {
-            var moreButton = document.getElementById('more');
-            
-            moreButton.addEventListener('click', function() {
-            renderPlaces(pagination.nextPage());
-            });
-           
-        }
-       
-        
-      }
-      function createMarker(place) {
+    }
+    else{
+         place.forEach(function(place){
+             console.log(place)
+             createMarker(place);
+         })
+    }
+    
+    function createMarker(place) {
         var placeLoc = place.geometry.location;
+        console.log(placeLoc)
         var marker = new google.maps.Marker({
-          map: map,
-          position: place.geometry.location
+            map: map,
+            position: place.geometry.location
         });
-
+        var infowindow = new google.maps.InfoWindow();
         google.maps.event.addListener(marker, 'click', function() {
-          infowindow.setContent(place.name);
-          infowindow.open(map, this);
+            infowindow.setContent(place.name);
+            infowindow.open(map, this);
         });
-      }
+    }
 }
 
-var getData=function(data){
-    console.log(data)
+function getMap() {
+      var map;
+     
+      var loc={lat:15.5555,lng:20.55555}
+      map = new google.maps.Map(document.getElementById('map'), {
+          center: loc,
+          zoom: 15
+      })
+        
 }
+

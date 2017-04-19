@@ -3,16 +3,12 @@ var Schema = mongoose.Schema;
 
 var Place = new Schema({
     id:Number,
-    city: String,
-	cityID:Number,
-	cityName:String,
+    cityName:String,
+    placeName: String,
 	placeId:String,
-	coordinates:{lat:Number,long:Number},
 	address:String,
-	placeName: String,
-    photoRef:String,
     keyword:Array,
-    attributions:Array
+    addInfo: String
 });
 
 module.exports = mongoose.model('Place', Place);

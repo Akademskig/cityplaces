@@ -32,7 +32,14 @@ h1 {
   border: solid 1px black;
   padding: 10px;
 }
-
+.container-3{
+  margin:auto;
+  margin-top:10px;
+  max-width:550px;
+  background:rgba(255,255,255,0.8);
+  border-radius:5px;
+  color:black;
+}
 ul {
   margin: auto;
   max-width: 300px;
@@ -68,12 +75,28 @@ a {
   border-left: solid 1px;
   border-right: solid 1px;
 }
+/**+LOCATION***/
+.locBox{
+  margin:auto;
+  max-width:200px;
+  text-align:center;
+  border-bottom:solid 1px black;
+  padding-bottom:0;
+  background:red;
+}
 
+.location{
+  font-weight:bold;
+  font-size:20px;
+  padding:0;
+  background:blue;
+  margin-bottom:0;
+}
 
 /***SEARCH LOCATION****/
 
 .b {
-  margin: 10px;
+  margin: 5px;
   padding: 5px;
   border-radius: 5px;
   cursor: pointer;
@@ -82,22 +105,32 @@ a {
 
 .searchOpt {
   text-align: center;
+  background:yellow;
+  padding:10px;
+  margin-top:15px;
 }
 
-#cityForm{
-  margin:10px;
+
+.searchText, .distText{
+  margin-bottom:0;
 }
 
-#city{
-  padding:5px;
-  border-radius: 5px;
-  font-family: 'raleway'
-}
+
 input{
   display:inline-block;
   padding:5px;
   border-radius: 5px;
-  font-family: 'raleway'
+  font-family: 'raleway';
+  width:200px;
+  text-align:center;
+  margin-top:5px;
+}
+
+input#distance{
+  padding:2px;
+  width:70px;
+  margin-bottom:10px;
+  
 }
 
 #submit{
@@ -107,17 +140,15 @@ input{
   font-size: 15px;
   
 }
+/****DROPDOWN******/
+.dropdown{
+  padding:5px;
+  margin-bottom:10px;
+}
 
 /*****RESULTS*******/
 
-.container-3{
-  margin:auto;
-  margin-top:10px;
-  max-width:550px;
-  background:rgba(255,255,255,0.8);
-  border-radius:5px;
-  color:black;
-}
+
 .results{
   padding:20px;
   padding-bottom:0;
@@ -156,6 +187,22 @@ input{
   margin-top:10px;
 }
 
+.detailsH{
+  cursor:pointer;
+  margin-top:15px;
+}
+
+.det{
+  font-size:15px;
+  
+}
+/***PEOPLE GOING****/
+.going{
+  clear:both;
+  float:right;
+  vertical-align:bottom;
+}
+
 #more{
   max-width:100px;
   margin:auto;
@@ -164,6 +211,12 @@ input{
   color:purple;
   cursor:pointer;
 }
+
+#going{
+  cursor:pointer;
+}
+
+
 
 /***MAP*******/
 .map{
@@ -184,10 +237,9 @@ input{
   cursor:pointer;
 }
 #map{
-  
   width: 60vw;
   height: 500px;
-  background-color: grey;
+  background-color: gray;
   margin:auto;
   border-radius:5px;
   top: 0;
@@ -218,21 +270,43 @@ input{
   border:solid 1px red;
 }
 
+/***GOINGS PAGE***/
+
+.tab{
+  text-align:center;
+}
+
+.all{
+  margin-right:40px;
+}
+
+.my{
+  margin-left:40px;
+}
+
+.go{
+  cursor:pointer;
+}
+.active{
+  background:orange;
+}
+/***SUBMIT NEW PLACE***/
+textarea{
+  margin-top:10px;
+  width:300px;
+  overflow: scroll;
+}
+/**REST***/
 @keyframes wina {
   0% {
     color: black;
   }
   25% {
-    color: green;
+    color: blue;
   }
-  50% {
-    color: red;
-  }
+  
   75% {
     color: gray;
-  }
-  100% {
-    color: yellow;
   }
 }
 

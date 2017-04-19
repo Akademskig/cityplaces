@@ -1,15 +1,18 @@
 $(document).ready(function(){
+    var lat;
+    var long;
     
-     
     if(navigator.geolocation){
+        
         navigator.geolocation.getCurrentPosition(function(position) {
-            console.log(position)
-            var lat=position.coords.latitude;
-            var long= position.coords.longitude;
+            console.log("position:"+position)
+            lat=position.coords.latitude;
+            long= position.coords.longitude;
             var city;
             var cityID;
             var cityName;
-            
+        })
+    }
             var LOC_API_KEY='7701a8bdadb391afeedd037116f2cb2b'
             var call1= 'https://geoip-db.com/json/geoip.php?jsonp=?';
            
@@ -17,46 +20,54 @@ $(document).ready(function(){
                  $('.location').html(json.city + ', '+ json.country_name)
                     city=json.city + ','+ json.country_code;
                     cityName=json.city;
-                    console.log(json)
+                    lat=json.latitude;
+                    long=json.longitude;
+                    
                     var getCityID='https://cors-anywhere.herokuapp.com/http://api.openweathermap.org/data/2.5/find?q='+city+'&type=like&appid='+LOC_API_KEY;
                     $.getJSON(getCityID, function(data){
                         cityID=data.list[0].id
                     })
             })
-                    
+                 
                
-              var keyword=null;
+              var keyword="&keyword=";
+              var distance=500;
             $('.getLocation').on('click', function() {
+               
                $('.container-3').html('<div class=\'results-list\'></div>')
               
-                if($('#keyword').val() !=''){
-                    keyword=$('#keyword').val();
+                if($('#keyword').val() !='' && $('#keyword').val() != null){
+                    keyword='&keyword='+$('#keyword').val();
+                    console.log("true")
                 }
-                getMap(lat,long,15, keyword);
-               
-                var reqData={'location': lat + ','+long, 'keyword': keyword, 'city': city, 'cityId':cityID, 'cityName':cityName};
-                 console.log(reqData)
+                console.log(keyword)
+                if(!isNaN(Number($('#distance').val())) && Number($('#distance').val()) !=0){
+                    
+                    distance=Number($('#distance').val());
+                }
+                var placesUrl='https://maps.googleapis.com/maps/api/place/nearbysearch/json?location='+lat+','+long+'&radius='+distance+keyword+'&key=AIzaSyAJRnPCMCZ9ViyoX36Ijvho3DCTEv3QVI0';
                 
+                $.get(placesUrl, function(data){
+                    renderPlaces(data, 0)
+                    
+                    $('.showMap').on('click',function(){
+                        $('.map').fadeIn('slow')
+                        var showLocMap=new ShowLocMap(lat,long,data.results);
+                    })
+                })
             })
             
             $('.showMap').on('click',function(){
-                console.log($('.container-3').val())
                 if($('.container-3').is(':empty')){
-                    
+                     console.log(lat)
                      $('.map').fadeIn('slow')
-                    var showLocMap=new ShowLocMap(lat,long,15,'Your location');
+                    var showLocMap=new ShowLocMap(lat,long,'Your location');
                 }
-                else{
-                 $('.map').fadeIn('slow')
-                 getMap(lat,long,15,keyword)
-                }
-            //--------SHOW-HIDE MAP------------
-            
-                    
+              
             })
            
-        })
-    }
+        
+    
     $('#city').on('click', function() {
         $('h1').removeClass('anim')
     })
@@ -70,7 +81,7 @@ $(document).ready(function(){
         location=$('#location').val()
     })
     
-    var keyword=null;
+   
     
     $('#submit').on('click',function(){
         

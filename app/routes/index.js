@@ -4,7 +4,8 @@ var request = require('request');
 var path = process.cwd();
 var Yelp = require('yelp');
 var Place=require('../models/places.js')
-
+var Going=require('../models/going.js')
+//var UserPLaces=
 module.exports = function (app, passport) {
 
 	function isLoggedIn (req, res, next) {
@@ -17,11 +18,11 @@ module.exports = function (app, passport) {
 
 	app.route('/')
 		.get(function (req, res) {
-			var username;
+			var username='undefined';
 			if(req.user != undefined){
-				username= req.user.local.username || req.user.github.username || req.user.facebook.name || null;
+				username= req.user.local.username || req.user.github.username || req.user.facebook.name;
 			}
-				console.log(req.user)
+			
 			res.render('index',{user:username});
 		});
 	
@@ -64,8 +65,91 @@ module.exports = function (app, passport) {
 			res.setHeader('Access-Control-Allow-Origin', '*');
 			res.render('nightlife/nightlifeHP',{'api_key': process.env.GOOGLE_MAPS_KEY})
 		})
+		
+	app.route('/nightlife/putData')
+		.get(function(req,res){
+			res.sendFile(path + '/public/nightlife/newDataForm.html');
+		})
+		
+	app.route('/nightlife/going')
+		.post(function(req,res){
+			console.log(req.body)
+			var user;
+			if(req.user!=undefined){
+				user = req.user.local.username || req.user.github.username || req.user.facebook.name;
+			}
+			console.log(user)
+			Going.findOneAndUpdate({placeID: req.body.placeId},{'$inc':{'numberOfPpl':1},$push:{users:user}}, function(err,data){
+				console.log(data)
+				if (data==null){
+					var going= new Going()
+					going.placeName=req.body.place;
+					going.placeID=req.body.placeId;
+					going.numberOfPpl=1;
+					going.users.push(user)
+					
+					going.save(function(err){
+						if(err){
+							throw err;
+						}
+					})
+					res.send({"numOfPpl":going.numberOfPpl});
+				}
+				else{
+					res.send({"numOfPpl":data.numberOfPpl})
+				}
+			})
+		})
+		.get(function(req,res){
+			res.sendFile(path + '/public/nightlife/goings.html')
+		})
 	
-	app.route('/nightlife/loc/')
+	app.route('/nightlife/goings')
+		.get(function(req,res){
+			Going.find({},function(err,data){
+				if (err){
+					throw err;
+				}
+				res.json(data)
+			})
+		})
+	app.route('/nightlife/myGoings')
+		.get(function(req,res){
+			var user;
+			if(req.user!=undefined){
+				user = req.user.local.username || req.user.github.username || req.user.facebook.name;
+			}
+			
+			Going.find({users:user},function(err,data){
+				if (err){
+					throw err;
+				}
+				res.json(data)
+			})
+		})
+	
+	app.route('/nightlife/removeGoing')
+		.post(function(req,res){
+			var user;
+			if(req.user!=undefined){
+				user = req.user.local.username || req.user.github.username || req.user.facebook.name;
+			}
+			console.log(user)
+				console.log(req.body)
+			Going.update({placeID:req.body.placeId},{$pull:{users:user}},function(err,data){
+				if(err){
+					throw err
+				}
+			})
+			res.send('Deleted')
+		})
+	
+	app.route('/nightlife/putData/newPlace')
+		.post(function(req,res){
+			console.log(req.body.address)
+		})
+	
+	/*app.route('/nightlife/loc/')
 		.post(function(req,res){
 			var callUrl;
 			console.log(req.body.reqData.cityName)
@@ -146,7 +230,7 @@ module.exports = function (app, passport) {
             res.json(respObj)
         })
 		})        
-    
+    */
         
     app.route('/dbSearch')
     	.post(function(req,res){

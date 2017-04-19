@@ -10,13 +10,17 @@
 <body>
 <div class='container-1'>
 <div class="navbar"><a href="/login" class="login nav">Login</a>|<a href="/gitLogin" class="gitLogin nav">Login with Github</a>|<a href="/fbLogin" class="fbLogin nav">Login with Facebook</a></div>
-<h1>Welcome to my apps !{user}!</h1>
+<h1>Welcome to my apps <span id="user"></span>!</h1>
 <div class="container-2">
-<ul>
+<ul class="">
 <li><p class="voting"><a href="#">Voting app</a></p></li>
 <li><p class="nightlife"><a href="/nightlife"> Nightlife coordination app</a></p></li>
 </ul>
 </div>
 </div>
+script.
+    var user='!{user}'
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script type="text/javascript" src="controllers/appsVisibility.js"></script>
 </body>
 </html>
