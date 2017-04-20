@@ -26,6 +26,7 @@ $(document).ready(function(){
                     var getCityID='https://cors-anywhere.herokuapp.com/http://api.openweathermap.org/data/2.5/find?q='+city+'&type=like&appid='+LOC_API_KEY;
                     $.getJSON(getCityID, function(data){
                         cityID=data.list[0].id
+                        console.log(data)
                     })
             })
                  
@@ -49,8 +50,11 @@ $(document).ready(function(){
                 var placesUrl={url:'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location='+lat+','+long+'&radius='+distance+keyword+'&key=AIzaSyAJRnPCMCZ9ViyoX36Ijvho3DCTEv3QVI0'};
                 
                 $.post('/nightlife/loc',placesUrl, function(data){
-                    if(data.status= "OVER_QUERY_LIMIT"){
-                        message='<p style="text-align:center; padding:5px">No data available</p>'
+                    console.log(data)
+                    data=JSON.parse(data)
+                    if(data.status=== "OVER_QUERY_LIMIT"){
+                        message ="<p style=\"text-align:center; padding:5px\">No data available</p>"
+                        console.log(message)
                         $('.container-3').html(message)
                         return
                     }

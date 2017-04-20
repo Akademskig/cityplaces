@@ -25,9 +25,9 @@ h1 {
 
 .container-2 {
   padding: 5px;
-  background: #01A9DB;
+  background: #5882FA;
   margin: auto;
-  max-width: 500px;
+  max-width: 450px;
   border-radius: 5px;
   border: solid 1px black;
   padding: 10px;
@@ -80,16 +80,14 @@ a {
   margin:auto;
   max-width:200px;
   text-align:center;
-  border-bottom:solid 1px black;
   padding-bottom:0;
-  background:red;
 }
 
 .location{
   font-weight:bold;
   font-size:20px;
   padding:0;
-  background:blue;
+  background:#0040FF;
   margin-bottom:0;
 }
 
@@ -105,7 +103,6 @@ a {
 
 .searchOpt {
   text-align: center;
-  background:yellow;
   padding:10px;
   margin-top:15px;
 }
@@ -206,7 +203,7 @@ input#distance{
 #more{
   max-width:100px;
   margin:auto;
-  background:black;
+  background:blue;
   text-align:center;
   color:purple;
   cursor:pointer;

@@ -113,8 +113,9 @@ function renderDb(data){
      
     
      $('.name.'+i).on('click',function(){
+         var detailsUrl={url:'https://maps.googleapis.com/maps/api/place/details/json?placeid='+item.placeID+'&key=AIzaSyBsEIashHje_Mirls38eHsplMXbdrxaFLI'}
          if($('.details'+i).is(':empty')){
-        $.get(detailsUrl,function(data){
+        $.post('/nightlife/details',detailsUrl,function(data){
             if(data.status=='OK' && data.result.opening_hours){
                        $('.details'+i).html("<p class='opened' style='border-bottom: solid 1px black'>Opened: </p>")
                        
@@ -133,6 +134,8 @@ function renderDb(data){
      }
   })
   
+
+  
   if($('.my').hasClass('active')){
       $('.place-'+i).append('<div class="col-md-1"><button class="remove-'+i+'">X</button></div>')
   }
@@ -148,7 +151,11 @@ function renderDb(data){
     })
 }
 
-
+function renderMyPlaces(data){
+    data.forEach(function(item,i){
+        $('.results-list').append('<div class=\'place place-'+i+'\'><div class=\'info\'><p class=\'name '+i+'\'>'+item.placeName+'</p><p class=\'address '+i+'\'>'+item.address+'</p><p class=\'addInfo '+i+'\'>'+item.addInfo+'</p></div></div>')
+    })
+}
 
 function ShowLocMap(lat,long,place){
     this.lat=lat

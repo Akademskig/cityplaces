@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport"content="width=device-width initial-scale=1.0"/>
+<link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,700|Titillium+Web:400,700" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Cabin:400,600" rel="stylesheet" type="text/css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="../public/css/nightlifeHP.css" rel="stylesheet" type="text/css">
+</head>
+  
+<body>
+<div class="container-1">
+<div class="navig"><a href="/" class="homepage nav2">Homepage</a><a href="/nightlife" class="homepage nav2">Back</a></div>
+<h1 class="anim">City Places</h1>
+<div class="container-2">
+<div class="searchOpt">
+<p>New Place</p>
+<form action="/nightlife/putData/newPlace" method="post" id="cityForm">
+<input type="text" id="city" name="city" placeholder="city name" /><br>
+<input type="text" id="placeName" name= "place" placeholder="place name" /><br>
+<input type="text" id="address" name = "address" placeholder="address" /><br>
+<input type="text" id="keywords" name="keywords" placeholder="keywords" /><br>
+<input name="user" class="noDisplay" value=!{user} /><br>
+<textarea type="text" id="addInfo"name="addInfo"placeholder="additional info"></textarea><br>
+<input type="submit" value="Save" id="submit" class="b" style="display:inline-block" />
+</form>
+</div> 
+#{error-message}
+</div>  
+</div>
+</body>  
+</html>

@@ -2,10 +2,9 @@
 
 var request = require('request');
 var path = process.cwd();
-var Yelp = require('yelp');
 var Place=require('../models/places.js')
 var Going=require('../models/going.js')
-//var UserPLaces=
+
 module.exports = function (app, passport) {
 
 	function isLoggedIn (req, res, next) {
@@ -59,7 +58,7 @@ module.exports = function (app, passport) {
 			res.redirect('/login');
 		});
 		
-	//----ROUTE FOR NIGHTLIFE APP------------
+	//----ROUTES FOR NIGHTLIFE APP------------
 	app.route('/nightlife')
 		.get(function(req,res){
 			res.setHeader('Access-Control-Allow-Origin', '*');
@@ -68,7 +67,11 @@ module.exports = function (app, passport) {
 		
 	app.route('/nightlife/putData')
 		.get(function(req,res){
-			res.sendFile(path + '/public/nightlife/newDataForm.html');
+			var user;
+			if(req.user!=undefined){
+				user = req.user.local.username || req.user.github.username || req.user.facebook.name;
+			}
+			res.render('nightlife/newDataForm',{user:user});
 		})
 		
 	app.route('/nightlife/going')
@@ -150,11 +153,15 @@ module.exports = function (app, passport) {
 			if(req.user!=undefined){
 				user = req.user.local.username || req.user.github.username || req.user.facebook.name;
 			}
-			console.log(user)
-				console.log(req.body)
-			Going.update({placeID:req.body.placeId},{$pull:{users:user}},function(err,data){
+			
+			Going.update({placeID:req.body.placeId, users:user},{$pull:{users:user},'$inc':{'numberOfPpl':-1}},function(err,data){
 				if(err){
 					throw err
+				}
+			})
+			Going.remove({numberOfPpl:{$lte:0}},function(err,data){
+				if(err){
+					throw err;
 				}
 			})
 			res.send('Deleted')
@@ -162,7 +169,80 @@ module.exports = function (app, passport) {
 	
 	app.route('/nightlife/putData/newPlace')
 		.post(function(req,res){
+			console.log(req.user)
+			var user;
+			if(req.user!=undefined){
+				user = req.user.local.username || req.user.github.username || req.user.facebook.name;
+			}
+			
+			Place.findOne({placeName: req.body.place.toLowerCase()},function(err,data){
+				if(err){
+					throw err;
+				}
+				if(data==null){
+					var place = new Place()
+					place.id= new Date().getTime()
+					place.placeName=req.body.place.toLowerCase()
+					place.address=req.body.address
+					place.cityName=req.body.city
+					place.keyword=req.body.keywords
+					place.addInfo=req.body.addInfo
+					place.user=user
+					place.save(function(err,data){
+						if(err){
+							throw err
+						}
+					})
+				}
+				
+			})
 			console.log(req.body.address)
+			res.redirect('/nightlife/putData/newPlace')
+		})
+		.get(function(req,res){
+			res.redirect('/nightlife/places')
+		})
+		
+	app.route('/nightlife/places')
+		.get(function(req,res){
+			res.sendFile(path + '/public/nightlife/places.html')
+		})
+		
+	app.route('/nightlife/allPlaces')
+		.get(function(req,res){
+			Place.find({},function(err,data){
+				if(err){
+					throw err
+				}
+				res.json(data);
+			})
+		})
+		.post(function(req,res){
+			Place.find({cityName:req.body.city},function(err,data){
+				if(err){
+					throw err
+				}
+				res.json(data);
+			})
+		})
+		
+	app.route('/nightlife/myPlaces')
+		.get(function(req,res){
+			var user;
+			if(req.user){
+				user = req.user.local.username || req.user.github.username || req.user.facebook.name;
+			}
+			else{
+				res.send('You are not logged in!')
+				return
+			}
+			
+			Place.find({user:user},function(err,data){
+				if(err){
+					throw err
+				}
+				res.json(data);
+			})
 		})
 	
 	app.route('/nightlife/loc/')
@@ -211,27 +291,12 @@ module.exports = function (app, passport) {
             		'Content-Type': 'application/x-www-form-urlencoded',
             		'Accept': 'application/json'
                 }}
-            	request.get(opts,function(data){
-            		res.json(JSON.parse(data))
+            	request.get(opts,function(err,resp,body){
+            		console.log(resp.body)
+            		res.json(JSON.parse(resp.body))
             	
             	})
             })
-    		
-    
-		
-	app.route('https://api.yelp.com/oauth2/token/:credentials')
-		.post(function(req,res){
-		 })
 	
-
-	app.route('/profile')
-		.get(isLoggedIn, function (req, res) {
-			res.sendFile(path + '/public/profile.html');
-		});
-		
-	app.route('/api/:id')
-		.get(isLoggedIn, function (req, res) {
-			res.json(req.user.github);
-		});
 
 };
