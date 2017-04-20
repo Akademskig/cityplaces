@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css?family=Raleway:400,700|Titillium+Web:400,700" rel="stylesheet">
 <link href='https://fonts.googleapis.com/css?family=Cabin:400,600' rel='stylesheet' type='text/css'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
-<link href='public/css/nightlifeHP.css' rel='stylesheet' type='text/css'>
+<link href='../public/css/nightlifeHP.css' rel='stylesheet' type='text/css'>
 </head>
   
 <body>
@@ -16,16 +16,14 @@
 <div class="navig"><a href="/" class="homepage nav2">Homepage</a><a href="/nightlife/putData" class="homepage nav2">New Data</a><a href="/nightlife/going" class="homepage nav2">Goings</a><a href="/nightlife/places" class="homepage nav2">My Places</a><a href="/nightlife/searchCities" class="homepage nav2">Search by Cities</a><a href="/nightlife" class="homepage nav2">Search by current location</a></div>
 <h1 class='anim'>City Places</h1>
 <div class="container-2">
-<div class="locBox">Your location:<p class="location"></p></div>
-<div class="searchOpt">
-<button class="getLocation b">Use current location</button><br>
-<img src='public/img/google_logo.png' width='150px'/>
-<p><input type="text" id="keyword" placeholder="what are you looking for?"></p>
 
-<div class="distance">
-<p class='distText'>Find by distance</p>
-<input id='distance' placeholder='radius'/>
-</div>
+<div class="searchOpt">
+<p class="searchText">Search for a City</p>
+<input type="text" id="location" placeholder='e.g. Zagreb' />
+<div id="infowindow-content"></div>
+<p class="searchText" style="margin-top:10px">Filter by keyword</p>
+<input type="text" id="keyword" placeholder='keyword' /><br>
+<button id='submit' class='b' >Go!</button>
 
 div.showMap Show map  
 </div> 
@@ -37,12 +35,11 @@ div(id="numPpl") !{numPpl}
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-<script type="text/javascript" src="controllers/functions.js"></script>
-<script type="text/javascript" src="controllers/googleApiController.js"></script>
-<script async defer type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=!{api_key}&libraries=places&callback=getMap"></script>
 
+<script type="text/javascript" src="../controllers/functions.js"></script>
+<script type="text/javascript" src="../controllers/searchCities.js"></script>
+<script async defer type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTLF_6MfAch1HLYmGAuQmPyxydf0m1cNE&libraries=places&callback=initMap"></script>
 script.
     var page='!{page}'
-
 </body>  
 </html>

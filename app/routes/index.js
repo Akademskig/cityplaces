@@ -62,7 +62,7 @@ module.exports = function (app, passport) {
 	app.route('/nightlife')
 		.get(function(req,res){
 			res.setHeader('Access-Control-Allow-Origin', '*');
-			res.render('nightlife/nightlifeHP',{'api_key': process.env.GOOGLE_MAPS_KEY})
+			res.render('nightlife/nightlifeHP',{'api_key': process.env.GOOGLE_MAPS_KEY,'page': 'homepage'})
 		})
 		
 	app.route('/nightlife/putData')
@@ -185,7 +185,18 @@ module.exports = function (app, passport) {
 					place.placeName=req.body.place.toLowerCase()
 					place.address=req.body.address
 					place.cityName=req.body.city
-					place.keyword=req.body.keywords
+					
+					var keywords=req.body.keywords.split(',')
+					console.log(keywords)
+					keywords.forEach(function(key){
+						var a=key.split("")
+						while(a[0]==" "){
+							a.shift();
+						}
+						key=a.join("")
+						place.keyword.push(key)
+					})
+					
 					place.addInfo=req.body.addInfo
 					place.user=user
 					place.save(function(err,data){
@@ -218,10 +229,23 @@ module.exports = function (app, passport) {
 			})
 		})
 		.post(function(req,res){
-			Place.find({cityName:req.body.city},function(err,data){
+			var query={cityName:req.body.city, keyword: req.body.keyword}
+			
+			if(!req.body.city){
+				query={keyword: req.body.keyword}
+			}
+			if(!req.body.keyword){
+				query={cityName:req.body.city}
+			}
+			if(!req.body.city && !req.body.keyword){
+				query={}
+			}
+			console.log(query)
+			Place.find(query,function(err,data){
 				if(err){
 					throw err
 				}
+				console.log(data)
 				res.json(data);
 			})
 		})
@@ -243,6 +267,18 @@ module.exports = function (app, passport) {
 				}
 				res.json(data);
 			})
+		})
+		
+	app.route('/nightlife/removePlace')
+		.post(function(req,res){
+			
+			Place.remove({placeName:req.body.placeName},function(err,data){
+				if(err){
+					throw err
+				}
+			})
+			
+			res.send('Deleted')
 		})
 	
 	app.route('/nightlife/loc/')
@@ -298,5 +334,9 @@ module.exports = function (app, passport) {
             	})
             })
 	
+	app.route('/nightlife/searchCities')
+		.get(function(req,res){
+			res.render('nightlife/searchCities',{'page': 'cities'})
+		})
 
 };

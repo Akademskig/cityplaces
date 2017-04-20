@@ -38,8 +38,8 @@ $(document).ready(function(){
        })
    })
    $('#submit').on('click', function(data){
-       var city={city: $('#location').val()}
-       $.post('/nightlife/allPlaces',city,function(data){
+       var query={city: $('#location').val(), keyword: $('#keyword').val()}
+       $.post('/nightlife/allPlaces',query,function(data){
            $('.results-list').empty()
            renderMyPlaces(data);
        })

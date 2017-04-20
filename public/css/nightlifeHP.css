@@ -25,7 +25,7 @@ h1 {
 
 .container-2 {
   padding: 5px;
-  background: #5882FA;
+  background: rgba(87,185,211,0.9);
   margin: auto;
   max-width: 450px;
   border-radius: 5px;
@@ -60,7 +60,7 @@ a {
 */
 
 .navig {
-  text-align: right;
+  text-align: justify;
   margin: 5px;
   background: black;
   padding: 5px;
@@ -72,8 +72,9 @@ a {
   padding: 4px 6px;
   color: #8000FF;
   border-radius: 0px;
-  border-left: solid 1px;
-  border-right: solid 1px;
+  border-left: solid 2px;
+  border-right: solid 2px;
+  margin-right:2px;
 }
 /**+LOCATION***/
 .locBox{
@@ -176,7 +177,7 @@ input#distance{
   float:right;
   display:block;
 }
-.photo a{
+.photo{
   clear:both;
   float:right;
   display:block;

@@ -6,7 +6,7 @@ var renderPlaces=function(data,index){
         dataJson=JSON.parse(data)
     }
     
-    console.log(data.results)
+    
     var places=dataJson.results;
     var photosKey='AIzaSyBXLMrmKqkc4CJijlW73FHU3hoAsGOyws0'
     
@@ -22,7 +22,7 @@ var renderPlaces=function(data,index){
         }
         var photo='';
         if(place.photos){
-            attribution=place.photos[0].html_attributions;
+            attribution='Photo by:  '+place.photos[0].html_attributions;
             photo='https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&photoreference='+place.photos[0].photo_reference+'&key='+photosKey;
         }
         else{
@@ -40,8 +40,11 @@ var renderPlaces=function(data,index){
         
             $('.going'+i).on('click',function(){
                 if(!$(this).children().hasClass("active")){
-                    
-                    $.post('nightlife/going',goingData,function(data){
+                    var route='nightlife/going';
+                    if(page=='cities'){
+                        route='/nightlife/going';
+                    }
+                    $.post(route,goingData,function(data){
                        if(typeof data == 'string'){
                            alert(data)
                            return
@@ -68,7 +71,7 @@ var renderPlaces=function(data,index){
             if($('.details'+i).is(':empty')){
                 var detailsUrl={url:'https://maps.googleapis.com/maps/api/place/details/json?placeid='+place.place_id+'&key=AIzaSyBsEIashHje_Mirls38eHsplMXbdrxaFLI'}
                 $.post('/nightlife/details',detailsUrl,function(data){
-                    console.log(data)
+                    
                     if(data.status=='OK' && data.result.opening_hours){
                        $('.details'+i).html("<p class='opened' style='border-bottom: solid 1px black'>Opened: </p>")
                        
@@ -106,7 +109,7 @@ var renderPlaces=function(data,index){
 
 function renderDb(data){
     data.forEach(function(item,i){
-        console.log(item)
+        
         var detailsUrl='https://maps.googleapis.com/maps/api/place/details/json?placeid='+item.placeID+'&key=AIzaSyBsEIashHje_Mirls38eHsplMXbdrxaFLI'
         $('.results-list').append('<div class=\'row place place-'+i+'\'><div class=\'col-md-7 info\'><p class=\'name '+i+'\'>'+item.placeName+'</p><p class="det details'+i+'"></p></div><div class="numPpl col-md-4"><p class=\'numOPpl\'>People going: '+
      item.numberOfPpl+'</p></div>')
@@ -142,7 +145,7 @@ function renderDb(data){
   $('.remove-'+i).on('click',function(){
       
       var removeData={placeId:item.placeID}
-      console.log(removeData)
+      
       $.post('/nightlife/removeGoing',removeData,function(data){
           
       })
@@ -153,8 +156,24 @@ function renderDb(data){
 
 function renderMyPlaces(data){
     data.forEach(function(item,i){
-        $('.results-list').append('<div class=\'place place-'+i+'\'><div class=\'info\'><p class=\'name '+i+'\'>'+item.placeName+'</p><p class=\'address '+i+'\'>'+item.address+'</p><p class=\'addInfo '+i+'\'>'+item.addInfo+'</p></div></div>')
+        $('.results-list').append('<div class=\'place place-'+i+'\'><div class=\'info\'><p class=\'name '+i+'\'>Name:   '+item.placeName+'</p><p class=\'address '+i+'\'>Address:   '+item.address+', '+
+        item.cityName+'</p><p class=\'addInfo '+i+'\'>Additional information:   '+item.addInfo+'</p><p class=\'keywords '+i+'\'>Keywords:   '+item.keyword+'</p></div></div>')
+        
+        if($('.my').hasClass('active')){
+            $('.place-'+i).append('<div class="col-md-1"><button class="remove-'+i+'">X</button></div>')
+        }
+        $('.remove-'+i).on('click',function(){
+          
+            var removeData={placeName:item.placeName}
+            
+            $.post('/nightlife/removePlace',removeData,function(data){
+              
+            })
+            $(this).parent().parent().remove();
+        })
     })
+    
+    
 }
 
 function ShowLocMap(lat,long,place){
@@ -163,7 +182,7 @@ function ShowLocMap(lat,long,place){
     
     var place=place 
     this.loc = {lat: this.lat, lng: this.long};
-    console.log(typeof place)
+    
      var map = new google.maps.Map(document.getElementById('map'), {
     center: this.loc,
     zoom: 15
@@ -183,14 +202,14 @@ function ShowLocMap(lat,long,place){
     }
     else{
          place.forEach(function(place){
-             console.log(place)
+             
              createMarker(place);
          })
     }
     
     function createMarker(place) {
         var placeLoc = place.geometry.location;
-        console.log(placeLoc)
+        
         var marker = new google.maps.Marker({
             map: map,
             position: place.geometry.location
@@ -202,7 +221,7 @@ function ShowLocMap(lat,long,place){
         });
     }
 }
-
+/*
 function getMap() {
       var map;
      
@@ -210,7 +229,9 @@ function getMap() {
       map = new google.maps.Map(document.getElementById('map'), {
           center: loc,
           zoom: 15
-      })
-        
-}
+      })}
+*/
 
+$('.nav2').on('click',function(){
+    $(this).css("color", "blue")
+})
