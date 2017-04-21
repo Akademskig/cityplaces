@@ -1,11 +1,11 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var Going = new Schema({
-    numberOfPpl:Number,
+var Save = new Schema({
+    notes:[String],
     placeName: String,
     placeID: String,
     users:{type:Array, default:[]}
 });
 
-module.exports = mongoose.model('Going', Going);
+module.exports = mongoose.model('Save', Save);

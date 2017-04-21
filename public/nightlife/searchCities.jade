@@ -13,7 +13,7 @@
 <body>
 <div class='container-1'>
 <div class='map noDisplay'><div class="hide">X</div><div id="map"></div></div>
-<div class="navig"><a href="/" class="homepage nav2">Homepage</a><a href="/nightlife/putData" class="homepage nav2">New Data</a><a href="/nightlife/going" class="homepage nav2">Goings</a><a href="/nightlife/places" class="homepage nav2">My Places</a><a href="/nightlife/searchCities" class="homepage nav2">Search by Cities</a><a href="/nightlife" class="homepage nav2">Search by current location</a></div>
+<div class="navig"><a href="/" class="homepage nav2">Homepage</a><a href="/nightlife/putData" class="homepage nav2">New Data</a><a href="/nightlife/save" class="homepage nav2">Saves</a><a href="/nightlife/places" class="homepage nav2">My Places</a><a href="/nightlife/searchCities" class="homepage nav2">Search by Cities</a><a href="/nightlife" class="homepage nav2">Search by current location</a></div>
 <h1 class='anim'>City Places</h1>
 <div class="container-2">
 
@@ -38,7 +38,8 @@ div(id="numPpl") !{numPpl}
 
 <script type="text/javascript" src="../controllers/functions.js"></script>
 <script type="text/javascript" src="../controllers/searchCities.js"></script>
-<script async defer type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTLF_6MfAch1HLYmGAuQmPyxydf0m1cNE&libraries=places&callback=initMap"></script>
+<script type="text/javascript" src="../controllers/googleApiController.js"></script>
+<script async defer type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTLF_6MfAch1HLYmGAuQmPyxydf0m1cNE&libraries=places&callback=findCities"></script>
 script.
     var page='!{page}'
 </body>  

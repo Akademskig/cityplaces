@@ -4,7 +4,7 @@ body{
   font-family: 'Raleway'
 }
 .container-1{
-  background:url('http://www.planwallpaper.com/static/images/abstract-wallpapers-1080p-hd.jpg');
+  background:url('../img/homepage.jpg');
   margin:auto;
   margin-top:0;
   max-width:900px;

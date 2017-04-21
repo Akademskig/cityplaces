@@ -6,7 +6,7 @@ body {
 }
 
 .container-1 {
-  background: url('http://www.planwallpaper.com/static/images/abstract-wallpaper-images-hiht.jpg') 900px;
+  background: url('../img/cityplaces.jpg') 900px;
   margin: auto;
   margin-top: 0;
   max-width: 900px;
@@ -194,8 +194,8 @@ input#distance{
   font-size:15px;
   
 }
-/***PEOPLE GOING****/
-.going{
+/***PEOPLE save****/
+.save{
   clear:both;
   float:right;
   vertical-align:bottom;
@@ -210,7 +210,7 @@ input#distance{
   cursor:pointer;
 }
 
-#going{
+#save{
   cursor:pointer;
 }
 
@@ -268,7 +268,7 @@ input#distance{
   border:solid 1px red;
 }
 
-/***GOINGS PAGE***/
+/***saveS PAGE***/
 
 .tab{
   text-align:center;

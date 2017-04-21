@@ -5,13 +5,10 @@ var renderPlaces=function(data,index){
     if(typeof data != 'object'){
         dataJson=JSON.parse(data)
     }
-    
-    
     var places=dataJson.results;
+     
     var photosKey='AIzaSyBXLMrmKqkc4CJijlW73FHU3hoAsGOyws0'
-    
     places.forEach(function(place,i){
-        
         i=i+index
         if(place.opening_hours != undefined){
             opened=(place.opening_hours.open_now==true)? 'yes :)':'no :(';
@@ -28,44 +25,43 @@ var renderPlaces=function(data,index){
         else{
             attribution=""
         }
-        
         var lat=place.geometry.location.lat
         var long=place.geometry.location.lng
         
         $('.results-list').append('<div class=\'row place\'><div class=\'position noDisplay\'><p id=\'lat\'>'+lat+'</p><p id=\'long\'>'+long+'</p></div><div class=\'col-md-6 info\'><p class=\'name '+i+'\'>'+place.name+'</p><p class=\'address\'>'+
         place.vicinity+'</p><div class=\'opened \'>Opened: '+opened+'</div><img class=\'icon\'src=\'' +
-        place.icon+'\'><p id="details'+i+'" class="detailsH">Details</p><ul class="det details'+i+'"></ul></div><div class=\'col-md-6\'><p class=\'photo\'><img src='+photo+'></img><br/>'+attribution+'</p><div class="going going'+i+'"><button id="going"class="">Going</button></div></div></div>')
+        place.icon+'\'><p id="details'+i+'" class="detailsH">Details</p><ul class="det details'+i+'"></ul></div><div class=\'col-md-6\'><p class=\'photo\'><img src='+photo+'></img><br/>'+attribution+'</p><div class="save save'+i+'"><button id="save"class="">Save</button></div></div></div>')
         
-        var goingData={'place': place.name, 'placeId': place.place_id}
+        var saveData={'place': place.name, 'placeId': place.place_id}
         
-            $('.going'+i).on('click',function(){
+            $('.save'+i).on('click',function(){
                 if(!$(this).children().hasClass("active")){
-                    var route='nightlife/going';
+                    var route='nightlife/save';
                     if(page=='cities'){
-                        route='/nightlife/going';
+                        route='/nightlife/save';
                     }
-                    $.post(route,goingData,function(data){
+                    $.post(route,saveData,function(data){
                        if(typeof data == 'string'){
                            alert(data)
                            return
                        }
-                       $('.going'+i).children().addClass("active")
+                       $('.save'+i).children().addClass("active")
                     })
                 }else{
+                    var routeRem='nightlife/removesave';
+                    if(page=='cities'){
+                        routeRem='/nightlife/removesave';
+                    }
                     $(this).children().removeClass("active")
-                    $.post('nightlife/removeGoing',goingData,function(data){
-                    
+                    $.post(routeRem,saveData,function(data){
                 })
-               
             }
         })
         
          $('.name.'+i).on('click',function(){
            $('.map').fadeIn('slow');
            var showLocMap=new ShowLocMap(lat,long,place.name);
-           
         })
-        
         
         $('#details'+i).on('click',function(){
             if($('.details'+i).is(':empty')){
@@ -109,50 +105,95 @@ var renderPlaces=function(data,index){
 
 function renderDb(data){
     data.forEach(function(item,i){
-        
+         
         var detailsUrl='https://maps.googleapis.com/maps/api/place/details/json?placeid='+item.placeID+'&key=AIzaSyBsEIashHje_Mirls38eHsplMXbdrxaFLI'
-        $('.results-list').append('<div class=\'row place place-'+i+'\'><div class=\'col-md-7 info\'><p class=\'name '+i+'\'>'+item.placeName+'</p><p class="det details'+i+'"></p></div><div class="numPpl col-md-4"><p class=\'numOPpl\'>People going: '+
-     item.numberOfPpl+'</p></div>')
-     
+        $('.results-list').append('<div class=\'row place place-'+i+'\'><div class=\'col-md-8 info'+i+'\'><p class=\'name'+i+'\'>'+item.placeName+'</p></div></div>')
     
-     $('.name.'+i).on('click',function(){
-         var detailsUrl={url:'https://maps.googleapis.com/maps/api/place/details/json?placeid='+item.placeID+'&key=AIzaSyBsEIashHje_Mirls38eHsplMXbdrxaFLI'}
-         if($('.details'+i).is(':empty')){
+    
+        var detailsUrl={url:'https://maps.googleapis.com/maps/api/place/details/json?placeid='+item.placeID+'&key=AIzaSyBsEIashHje_Mirls38eHsplMXbdrxaFLI'}
+         
         $.post('/nightlife/details',detailsUrl,function(data){
-            if(data.status=='OK' && data.result.opening_hours){
-                       $('.details'+i).html("<p class='opened' style='border-bottom: solid 1px black'>Opened: </p>")
+             if(data.status=='OK'){
+            $('.info'+i).append('<p class=\'address '+i+'\'>'+data.result.formatted_address+'</p>')
+            if(data.result.international_phone_number){
+                 $('.info'+i).append('<p class=\'phoneNum '+i+'\'>'+data.result.international_phone_number+'</p>')
+            }
+            $('.info'+i).append('<p style="cursor:pointer"class=\'detailText-'+i+'\'>Details</p>')
+            $('.info'+i).append('<p class="noDisplay det details-'+i+'"></p>')
+            if(data.result.opening_hours){
+                
+                       $('.details-'+i).html("<p class='opened' style='border-bottom: solid 1px black'>Opened: </p>")
                        
                        data.result.opening_hours.weekday_text.forEach(function(val){
-                           $('.details'+i).append("<li>"+val+"</li>")
+                           $('.details-'+i).append("<li>"+val+"</li>")
                        })
                    }
-                   else{
-                       $('.details'+i).html("<p>No details found</p>")
-                   }
-                   $('.details'+i).append("<a href="+data.result.url+"><p style='color:purple; margin-top:10px'>See on map</p></a>")
+            else {
+                $('.details-'+i).html("<p>No details found</p>")
+            }
+            $('.details-'+i).append("<a href="+data.result.url+"><p style='color:purple; margin-top:10px'>See on map</p></a>")
+            
+            $('.detailText-'+i).on('click',function(){
+                $('.details-'+i).toggle()
+            })
+             }
+            $('.info'+i).append('<div class="notes-'+i+'">Notes: </div>')
+            $('.info'+i).append('<div class="editArea'+i+'"></div>')
+            item.notes.forEach(function(note,j){
+               
+                $('.notes-'+i).append('<p style="margin:0;border-top:solid 1px black;height:40px"><span id="note">'+note+'</span><span class="noDisplay"style="clear:both;float:right;cursor:pointer;" id="removeNote-'+j+'">x</span></p>')
+                if($('.my').hasClass('active')){
+                    $('#removeNote-'+j).removeClass('noDisplay')
+                }
+                $('#removeNote-'+j).on('click',function(){
+                     
+                  var noteRem={note:$(this).prev().text(), placeID:item.placeID}
+                  
+                  $.post('/nightlife/removeNote',noteRem,function(data){
+                  })
+                  $(this).parent().remove()
+              })
+            })
         })
-    }
-     else{
-         $('.details'+i).toggle()
-     }
-  })
-  
-
-  
-  if($('.my').hasClass('active')){
-      $('.place-'+i).append('<div class="col-md-1"><button class="remove-'+i+'">X</button></div>')
-  }
-  $('.remove-'+i).on('click',function(){
       
-      var removeData={placeId:item.placeID}
-      
-      $.post('/nightlife/removeGoing',removeData,function(data){
-          
-      })
-      $(this).parent().parent().remove();
-  })
+        if($('.my').hasClass('active')){
+            $('.place-'+i).append('<div class="col-md-2 edit-'+i+'" style="font-size:15px;cursor:pointer">Add note</div><div class="col-md-2 remove-'+i+'"style="font-size:15px;cursor:pointer">Remove</div>')
+            $('.notes-'+i).children().append('<span style="clear:both;float:right;cursor:pointer;" id="removeNote-'+j+'">x</span>')
+        }
+        $('.remove-'+i).on('click',function(){
+            var removeData={placeId:item.placeID}
+            $.post('/nightlife/removesave',removeData,function(data){
+            })
+            $(this).parent().remove();
+        })
+        var j= 100;
+        $('.edit-'+i).on('click',function(){
+            if($('.editArea'+i).is(':empty')){
+              j++;
+              $('.editArea'+i).append('<div class="editDiv-'+i+'"><textarea id="note-'+i+'"></textarea><br><button style="cursor:pointer;" id="saveNote-'+i+'">Save</button></div>')
+              $('#saveNote-'+i).on('click',function(){
+                  var note={note:$('#note-'+i).val(), placeID:item.placeID}
+                  $.post('/nightlife/addNote',note,function(data){
+                  })
+                  
+                  $('.editDiv-'+i).remove()
+                  $('.notes-'+i).append('<p style="margin:0;border-top:solid 1px black;height:40px"><span id="note">'+note.note+'</span><span style="clear:both;float:right;cursor:pointer;" id="removeNote-'+j+'">x</spans></p>')
+                  $('#removeNote-'+j).on('click',function(){
+                      var noteRem={note:$(this).prev().text(), placeID:item.placeID}
+                     
+                      $.post('/nightlife/removeNote',noteRem,function(data){
+                      })
+                      $(this).parent().remove()
+                  })
+              })
+            }
+            else{
+              $('.editArea'+i).toggle()
+            }
+        })
     })
 }
+
 
 function renderMyPlaces(data){
     data.forEach(function(item,i){
@@ -172,8 +213,6 @@ function renderMyPlaces(data){
             $(this).parent().parent().remove();
         })
     })
-    
-    
 }
 
 function ShowLocMap(lat,long,place){
@@ -221,17 +260,4 @@ function ShowLocMap(lat,long,place){
         });
     }
 }
-/*
-function getMap() {
-      var map;
-     
-      var loc={lat:15.5555,lng:20.55555}
-      map = new google.maps.Map(document.getElementById('map'), {
-          center: loc,
-          zoom: 15
-      })}
-*/
 
-$('.nav2').on('click',function(){
-    $(this).css("color", "blue")
-})

@@ -3,7 +3,7 @@
 var request = require('request');
 var path = process.cwd();
 var Place=require('../models/places.js')
-var Going=require('../models/going.js')
+var Save=require('../models/save.js')
 
 module.exports = function (app, passport) {
 
@@ -74,7 +74,7 @@ module.exports = function (app, passport) {
 			res.render('nightlife/newDataForm',{user:user});
 		})
 		
-	app.route('/nightlife/going')
+	app.route('/nightlife/save')
 		.post(function(req,res){
 			var user;
 			if(req.user!=undefined){
@@ -84,35 +84,33 @@ module.exports = function (app, passport) {
 				res.send('You are not logged in!')
 				return
 			}
-			var isGoing=false;
-			Going.find({placeID:req.body.placeID, users:user},function(err,data){
+			var issave=false;
+			Save.find({placeID:req.body.placeID, users:user},function(err,data){
 				if(err){
 					throw err;
 				}
-				console.log(data!=[])
+				
 				if(data!=[]){
-					isGoing=true;
+					issave=true;
 				}
 			})
-			if(isGoing==true){
+			if(issave==true){
 				res.send("You are already listed!")
 				return
 			}
-			Going.findOneAndUpdate({placeID: req.body.placeId, users:{$ne:user}},{'$inc':{'numberOfPpl':1},$push:{users:user}}, function(err,data){
-				console.log(data)
+			Save.findOneAndUpdate({placeID: req.body.placeId, users:{$ne:user}},{$push:{users:user}}, function(err,data){
 				if (data==null){
-					var going= new Going()
-					going.placeName=req.body.place;
-					going.placeID=req.body.placeId;
-					going.numberOfPpl=1;
-					going.users.push(user)
+					var save= new Save()
+					save.placeName=req.body.place;
+					save.placeID=req.body.placeId;
+					save.users.push(user)
 					
-					going.save(function(err){
+					save.save(function(err){
 						if(err){
 							throw err;
 						}
 					})
-					res.send({"numOfPpl":going.numberOfPpl});
+					res.send({"numOfPpl":save.numberOfPpl});
 				}
 				else{
 					res.send({"numOfPpl":data.numberOfPpl})
@@ -120,26 +118,47 @@ module.exports = function (app, passport) {
 			})
 		})
 		.get(function(req,res){
-			res.sendFile(path + '/public/nightlife/goings.html')
+			res.sendFile(path + '/public/nightlife/saves.html')
+		})
+		
+	app.route('/nightlife/addNote')
+		.post(function(req,res){
+			Save.findOneAndUpdate({placeID:req.body.placeID},{$push: {notes:req.body.note}},function(err,data){
+				if(err){
+					throw err;
+				}
+				res.send("saved")
+			})
+		})
+		
+	app.route('/nightlife/removeNote')
+		.post(function(req,res){
+			Save.findOneAndUpdate({placeID:req.body.placeID},{$pull: {notes:req.body.note}},function(err,data){
+				if(err){
+					throw err;
+				}
+				res.send("saved")
+			})
 		})
 	
-	app.route('/nightlife/goings')
+	app.route('/nightlife/saves')
 		.get(function(req,res){
-			Going.find({},function(err,data){
+			Save.find({},function(err,data){
 				if (err){
 					throw err;
 				}
 				res.json(data)
 			})
 		})
-	app.route('/nightlife/myGoings')
+		
+	app.route('/nightlife/mysaves')
 		.get(function(req,res){
 			var user;
 			if(req.user!=undefined){
 				user = req.user.local.username || req.user.github.username || req.user.facebook.name;
 			}
 			
-			Going.find({users:user},function(err,data){
+			Save.find({users:user},function(err,data){
 				if (err){
 					throw err;
 				}
@@ -147,21 +166,26 @@ module.exports = function (app, passport) {
 			})
 		})
 	
-	app.route('/nightlife/removeGoing')
+	app.route('/nightlife/removesave')
 		.post(function(req,res){
 			var user;
 			if(req.user!=undefined){
 				user = req.user.local.username || req.user.github.username || req.user.facebook.name;
 			}
 			
-			Going.update({placeID:req.body.placeId, users:user},{$pull:{users:user},'$inc':{'numberOfPpl':-1}},function(err,data){
+			Save.update({placeID:req.body.placeId, users:user},{$pull:{users:user}},function(err,data){
 				if(err){
 					throw err
 				}
 			})
-			Going.remove({numberOfPpl:{$lte:0}},function(err,data){
+			Save.find({'numberOfPpl':{'$lte':0}}, function(err,docs){
 				if(err){
 					throw err;
+				}
+				if(docs.length!=0){
+					docs.forEach(function(doc){
+					doc.remove()
+					})
 				}
 			})
 			res.send('Deleted')
@@ -169,7 +193,6 @@ module.exports = function (app, passport) {
 	
 	app.route('/nightlife/putData/newPlace')
 		.post(function(req,res){
-			console.log(req.user)
 			var user;
 			if(req.user!=undefined){
 				user = req.user.local.username || req.user.github.username || req.user.facebook.name;
@@ -187,7 +210,7 @@ module.exports = function (app, passport) {
 					place.cityName=req.body.city
 					
 					var keywords=req.body.keywords.split(',')
-					console.log(keywords)
+					
 					keywords.forEach(function(key){
 						var a=key.split("")
 						while(a[0]==" "){
@@ -205,9 +228,7 @@ module.exports = function (app, passport) {
 						}
 					})
 				}
-				
 			})
-			console.log(req.body.address)
 			res.redirect('/nightlife/putData/newPlace')
 		})
 		.get(function(req,res){
@@ -240,12 +261,12 @@ module.exports = function (app, passport) {
 			if(!req.body.city && !req.body.keyword){
 				query={}
 			}
-			console.log(query)
+			
 			Place.find(query,function(err,data){
 				if(err){
 					throw err
 				}
-				console.log(data)
+				
 				res.json(data);
 			})
 		})
@@ -260,7 +281,6 @@ module.exports = function (app, passport) {
 				res.send('You are not logged in!')
 				return
 			}
-			
 			Place.find({user:user},function(err,data){
 				if(err){
 					throw err
@@ -271,13 +291,11 @@ module.exports = function (app, passport) {
 		
 	app.route('/nightlife/removePlace')
 		.post(function(req,res){
-			
 			Place.remove({placeName:req.body.placeName},function(err,data){
 				if(err){
 					throw err
 				}
 			})
-			
 			res.send('Deleted')
 		})
 	
@@ -296,47 +314,23 @@ module.exports = function (app, passport) {
 			})        
 		})
         
-    app.route('/dbSearch')
-    	.post(function(req,res){
-    		console.log(req.body.city)
-    		if(!req.body.city){
-    			var error="Think of a city"
-    			res.send(error)
-    			return
-    		}
-    		var query= (req.body.city.indexOf(',')==-1)? {'cityName': req.body.city}:{'city':req.body.city}
-    		if(req.body.keyword){
-    			query.keyword=req.body.keyword
-    		}
-    		console.log(query)
-    		Place.find(query, function(err,data){
-    			if(err){
-    				throw err;
-    			}
-    			res.send(data)
-    		})
-    	})
-        
     app.route('/nightlife/details')
     	.post(function(req,res){
-    		    var detailsUrl=req.body.url;
-            	console.log(detailsUrl)
-            	var opts={
-            		url: detailsUrl,
-            		headers:{
-            		'Content-Type': 'application/x-www-form-urlencoded',
-            		'Accept': 'application/json'
-                }}
-            	request.get(opts,function(err,resp,body){
-            		console.log(resp.body)
-            		res.json(JSON.parse(resp.body))
+    		var detailsUrl=req.body.url;
             	
-            	})
+        	var opts={
+            	url: detailsUrl,
+            	headers:{
+            	'Content-Type': 'application/x-www-form-urlencoded',
+            	'Accept': 'application/json'
+            }}
+            request.get(opts,function(err,resp,body){
+            	res.json(JSON.parse(resp.body))
             })
+        })
 	
 	app.route('/nightlife/searchCities')
 		.get(function(req,res){
 			res.render('nightlife/searchCities',{'page': 'cities'})
 		})
-
 };

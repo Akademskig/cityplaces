@@ -2,7 +2,6 @@
 $(document).ready(function(){
     
    $.get('/nightlife/allPlaces',function(data){
-       console.log(data)
        $('.results-list').empty()
        if(typeof data=='string'){
            alert(data)
@@ -13,7 +12,6 @@ $(document).ready(function(){
    
   $('.my').on('click',function(){
        $.get('/nightlife/myPlaces',function(data){
-       console.log(data)
        if(typeof data == 'string'){
            alert(data);
            return
@@ -26,7 +24,6 @@ $(document).ready(function(){
    })
        $('.all').on('click',function(){
            $.get('/nightlife/allPlaces',function(data){
-           console.log(data)
            $('.results-list').empty()
            $('.all').addClass('active')
            $('.my').removeClass('active');
