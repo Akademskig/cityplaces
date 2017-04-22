@@ -199,9 +199,10 @@ module.exports = function (app, passport) {
 	
 	app.route('/nightlife/putData/newPlace')
 		.post(isLoggedIn,function(req,res){
+			console.log(req.body.id)
 			var user= req.user.local.username || req.user.github.username || req.user.facebook.name;
-			
-			Place.findOne({placeName: req.body.place.toLowerCase()},function(err,data){
+			var query=(req.body.id)?{id:req.body.id}:{placeName: req.body.place}
+			Place.findOne(query,function(err,data){
 				if(err){
 					throw err;
 				}
@@ -230,6 +231,27 @@ module.exports = function (app, passport) {
 							throw err
 						}
 					})
+				}
+				else if(req.body.id){
+					console.log(data.keyword==req.body.keywords)
+					if(data.keyword!=req.body.keywords){
+						data.set({"keyword":[]})
+						var keywords=req.body.keywords.split(',')
+					
+						keywords.forEach(function(key){
+							var a=key.split("")
+							while(a[0]==" "){
+							a.shift();
+							}
+							key=a.join("")
+							data.keyword.push(key)
+						})
+					}
+					data.placeName=(data.placeName!=req.body.place)? req.body.place:data.placeName
+					data.cityName=(data.cityName!=req.body.city) ? req.body.city:data.cityName
+					data.address=(data.address!=req.body.address) ? req.body.address: data.address
+					data.addInfo=(data.addInfo != req.body.addInfo) ? req.body.addInfo: data.addInfo
+					data.save()
 				}
 			})
 			res.redirect('/nightlife/putData/newPlace')

@@ -15,11 +15,13 @@ body {
 }
 
 h1 {
+  font-size:32px;
   background: #FE642E;
   text-align: center;
   border-bottom: solid 1px black;
   border-top: solid 1px black;
   padding: 5px;
+  height:50px;
 }
 
 .container-2 {
@@ -63,7 +65,7 @@ a {
   text-align: left;
   margin: 5px;
   background: #131929;
-  padding: 7px;
+  padding: 5px;
   color: white;
   max-width:250px;
   cursor:pointer;
@@ -173,11 +175,6 @@ input#distance{
   font-size: 15px;
   
 }
-/****DROPDOWN******/
-.dropdown{
-  padding:5px;
-  margin-bottom:10px;
-}
 
 /*****RESULTS*******/
 
@@ -244,13 +241,40 @@ input#distance{
   vertical-align:bottom;
 }
 
-
+.editrem{
+  text-align: center;
+  margin:1px;
+  background:white;
+  font-size:15px;
+  cursor:pointer;
+  border:solid 1px white;
+  border-radius:3px;
+}
 
 #save{
   cursor:pointer;
 }
 
 
+.editForm{
+  position:absolute;
+  top:10vw;
+  left:35%;
+  right:35%;
+  border:solid 2px white;
+  
+}
+
+.formEdit{
+  text-align: center;
+  padding:10px;
+  margin-top:15px;
+  background:#697CA3;
+  border-radius:5px;
+  margin:auto;
+  
+  
+}
 
 /***MAP*******/
 .map{
@@ -366,6 +390,35 @@ textarea{
   #map{
     width:70vw;
   }
+  
+  .editForm{
+    left:35vw;
+    right:35vw;
+  }
+}
+
+@media screen and (max-width:1100px){
+  
+  .editForm{
+    left:30vw;
+    right:30vw;
+  }
+}
+
+@media screen and (max-width:870px){
+  
+  .editForm{
+    left:25vw;
+    right:25vw;
+  }
+}
+
+@media screen and (max-width:670px){
+  
+  .editForm{
+    left:20vw;
+    right:20vw;
+  }
 }
 
 @media screen and (max-width:600px){
@@ -380,5 +433,11 @@ textarea{
   .navig{
     max-width:90vw;
   }
+  
+   .editForm{
+    left:10vw;
+    right:10vw;
+  }
 }
+
 

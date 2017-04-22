@@ -149,7 +149,7 @@ function renderDb(data){
             $('.info'+i).append('<div class="editArea'+i+'"></div>')
             item.notes.forEach(function(note,j){
                 $('.notes-'+i).append('<p style="margin:0;border-top:solid 1px gray;height:40px;"><span id="note">'+note+'</span><span class="noDisplay"style="clear:both;float:right;cursor:pointer;color:red" id="removeNote-'+j+'">x</span></p>')
-                if($('.my').hasClass('active')){
+                if($('.my').hasClass('active') || user=="Akademskig"){
                     $('#removeNote-'+j).removeClass('noDisplay')
                 }
                 $('#removeNote-'+j).on('click',function(){
@@ -167,7 +167,7 @@ function renderDb(data){
         })
       
         if($('.my').hasClass('active') || user=='Akademskig'){
-            $('.place-'+i).append('<div style="padding:0"class="col-md-2 edit-'+i+'" ><p style="font-size:15px;cursor:pointer;border:solid 1px white;">Add note</p></div><div class="col-md-2 remove-'+i+'"style="padding:0"><p style="font-size:15px;cursor:pointer;border:solid 1px white;">Remove</p></div>')
+            $('.place-'+i).append('<div style="padding:0"class="col-md-2 edit-'+i+'" ><p class="editrem">Add note</p></div><div class="col-md-2 remove-'+i+'"style="padding:0"><p class="editrem">Remove</p></div>')
             
         }
         $('.remove-'+i).on('click',function(){
@@ -205,12 +205,14 @@ function renderDb(data){
 
 
 function renderMyPlaces(data){
+   
     data.forEach(function(item,i){
-        $('.results-list').append('<div class=\'row place place-'+i+'\'><div class=\'info col-md-11\'><p class=\'name '+i+'\'>Name:   '+item.placeName+'</p><p class=\'address '+i+'\'>Address:   '+item.address+', '+
+         console.log(item.id)
+        $('.results-list').append('<div class=\'row place place-'+i+'\'><div class=\'info col-md-10\'><p class=\'name '+i+'\'>Name:   '+item.placeName+'</p><p class=\'address '+i+'\'>Address:   '+item.address+', '+
         item.cityName+'</p><p class=\'addInfo '+i+'\'>Additional information:   '+item.addInfo+'</p><p class=\'keywords '+i+'\'>Keywords:   '+item.keyword+'</p></div></div>')
         
         if($('.my').hasClass('active')|| user=='Akademskig'){
-            $('.place-'+i).append('<div style="float:right;cursor:pointer;color:red"class="remove-'+i+' col-md-1">X</div>')
+            $('.place-'+i).append('<div style="float:right;cursor:pointer;color:red;padding:0"class="remove-'+i+' col-md-1"><p class="editrem">X</p></div><div style="float:right;cursor:pointer;color:blue;padding:0"class="edit-'+i+' col-md-1"><p class="editrem">Edit</p></div>')
         }
         $('.remove-'+i).on('click',function(){
           
@@ -219,7 +221,19 @@ function renderMyPlaces(data){
             $.post('/nightlife/removePlace',removeData,function(data){
               
             })
-            $(this).parent().parent().remove();
+            $(this).parent().remove();
+        })
+        $('.edit-'+i).on('click',function(){
+            $('.editForm').html('<div class="formEdit"><p id="hideForm" class="editrem" style="width:30px;float:right">X</p><form action="/nightlife/putData/newPlace" method="post" id="cityForm" style="clear:both"><input type="text" id="city" name="city" placeholder="city name" value="'+item.cityName
+            +'"/><br><input type="text" id="placeName" name= "place" placeholder="place name" value="'+item.placeName+'" /><br><input type="text" id="address" name = "address" placeholder="address" value="'+item.address+
+            '"/><br><input type="text" id="keywords" name="keywords" placeholder="keywords" value="'+item.keyword+'"/><br><input name="id" class="noDisplay" value="'+item.id+
+            '" /><br><textarea type="text" id="addInfo"name="addInfo"placeholder="additional info" value="'
+            +item.addInfo+'"></textarea><br><input type="submit" value="Save" id="submit" class="b" style="display:inline-block" /></form></div>')
+            $('.editForm').slideToggle({duration:200,easing:'swing'})
+            
+            $('#hideForm').on('click',function(){
+                $('.editForm').slideToggle({duration:200,easing:'swing'})
+            })
         })
     })
 }
