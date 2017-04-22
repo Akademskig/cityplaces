@@ -257,7 +257,7 @@ input#distance{
 
 
 .editForm{
-  position:absolute;
+  position:fixed;
   top:10vw;
   left:35%;
   right:35%;
