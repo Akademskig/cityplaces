@@ -440,4 +440,16 @@ textarea{
   }
 }
 
+@media screen and (max-width:430px){
+     .editForm{
+    left:5vw;
+    right:5vw;
+  }
+}
 
+@media screen and (max-width:350px){
+     .editForm{
+    left:1vw;
+    right:1vw;
+  }
+}
