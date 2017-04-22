@@ -107,7 +107,7 @@ function renderDb(data){
     data.forEach(function(item,i){
          
         var detailsUrl='https://maps.googleapis.com/maps/api/place/details/json?placeid='+item.placeID+'&key=AIzaSyBsEIashHje_Mirls38eHsplMXbdrxaFLI'
-        $('.results-list').append('<div class=\'row place place-'+i+'\'><div class=\'col-md-8 info'+i+'\'><p class=\'name'+i+'\'>'+item.placeName+'</p></div></div>')
+        $('.results-list').append('<div class=\'row place place-'+i+'\'><div class=\'col-md-8 info'+i+'\'><p class=\'name'+i+'\'style="font-weight:bold">'+item.placeName+'</p></div></div>')
     
     
         var detailsUrl={url:'https://maps.googleapis.com/maps/api/place/details/json?placeid='+item.placeID+'&key=AIzaSyBsEIashHje_Mirls38eHsplMXbdrxaFLI'}
@@ -121,9 +121,7 @@ function renderDb(data){
             $('.info'+i).append('<p style="cursor:pointer"class=\'detailText-'+i+'\'>Details</p>')
             $('.info'+i).append('<p class="noDisplay det details-'+i+'"></p>')
             if(data.result.opening_hours){
-                
                        $('.details-'+i).html("<p class='opened' style='border-bottom: solid 1px black'>Opened: </p>")
-                       
                        data.result.opening_hours.weekday_text.forEach(function(val){
                            $('.details-'+i).append("<li>"+val+"</li>")
                        })
@@ -137,11 +135,10 @@ function renderDb(data){
                 $('.details-'+i).toggle()
             })
              }
-            $('.info'+i).append('<div class="notes-'+i+'">Notes: </div>')
+            $('.info'+i).append('<div class="notes-'+i+'"style="cursor:pointer"><div style="color:#0B2161"id="notesText-'+i+'">Notes: </div></div>')
             $('.info'+i).append('<div class="editArea'+i+'"></div>')
             item.notes.forEach(function(note,j){
-               
-                $('.notes-'+i).append('<p style="margin:0;border-top:solid 1px black;height:40px"><span id="note">'+note+'</span><span class="noDisplay"style="clear:both;float:right;cursor:pointer;" id="removeNote-'+j+'">x</span></p>')
+                $('.notes-'+i).append('<p style="margin:0;border-top:solid 1px gray;height:40px;display:none"><span id="note">'+note+'</span><span class="noDisplay"style="clear:both;float:right;cursor:pointer;color:red" id="removeNote-'+j+'">x</span></p>')
                 if($('.my').hasClass('active')){
                     $('#removeNote-'+j).removeClass('noDisplay')
                 }
@@ -154,11 +151,14 @@ function renderDb(data){
                   $(this).parent().remove()
               })
             })
+            $('#notesText-'+i).on('click',function(){
+                $('.notes-'+i+' p').toggle()
+            })
         })
       
         if($('.my').hasClass('active')){
             $('.place-'+i).append('<div class="col-md-2 edit-'+i+'" style="font-size:15px;cursor:pointer">Add note</div><div class="col-md-2 remove-'+i+'"style="font-size:15px;cursor:pointer">Remove</div>')
-            $('.notes-'+i).children().append('<span style="clear:both;float:right;cursor:pointer;" id="removeNote-'+j+'">x</span>')
+            //$('.notes-'+i).children().append('<span style="clear:both;float:right;cursor:pointer;" id="removeNote-'+j+'">x</span>')
         }
         $('.remove-'+i).on('click',function(){
             var removeData={placeId:item.placeID}
@@ -175,12 +175,11 @@ function renderDb(data){
                   var note={note:$('#note-'+i).val(), placeID:item.placeID}
                   $.post('/nightlife/addNote',note,function(data){
                   })
-                  
                   $('.editDiv-'+i).remove()
-                  $('.notes-'+i).append('<p style="margin:0;border-top:solid 1px black;height:40px"><span id="note">'+note.note+'</span><span style="clear:both;float:right;cursor:pointer;" id="removeNote-'+j+'">x</spans></p>')
+                  $('.notes-'+i).append('<p style="margin:0;border-top:solid 1px gray;height:40px;display:none"><span id="note">'+note.note+'</span><span style="clear:both;float:right;cursor:pointer;color:red" id="removeNote-'+j+'">x</spans></p>')
                   $('#removeNote-'+j).on('click',function(){
                       var noteRem={note:$(this).prev().text(), placeID:item.placeID}
-                     
+                      console.log(noteRem)
                       $.post('/nightlife/removeNote',noteRem,function(data){
                       })
                       $(this).parent().remove()
