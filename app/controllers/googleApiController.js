@@ -68,22 +68,8 @@ $(document).ready(function(){
         location=$('#location').val()
     })
     
-    $('#submit').on('click',function(){
-        if($('#keyword').val()){
-            keyword=$('#keyword').val();
-        }
-        $.post('/dbSearch',{'city':location, 'keyword':keyword},function(data){
-            if(typeof data== 'string'){
-                $('#location').val(data) 
-                $('#location').addClass('error')
-                return
-            }
-            $('#location').on('click',function(){
-                this.val('');
-                this.removeClass('error')
-            })
-            renderDb(data)
-        })
+    $('.navig').on('click',function(){
+        $('.nav2').toggle()
     })
 })
 

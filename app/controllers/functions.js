@@ -91,11 +91,21 @@ var renderPlaces=function(data,index){
             $('.more').on('click',function(){
                 
                 if(data.next_page_token){
-                    var placesNextUrl='https://maps.googleapis.com/maps/api/place/nearbysearch/json?pagetoken='+data.next_page_token+'&key=AIzaSyAJRnPCMCZ9ViyoX36Ijvho3DCTEv3QVI0'
-                    $.get(placesNextUrl, function(data){
-                        i++;
-                        renderPlaces(data, i);
+                    var placesNextUrl={url:'https://maps.googleapis.com/maps/api/place/nearbysearch/json?pagetoken='+data.next_page_token+'&key=AIzaSyAJRnPCMCZ9ViyoX36Ijvho3DCTEv3QVI0'}
+                    $.post('/nightlife/loc',placesNextUrl, function(data){
+                    data=JSON.parse(data)
+                    if(data.status=== "OVER_QUERY_LIMIT"){
+                        var message ="<p style=\"text-align:center; padding:5px\">No data available</p>"
+                        $('.container-3').html(message)
+                        return
+                    }
+                    renderPlaces(data, places.length)
+                    
+                    $('.showMap').on('click',function(){
+                        $('.map').fadeIn('slow')
+                        var showLocMap=new ShowLocMap(lat,long,data.results);
                     })
+                })
                 }
             })
         }
@@ -135,10 +145,10 @@ function renderDb(data){
                 $('.details-'+i).toggle()
             })
              }
-            $('.info'+i).append('<div class="notes-'+i+'"style="cursor:pointer"><div style="color:#0B2161"id="notesText-'+i+'">Notes: </div></div>')
+            $('.info'+i).append('<p id="notesText-'+i+'" style="color:#0B2161; cursor:pointer">Notes: </p><div class="notes-'+i+'"style="display:none"></div>')
             $('.info'+i).append('<div class="editArea'+i+'"></div>')
             item.notes.forEach(function(note,j){
-                $('.notes-'+i).append('<p style="margin:0;border-top:solid 1px gray;height:40px;display:none"><span id="note">'+note+'</span><span class="noDisplay"style="clear:both;float:right;cursor:pointer;color:red" id="removeNote-'+j+'">x</span></p>')
+                $('.notes-'+i).append('<p style="margin:0;border-top:solid 1px gray;height:40px;"><span id="note">'+note+'</span><span class="noDisplay"style="clear:both;float:right;cursor:pointer;color:red" id="removeNote-'+j+'">x</span></p>')
                 if($('.my').hasClass('active')){
                     $('#removeNote-'+j).removeClass('noDisplay')
                 }
@@ -152,13 +162,13 @@ function renderDb(data){
               })
             })
             $('#notesText-'+i).on('click',function(){
-                $('.notes-'+i+' p').toggle()
+                $('.notes-'+i).toggle()
             })
         })
       
-        if($('.my').hasClass('active')){
-            $('.place-'+i).append('<div class="col-md-2 edit-'+i+'" style="font-size:15px;cursor:pointer">Add note</div><div class="col-md-2 remove-'+i+'"style="font-size:15px;cursor:pointer">Remove</div>')
-            //$('.notes-'+i).children().append('<span style="clear:both;float:right;cursor:pointer;" id="removeNote-'+j+'">x</span>')
+        if($('.my').hasClass('active') || user=='Akademskig'){
+            $('.place-'+i).append('<div style="padding:0"class="col-md-2 edit-'+i+'" ><p style="font-size:15px;cursor:pointer;border:solid 1px white;">Add note</p></div><div class="col-md-2 remove-'+i+'"style="padding:0"><p style="font-size:15px;cursor:pointer;border:solid 1px white;">Remove</p></div>')
+            
         }
         $('.remove-'+i).on('click',function(){
             var removeData={placeId:item.placeID}
@@ -176,7 +186,7 @@ function renderDb(data){
                   $.post('/nightlife/addNote',note,function(data){
                   })
                   $('.editDiv-'+i).remove()
-                  $('.notes-'+i).append('<p style="margin:0;border-top:solid 1px gray;height:40px;display:none"><span id="note">'+note.note+'</span><span style="clear:both;float:right;cursor:pointer;color:red" id="removeNote-'+j+'">x</spans></p>')
+                  $('.notes-'+i).append('<p style="margin:0;border-top:solid 1px gray;height:40px;"><span id="note">'+note.note+'</span><span style="clear:both;float:right;cursor:pointer;color:red" id="removeNote-'+j+'">x</spans></p>')
                   $('#removeNote-'+j).on('click',function(){
                       var noteRem={note:$(this).prev().text(), placeID:item.placeID}
                       console.log(noteRem)
@@ -196,11 +206,11 @@ function renderDb(data){
 
 function renderMyPlaces(data){
     data.forEach(function(item,i){
-        $('.results-list').append('<div class=\'place place-'+i+'\'><div class=\'info\'><p class=\'name '+i+'\'>Name:   '+item.placeName+'</p><p class=\'address '+i+'\'>Address:   '+item.address+', '+
+        $('.results-list').append('<div class=\'row place place-'+i+'\'><div class=\'info col-md-11\'><p class=\'name '+i+'\'>Name:   '+item.placeName+'</p><p class=\'address '+i+'\'>Address:   '+item.address+', '+
         item.cityName+'</p><p class=\'addInfo '+i+'\'>Additional information:   '+item.addInfo+'</p><p class=\'keywords '+i+'\'>Keywords:   '+item.keyword+'</p></div></div>')
         
-        if($('.my').hasClass('active')){
-            $('.place-'+i).append('<div class="col-md-1"><button class="remove-'+i+'">X</button></div>')
+        if($('.my').hasClass('active')|| user=='Akademskig'){
+            $('.place-'+i).append('<div style="float:right;cursor:pointer;color:red"class="remove-'+i+' col-md-1">X</div>')
         }
         $('.remove-'+i).on('click',function(){
           

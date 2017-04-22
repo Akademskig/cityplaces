@@ -11,7 +11,7 @@ module.exports = function (app, passport) {
 		if (req.isAuthenticated()) {
 			return next();
 		} else {
-			res.redirect('/login');
+			res.redirect('/');
 		}
 	}
 
@@ -55,18 +55,18 @@ module.exports = function (app, passport) {
 	app.route('/logout')
 		.get(function (req, res) {
 			req.logout();
-			res.redirect('/login');
+			res.redirect('/');
 		});
 		
 	//----ROUTES FOR NIGHTLIFE APP------------
 	app.route('/nightlife')
-		.get(function(req,res){
+		.get(isLoggedIn,function(req,res){
 			res.setHeader('Access-Control-Allow-Origin', '*');
 			res.render('nightlife/nightlifeHP',{'api_key': process.env.GOOGLE_MAPS_KEY,'page': 'homepage'})
 		})
 		
 	app.route('/nightlife/putData')
-		.get(function(req,res){
+		.get(isLoggedIn,function(req,res){
 			var user;
 			if(req.user!=undefined){
 				user = req.user.local.username || req.user.github.username || req.user.facebook.name;
@@ -117,8 +117,9 @@ module.exports = function (app, passport) {
 				}
 			})
 		})
-		.get(function(req,res){
-			res.sendFile(path + '/public/nightlife/saves.html')
+		.get(isLoggedIn,function(req,res){
+			var	user = req.user.local.username || req.user.github.username || req.user.facebook.name;
+			res.render('nightlife/saves.jade',{user: user})
 		})
 		
 	app.route('/nightlife/addNote')
@@ -168,12 +169,17 @@ module.exports = function (app, passport) {
 	
 	app.route('/nightlife/removesave')
 		.post(function(req,res){
-			var user;
-			if(req.user!=undefined){
-				user = req.user.local.username || req.user.github.username || req.user.facebook.name;
+			var	user = req.user.local.username || req.user.github.username || req.user.facebook.name;
+			var query={placeID:req.body.placeId, users:user}
+			if(user=='Akademskig'){
+				Save.findOne({placeID:req.body.placeId}, function(err,doc){
+				if(err){
+					throw err;
+				}
+				doc.remove()
+			})
 			}
-			
-			Save.update({placeID:req.body.placeId, users:user},{$pull:{users:user}},function(err,data){
+			Save.update(query,{$pull:{users:user}},function(err,data){
 				if(err){
 					throw err
 				}
@@ -192,11 +198,8 @@ module.exports = function (app, passport) {
 		})
 	
 	app.route('/nightlife/putData/newPlace')
-		.post(function(req,res){
-			var user;
-			if(req.user!=undefined){
-				user = req.user.local.username || req.user.github.username || req.user.facebook.name;
-			}
+		.post(isLoggedIn,function(req,res){
+			var user= req.user.local.username || req.user.github.username || req.user.facebook.name;
 			
 			Place.findOne({placeName: req.body.place.toLowerCase()},function(err,data){
 				if(err){
@@ -236,8 +239,9 @@ module.exports = function (app, passport) {
 		})
 		
 	app.route('/nightlife/places')
-		.get(function(req,res){
-			res.sendFile(path + '/public/nightlife/places.html')
+		.get(isLoggedIn,function(req,res){
+			var user= req.user.local.username || req.user.github.username || req.user.facebook.name;
+			res.render('nightlife/places.jade',{user:user})
 		})
 		
 	app.route('/nightlife/allPlaces')
@@ -330,7 +334,7 @@ module.exports = function (app, passport) {
         })
 	
 	app.route('/nightlife/searchCities')
-		.get(function(req,res){
+		.get(isLoggedIn,function(req,res){
 			res.render('nightlife/searchCities',{'page': 'cities'})
 		})
 };

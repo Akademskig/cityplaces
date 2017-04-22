@@ -41,5 +41,9 @@ $(document).ready(function(){
            renderMyPlaces(data);
        })
    })
+   
+   $('.navig').on('click',function(){
+        $('.nav2').toggle()
+    })
     
 })

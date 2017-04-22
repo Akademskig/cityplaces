@@ -21,5 +21,8 @@ $(document).ready(function(){
            renderDb(data);
         })
     })
+    $('.navig').on('click',function(){
+        $('.nav2').toggle()
+    })
     
 })
