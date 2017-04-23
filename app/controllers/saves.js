@@ -10,6 +10,7 @@ $(document).ready(function(){
    
    $('.my').on('click',function(){
        $.get('/nightlife/mysaves',function(data){
+           tags=[]
            data.forEach(function(item,i){
            tags.push(item.placeName)
            })
@@ -22,6 +23,7 @@ $(document).ready(function(){
    $('.all').on('click',function(){
        
        $.get('/nightlife/saves',function(data){
+           tags=[]
            data.forEach(function(item,i){
            tags.push(item.placeName)
            })
