@@ -6,6 +6,7 @@ var Place = new Schema({
     cityName:String,
     placeName: String,
 	address:String,
+	phoneNo:String,
     keyword:Array,
     addInfo: String,
     user: String

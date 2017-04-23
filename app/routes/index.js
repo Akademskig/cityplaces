@@ -151,6 +151,14 @@ module.exports = function (app, passport) {
 				res.json(data)
 			})
 		})
+		.post(function(req,res){
+			Save.find({placeName:req.body.placeName},function(err,data){
+				if(err){
+					throw err
+				}
+				res.json(data)
+			})
+		})
 		
 	app.route('/nightlife/mysaves')
 		.get(function(req,res){
@@ -199,9 +207,24 @@ module.exports = function (app, passport) {
 	
 	app.route('/nightlife/putData/newPlace')
 		.post(isLoggedIn,function(req,res){
-			console.log(req.body.id)
 			var user= req.user.local.username || req.user.github.username || req.user.facebook.name;
-			var query=(req.body.id)?{id:req.body.id}:{placeName: req.body.place}
+			
+			String.prototype.capitalize = function() {
+				return this.charAt(0).toUpperCase() + this.slice(1);
+			}
+			
+			var a=req.body.city.split('')
+			while(a[0]==" "){
+				a.shift();
+			}
+			while(a[a.length-1]==" "){
+				a.pop();
+			}
+			var cityName=a.join("")
+		
+			var placeCap=req.body.place.capitalize()
+			var cityCap=cityName.capitalize()
+			var query=(req.body.id)?{id:req.body.id}:{placeName: placeCap}
 			Place.findOne(query,function(err,data){
 				if(err){
 					throw err;
@@ -209,10 +232,10 @@ module.exports = function (app, passport) {
 				if(data==null){
 					var place = new Place()
 					place.id= new Date().getTime()
-					place.placeName=req.body.place.toLowerCase()
+					place.placeName=placeCap
 					place.address=req.body.address
-					place.cityName=req.body.city
-					
+					place.cityName=cityCap
+					place.phoneNo=req.body.phoneNo
 					var keywords=req.body.keywords.split(',')
 					
 					keywords.forEach(function(key){
@@ -221,6 +244,7 @@ module.exports = function (app, passport) {
 							a.shift();
 						}
 						key=a.join("")
+						key=key.toLowerCase()
 						place.keyword.push(key)
 					})
 					
@@ -233,7 +257,6 @@ module.exports = function (app, passport) {
 					})
 				}
 				else if(req.body.id){
-					console.log(data.keyword==req.body.keywords)
 					if(data.keyword!=req.body.keywords){
 						data.set({"keyword":[]})
 						var keywords=req.body.keywords.split(',')
@@ -244,12 +267,14 @@ module.exports = function (app, passport) {
 							a.shift();
 							}
 							key=a.join("")
+							key=key.toLowerCase()
 							data.keyword.push(key)
 						})
 					}
-					data.placeName=(data.placeName!=req.body.place)? req.body.place:data.placeName
-					data.cityName=(data.cityName!=req.body.city) ? req.body.city:data.cityName
+					data.placeName=(data.placeName!=placeCap)? placeCap:data.placeName
+					data.cityName=(data.cityName!=cityCap) ? cityCap:data.cityName
 					data.address=(data.address!=req.body.address) ? req.body.address: data.address
+					data.phoneNo=(data.phoneNo!=req.body.phoneNo) ? req.body.phoneNo: data.phoneNo
 					data.addInfo=(data.addInfo != req.body.addInfo) ? req.body.addInfo: data.addInfo
 					data.save()
 				}

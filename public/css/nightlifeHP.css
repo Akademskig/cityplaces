@@ -254,6 +254,8 @@ input#distance{
 
 #save{
   cursor:pointer;
+  border:solid 1px white;
+  border-radius:2px;
 }
 
 
@@ -273,8 +275,6 @@ input#distance{
   background:#697CA3;
   border-radius:5px;
   margin:auto;
-  
-  
 }
 
 /***MAP*******/
@@ -354,13 +354,25 @@ input#distance{
   cursor:pointer;
 }
 .active{
-  background:orange;
+  background:#FA8258;
 }
 /***SUBMIT NEW PLACE***/
-textarea{
+textarea#addInfo{
   margin-top:10px;
   width:300px;
-  overflow: scroll;
+  overflow: auto;
+}
+
+#address{
+  overflow:auto;
+  padding:5px;
+  margin-bottom:0;
+  height:50px;
+  border-radius: 4px;
+}
+
+#phoneNo{
+  margin-top:0;
 }
 /**REST***/
 @keyframes wina {

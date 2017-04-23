@@ -1,6 +1,9 @@
 
 $(document).ready(function(){
-    
+    String.prototype.capitalize = function() {
+		return this.charAt(0).toUpperCase() + this.slice(1);
+	}
+	
    $.get('/nightlife/allPlaces',function(data){
        $('.results-list').empty()
        if(typeof data=='string'){
@@ -35,7 +38,19 @@ $(document).ready(function(){
        })
    })
    $('#submit').on('click', function(data){
-       var query={city: $('#location').val(), keyword: $('#keyword').val()}
+        var cityName=$('#location').val().split("")
+       while(cityName[0]==" "){
+           cityName.shift()
+       }
+       while(cityName[cityName.length-1]==" "){
+           cityName.pop()
+       }
+       cityName=cityName.join("")
+       console.log(cityName)
+       cityName=cityName.capitalize();
+       
+       var keyword=$('#keyword').val().toLowerCase();
+       var query={city: cityName, keyword: keyword}
        $.post('/nightlife/allPlaces',query,function(data){
            $('.results-list').empty()
            renderMyPlaces(data);
