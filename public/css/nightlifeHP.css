@@ -225,7 +225,8 @@ input#distance{
 
 .det{
   font-size:15px;
-  
+  list-style-type:none;
+  margin-left:-10px;
 }
 #more{
   max-width:100px;
