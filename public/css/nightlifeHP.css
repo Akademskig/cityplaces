@@ -72,6 +72,7 @@ a {
   font-size:20px;
   list-style-type:none;
   border-radius:3px;
+  z-index:10;
 }
 
 .nav2 {
