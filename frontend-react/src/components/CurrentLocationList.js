@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Segment, Input, Icon, Grid, Divider, SegmentInline, CardHeader, Image, Card, CardContent, GridColumn } from 'semantic-ui-react';
+import { Segment, Icon, Grid, Image, Card } from 'semantic-ui-react';
 import * as _ from 'lodash'
 import { googleApi } from "../config"
 
@@ -27,7 +27,6 @@ class CurrentLocationList extends Component {
                             const photoreference = p.photos[0].photo_reference
                             src = `${googleApi.photosUrl}maxwidth=200&photoreference=${photoreference}&key=${googleApi.apiKey}`
                         }
-
                         if (p.opening_hours && p.opening_hours.open_now)
                             openedNow = "OPENED"
                         if (p.opening_hours && !p.opening_hours.open_now)
@@ -48,8 +47,8 @@ class CurrentLocationList extends Component {
                                     </Card.Header>
                                 </Card.Content>
                                 <Card.Content>
-                                    <Grid columns={2}>
-                                        <Grid.Column>
+                                    <Grid columns={2} height="100%">
+                                        <Grid.Column verticalAlign="middle">
 
                                             <Card.Meta >
                                                 <Icon name="star"></Icon>
@@ -72,7 +71,6 @@ class CurrentLocationList extends Component {
                                             </span>
                                         </Grid.Column>
                                     </Grid>
-
                                 </Card.Content>
                             </Card>)
                     }
@@ -91,18 +89,3 @@ const CurrentStatus = (props) => {
 }
 
 export default CurrentLocationList
-
-// geometry: {location: {…}, viewport: {…}}
-            // icon: "https://maps.gstatic.com/mapfiles/place_api/icons/bar-71.png"
-            // id: "cf8108be63787f1e3eeb0ae82830ebfddba13bdd"
-            // name: "Swanky Monkey Garden bar"
-// opening_hours: {open_now: true}
-// photos: [{…}]
-            // place_id: "ChIJMc9CVeLWZUcR0KP8N5zPR-E"
-// plus_code: {compound_code: "RX79+89 Zagreb, Croatia", global_code: "8FQQRX79+89"}
-            // price_level: 2
-            // rating: 4.7
-            // reference: "ChIJMc9CVeLWZUcR0KP8N5zPR-E"
-            // scope: "GOOGLE"
-            // types: (3) ["bar", "point_of_interest", "establishment"]
-// vicinity: "Ilica 50, Zagreb"
