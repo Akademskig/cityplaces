@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import "semantic-ui-css/semantic.min.css"
 import { Container } from 'semantic-ui-react';
 import Navigation from '../components/Navigation';
 import { NavigationRoutes } from '../routes'

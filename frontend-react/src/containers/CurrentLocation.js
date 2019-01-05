@@ -1,18 +1,22 @@
 import React, { Component } from 'react';
 import { Container, Segment, Input, Icon, Divider, SegmentInline, Form, Grid, GridColumn, Button, Header, HeaderSubheader } from 'semantic-ui-react';
 import CurrentLocationList from '../components/CurrentLocationList';
-import GoogleMapsApi from "../googe-maps-api"
+import PlacesApi from "../googe-maps-api/places"
+import { GoogleMapContainer } from './GoogleMapContainer';
 
 
 class CurrentLocation extends Component {
 
     state = {
         loading: true,
-        position: ""
+        position: "",
+        mapVisible: false,
+        lat: null,
+        lng: null
     }
     constructor() {
         super()
-        this.gma = new GoogleMapsApi()
+        this.gma = new PlacesApi()
     }
 
     getFormData = (data) => {
@@ -24,7 +28,9 @@ class CurrentLocation extends Component {
         this.gma.getCurrentPosition(reset).then(data => {
             this.setState({
                 loading: false,
-                position: data
+                position: data.location,
+                lat: data.lat,
+                lng: data.lng
             })
         })
     }
@@ -33,14 +39,24 @@ class CurrentLocation extends Component {
         this.setState({ loadingPlaces: true })
         this.gma.getPlaces(data.radius, data.keyword)
             .then((data) => {
-                console.log(data)
+                let placesList = data.data.data
+                placesList.forEach(p => {
+                    this.gma.getDetails(p.place_id, "opening_hours")
+                        .then(d => {
+                            p["opening_hours"] = d.data.data.opening_hours
+                        })
+                })
                 this.setState({
                     loadingPlaces: false,
-                    placesList: data.data.data
+                    placesList: placesList
                 })
             })
+        this.setState({
+            query: data
+        })
     }
-    componentWillMount = () => {
+
+    componentWillMount() {
         this.getPosition(false)
     }
     render() {
@@ -56,9 +72,14 @@ class CurrentLocation extends Component {
                     <SearchCurrentForm getPlaces={this.getPlaces}></SearchCurrentForm>
                 </Segment>
                 <Segment loading={this.state.loadingPlaces}>
-                    <CurrentLocationList placesList={this.state.placesList} ></CurrentLocationList>
+                    <CurrentLocationList
+                        query={this.state.query}
+                        placesList={this.state.placesList}
+                        currentPosition={{ lat: this.state.lat, lng: this.state.lng }}
+                    ></CurrentLocationList>
+
                 </Segment>
-            </Segment.Group>
+            </Segment.Group >
         );
     }
 }
@@ -81,8 +102,6 @@ class CurrentPositionView extends Component {
                     <Button icon="redo" circular onClick={this.reset} basic color="blue">
                     </Button>
                 </Header.Subheader>
-
-
             </div>
         )
     }
@@ -92,7 +111,7 @@ class SearchCurrentForm extends Component {
 
     state = {
         keyword: "bar",
-        radius: "100"
+        radius: "300"
     }
     handlePlaceChange = (e) => {
         this.setState({

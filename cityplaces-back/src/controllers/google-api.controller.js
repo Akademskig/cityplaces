@@ -27,7 +27,7 @@ export default class GoogleApiCtrl {
     async getPhotos(req, res) {
         const maxwidth = req.query.maxwidth
         const photoreference = req.query.photoreference
-        const url = `${config.googleApi.photoSearchUrl}maywidth=${maxwidth}&photoreference=${photoreference}`
+        const url = `${config.googleApi.photoSearchUrl}maxwidth=${maxwidth}&photoreference=${photoreference}`
         request.get(url, {
             dataType: "application/json"
         }, (err, resp, body) => {
@@ -36,6 +36,21 @@ export default class GoogleApiCtrl {
             }
             res.status(200).json({
                 data: JSON.parse(body).results
+            })
+        })
+    }
+
+    async getDetails(req, res) {
+        const url = `${config.googleApi.detailsUrl}place_id=${req.query.place_id}&fields=${req.query.fields}&key=${config.googleApi.key}`
+        request.get(url, {
+            dataType: "application/json"
+        }, (err, resp, body) => {
+            if (err) {
+                return res.status(400).json({ error: err })
+            }
+            console.log(body.result)
+            res.status(200).json({
+                data: JSON.parse(body).result
             })
         })
     }

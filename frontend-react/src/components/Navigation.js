@@ -9,7 +9,6 @@ import { NavigationRoutes } from '../routes'
 class Navigation extends Component {
   render() {
     return (
-
       <Menu attached="top">
         <Dropdown text="Menu" item>
           <Dropdown.Menu>
@@ -24,7 +23,6 @@ class Navigation extends Component {
             <Dropdown.Item as={Link} to="/login">
               Logout
               </Dropdown.Item>
-
           </Dropdown.Menu>
         </Dropdown>
         <Menu.Menu position="right">

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { googleApi } from '../config'
 
-export default class GoogleMapsApi {
+export default class PlacesApi {
     latitude
     longitude
     location
@@ -17,11 +17,11 @@ export default class GoogleMapsApi {
         }
         if (navigator.geolocation) {
             return new Promise((resolve, reject) => {
-                navigator.geolocation.getCurrentPosition((position) => {
+                navigator.geolocation.getCurrentPosition(async (position) => {
                     this.latitude = position.coords.latitude;
                     this.longitude = position.coords.longitude;
-                    this.location = this.getByCurrentLocation()
-                    resolve(this.location)
+                    this.location = await this.getByCurrentLocation()
+                    resolve({ location: this.location, lat: this.latitude, lng: this.longitude })
                 })
             })
         }
@@ -36,6 +36,13 @@ export default class GoogleMapsApi {
 
     async getPlaces(radius, keyword) {
         const url = `http://localhost:5000/api/google-api/nearby-search?lat=${this.latitude}&lng=${this.longitude}&radius=${radius}&keyword=${keyword}&key=${googleApi.apiKey}`
+        const data = await axios.get(url, {
+            dataType: "application/json"
+        })
+        return data
+    }
+    async getDetails(placeId, fields) {
+        const url = `http://localhost:5000/api/google-api/details-search?place_id=${placeId}&fields=${fields}`
         const data = await axios.get(url, {
             dataType: "application/json"
         })

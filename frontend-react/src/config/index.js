@@ -2,6 +2,7 @@ export const googleApi = {
     nearbySearchUrl: "https://maps.googleapis.com/maps/api/place/nearbysearch/json?",
     geocodeUrl: "https://maps.googleapis.com/maps/api/geocode/json?",
     photosUrl: "https://maps.googleapis.com/maps/api/place/photo?",
+    mapsUrl: "https://maps.googleapis.com/maps/api/js?",
     apiKey: "AIzaSyA_h5tnlq-qjVqJVDT8NrusM8eJJ_YTF6s"
 }
 

@@ -10,6 +10,8 @@ const config = {
         googleApi: {
                 nearbySearchUrl: "https://maps.googleapis.com/maps/api/place/nearbysearch/json?",
                 photoSearchUrl: "https://maps.googleapis.com/maps/api/place/photo?",
+                detailsUrl: "https://maps.googleapis.com/maps/api/place/details/json?",
+                mapsUrl: "https://maps.googleapis.com/maps/api/js?",
                 key: "AIzaSyA_h5tnlq-qjVqJVDT8NrusM8eJJ_YTF6s"
         }
 }
