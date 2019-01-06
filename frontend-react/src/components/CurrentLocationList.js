@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-import { Segment, Icon, Grid, Image, Card, Button } from 'semantic-ui-react';
+import { Segment, Icon, Grid, Image, Card } from 'semantic-ui-react';
 import * as _ from 'lodash'
 import { googleApi } from "../config"
-import MapsApi from '../googe-maps-api/maps'
 import GoogleMapContainer from '../containers/GoogleMapContainer';
-import { windowResize } from '../services'
 
-const maps = new MapsApi()
 class CurrentLocationList extends Component {
     colors = ["blue", "purple", "orange", "red", "yellow"]
     items = 3
