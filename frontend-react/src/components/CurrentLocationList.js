@@ -159,21 +159,3 @@ const CurrentStatus = (props) => {
 }
 
 export default CurrentLocationList
-
-// geometry:
-// location: {lat: 45.8133559, lng: 15.9684515}
-// viewport: {northeast: {…}, southwest: {…}}
-// __proto__: Object
-// icon: "https://maps.gstatic.com/mapfiles/place_api/icons/bar-71.png"
-// id: "cf8108be63787f1e3eeb0ae82830ebfddba13bdd"
-// name: "Swanky Monkey Garden bar"
-// opening_hours: {open_now: true}
-// photos: [{…}]
-// place_id: "ChIJMc9CVeLWZUcR0KP8N5zPR-E"
-// plus_code: {compound_code: "RX79+89 Zagreb, Croatia", global_code: "8FQQRX79+89"}
-// price_level: 2
-// rating: 4.7
-// reference: "ChIJMc9CVeLWZUcR0KP8N5zPR-E"
-// scope: "GOOGLE"
-// types: (3) ["bar", "point_of_interest", "establishment"]
-// vicinity: "Ilica 50, Zagreb"
