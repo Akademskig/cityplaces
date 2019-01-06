@@ -48,11 +48,19 @@ class CurrentLocation extends Component {
                 })
                 this.setState({
                     loadingPlaces: false,
-                    placesList: placesList
+                    placesList: placesList,
+                    filteredPlaces: placesList
                 })
             })
         this.setState({
             query: data
+        })
+    }
+
+    handleSearch = (value) => {
+        const filteredPlaces = this.state.placesList.filter((pl) => pl.name.toLowerCase().match(value.toLowerCase()))
+        this.setState({
+            filteredPlaces: filteredPlaces
         })
     }
 
@@ -69,12 +77,12 @@ class CurrentLocation extends Component {
                     </CurrentPositionView>
                 </Segment>
                 <Segment>
-                    <SearchCurrentForm getPlaces={this.getPlaces}></SearchCurrentForm>
+                    <SearchCurrentForm getPlaces={this.getPlaces} onSearch={this.handleSearch}></SearchCurrentForm>
                 </Segment>
                 <Segment loading={this.state.loadingPlaces}>
                     <CurrentLocationList
                         query={this.state.query}
-                        placesList={this.state.placesList}
+                        placesList={this.state.filteredPlaces}
                         currentPosition={{ lat: this.state.lat, lng: this.state.lng }}
                     ></CurrentLocationList>
 
@@ -112,6 +120,10 @@ class SearchCurrentForm extends Component {
     state = {
         keyword: "bar",
         radius: "300"
+    }
+
+    handleSearch = (e) => {
+        this.props.onSearch(e.target.value)
     }
     handlePlaceChange = (e) => {
         this.setState({
@@ -167,6 +179,7 @@ class SearchCurrentForm extends Component {
                                 placeholder='Search...'
                                 className='prompt'
                                 floated="right"
+                                onChange={this.handleSearch.bind(this)}
                             />
                         </div>
                     </GridColumn>
