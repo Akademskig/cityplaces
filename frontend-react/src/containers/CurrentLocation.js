@@ -35,7 +35,10 @@ class CurrentLocation extends Component {
         })
     }
     getPlacesFromMap = (places) => {
-        this.setState({ filteredPlaces: places })
+        this.setState({
+            filteredPlaces: places,
+            placesList: places
+        })
     }
 
     getPlaces = (data) => {

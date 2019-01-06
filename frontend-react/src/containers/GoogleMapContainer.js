@@ -52,7 +52,7 @@ export class GoogleMapContainer extends Component {
                 }
                 service.getDetails(requestDetails, (det) => {
                     d["opening_hours"] = det ? det.opening_hours : det
-                    d["opening_hours"] = det ? det.url : det
+                    d["url"] = det ? det.url : det
                 })
             })
             this.setState({
@@ -86,7 +86,7 @@ export class GoogleMapContainer extends Component {
         });
         var infowindow = new window.google.maps.InfoWindow();
         window.google.maps.event.addListener(marker, 'click', function () {
-            infowindow.setContent(place ? infoContent(place) : "Your location");
+            infowindow.setContent(place ? infoContent(place) : currentLocContent());
             infowindow.open(map, this);
         });
         window.google.maps.event.addListener(marker, 'dragend', (e) => {
@@ -143,8 +143,13 @@ const closeButton = (closeMap) => {
     return (
         controlBtn
     )
-
-
+}
+const currentLocContent = () => {
+    return `<div class="ui card" style="width:130px">
+    <div class="ui card content">
+        <div class="ui header">Your location</div>
+    </div>
+    </div>`
 }
 const infoContent = (place) => {
     let src
