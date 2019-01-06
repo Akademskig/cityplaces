@@ -14,6 +14,10 @@ class CurrentLocationList extends Component {
         mapVisible: false
     }
     async showMap(lat, lng, place) {
+        if (typeof lat == "function") {
+            lat = lat()
+            lng = lng()
+        }
         if (this.state.mapVisible) {
             this.setState({
                 mapVisible: false
@@ -71,13 +75,13 @@ class CurrentLocationList extends Component {
 
                         <GoogleMapContainer
                             visible={this.state.mapVisible}
-                            initialCenter={{ lat: this.state.lat, lng: this.state.lng }}
                             center={{ lat: this.state.lat, lng: this.state.lng, place: this.state.place }}
                             places={this.props.placesList}
                             currentPosition={this.props.currentPosition}
                             resetMap={this.resetMap}
                             loading={true}
                             closeMap={this.closeMap}
+                            getPlaces={this.props.getPlaces}
                             query={this.props.query}
                         >
 
@@ -94,7 +98,10 @@ class CurrentLocationList extends Component {
                             let src = ""
                             if (p.photos) {
                                 const photoreference = p.photos[0].photo_reference
-                                src = `${googleApi.photosUrl}maxwidth=200&photoreference=${photoreference}&key=${googleApi.apiKey}`
+                                if (photoreference)
+                                    src = `${googleApi.photosUrl}maxwidth=200&photoreference=${photoreference}&key=${googleApi.apiKey}`
+                                else
+                                    src = p.photos[0].getUrl()
                             }
                             if (p.opening_hours && p.opening_hours.open_now)
                                 openedNow = "OPENED"
@@ -159,3 +166,4 @@ const CurrentStatus = (props) => {
 }
 
 export default CurrentLocationList
+

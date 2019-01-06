@@ -12,6 +12,7 @@ export class GoogleMapContainer extends Component {
         places: this.props.places,
         placesIds: []
     }
+    map
 
     currentInfoShow = (props, marker, e) => {
         if (this.state.currentInfoVisible && marker === this.state.currentMarker)
@@ -24,8 +25,12 @@ export class GoogleMapContainer extends Component {
             })
         }
     }
-    fetchPlaces = (mapProps, map) => {
-        const newCenter = new this.props.google.maps.LatLng(map.center.lat(), map.center.lng())
+    fetchPlaces = (mapProps, map, markerCenter) => {
+        let newCenter = new this.props.google.maps.LatLng(map.center.lat(), map.center.lng())
+
+        if (markerCenter)
+            newCenter = new this.props.google.maps.LatLng(markerCenter.lat, markerCenter.lng)
+
         this.setState({
             center: newCenter
         })
@@ -43,24 +48,37 @@ export class GoogleMapContainer extends Component {
                 this.pIds.push(d.id)
                 let requestDetails = {
                     placeId: d.place_id,
-                    fields: ["opening_hours"]
+                    fields: ["opening_hours,url"]
                 }
                 service.getDetails(requestDetails, (det) => {
                     d["opening_hours"] = det ? det.opening_hours : det
+                    d["opening_hours"] = det ? det.url : det
                 })
             })
             this.setState({
                 places: data,
                 placesIds: this.pIds
             })
+
+            this.props.getPlaces(this.state.places)
         }
         service.nearbySearch(requestPlaces, callbackPlaces);
     }
 
     async createMarker(place, position, map) {
+        let location
+        if (place) {
+            location = { lat: place.geometry.location.lat, lng: place.geometry.location.lng }
+            if (typeof place.geometry.location.lat == "function")
+                location = { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() }
+        }
+        let draggable = false
+        if (position)
+            draggable = true
         var marker = new window.google.maps.Marker({
             map: map,
-            position: position || place.geometry.location,
+            position: position || location,
+            draggable: draggable,
             icon: place ? {
                 url: place.icon, scaledSize: place.id !== this.props.center.place.id ?
                     new this.props.google.maps.Size(25, 25) : new this.props.google.maps.Size(34, 34)
@@ -69,12 +87,13 @@ export class GoogleMapContainer extends Component {
         var infowindow = new window.google.maps.InfoWindow();
         window.google.maps.event.addListener(marker, 'click', function () {
             infowindow.setContent(place ? infoContent(place) : "Your location");
-            infowindow.open(this.map, this);
+            infowindow.open(map, this);
+        });
+        window.google.maps.event.addListener(marker, 'dragend', (e) => {
+            this.fetchPlaces(null, map, { lat: e.latLng.lat(), lng: e.latLng.lng() })
         });
     }
-    onMapMove = (mapProps, map) => {
-        this.fetchPlaces()
-    }
+
     prepareMap = (mapProps, map) => {
         this.setState({
             places: this.props.places
@@ -100,8 +119,6 @@ export class GoogleMapContainer extends Component {
                     visible={this.props.visible}
                     initialCenter={this.props.center}
                     center={this.state.center || this.props.center}
-                    onDragend={this.fetchPlaces}
-                    onClick={this.setCurrentLoc}
                     onReady={this.prepareMap}
                     styles={mapStyles}
                 >

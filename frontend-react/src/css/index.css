@@ -11,10 +11,25 @@
   position: fixed !important;
   height: 80%;
   top: 40px;
-  left: 40px;
-  right: 40px;
+  left: 100px;
+  right: 100px;
   z-index: 10;
 }
 .info-image {
   width: 100%;
+}
+.gm-style-iw > div {
+  max-width: 100% !important;
+}
+@media (max-width: 769px) {
+  .map-container {
+    left: 12px;
+    right: 12px;
+  }
+}
+@media (min-width: 769px) {
+  .map-container {
+    left: 40px;
+    right: 40px;
+  }
 }

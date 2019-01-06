@@ -34,10 +34,13 @@ class CurrentLocation extends Component {
             })
         })
     }
+    getPlacesFromMap = (places) => {
+        this.setState({ filteredPlaces: places })
+    }
 
     getPlaces = (data) => {
         this.setState({ loadingPlaces: true })
-        this.gma.getPlaces(data.radius, data.keyword)
+        this.gma.getPlaces(data.radius, data.keyword, { lat: this.state.lat, lng: this.state.lng })
             .then((data) => {
                 let placesList = data.data.data
                 placesList.forEach(p => {
@@ -84,6 +87,7 @@ class CurrentLocation extends Component {
                     <CurrentLocationList
                         query={this.state.query}
                         placesList={this.state.filteredPlaces}
+                        getPlaces={this.getPlacesFromMap}
                         currentPosition={{ lat: this.state.lat, lng: this.state.lng }}
                     ></CurrentLocationList>
 

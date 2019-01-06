@@ -34,8 +34,17 @@ export default class PlacesApi {
         return data.data.results[0].formatted_address
     }
 
-    async getPlaces(radius, keyword) {
-        const url = `http://localhost:5000/api/google-api/nearby-search?lat=${this.latitude}&lng=${this.longitude}&radius=${radius}&keyword=${keyword}&key=${googleApi.apiKey}`
+    async getPlaces(radius, keyword, center) {
+        let lat, lng
+        if (center) {
+            lat = center.lat
+            lng = center.lng
+        }
+        else {
+            lat = this.latitude
+            lng = this.longitude
+        }
+        const url = `http://localhost:5000/api/google-api/nearby-search?lat=${lat}&lng=${lng}&radius=${radius}&keyword=${keyword}&key=${googleApi.apiKey}`
         const data = await axios.get(url, {
             dataType: "application/json"
         })
