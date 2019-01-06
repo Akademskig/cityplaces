@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Segment, Input, Icon, Divider, SegmentInline, Form, Grid, GridColumn, Button, Header, HeaderSubheader } from 'semantic-ui-react';
+import { Container, Menu, Segment, Input, Icon, Divider, SegmentInline, Form, Grid, GridColumn, Button, Header, HeaderSubheader } from 'semantic-ui-react';
 import CurrentLocationList from '../components/CurrentLocationList';
 import PlacesApi from "../googe-maps-api/places"
 import { GoogleMapContainer } from './GoogleMapContainer';
@@ -152,10 +152,25 @@ class SearchCurrentForm extends Component {
                             placeholder='Set radius (m)' />
                     </Form.Field>
                 </Form.Group>
-                <Button icon color="purple" labelPosition='left'>
-                    <Icon name='location arrow' />
-                    Go
+                <Grid columns={2}>
+                    <GridColumn>
+                        <Button icon color="purple" labelPosition='left'>
+                            <Icon name='location arrow' />
+                            Go
                 </Button>
+                    </GridColumn>
+                    <GridColumn textAlign="right">
+                        <div className='ui transparent icon input' >
+                            <Input
+                                icon='search'
+                                iconPosition='right'
+                                placeholder='Search...'
+                                className='prompt'
+                                floated="right"
+                            />
+                        </div>
+                    </GridColumn>
+                </Grid>
             </Form>
         )
     }
