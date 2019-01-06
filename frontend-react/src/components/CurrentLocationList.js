@@ -62,6 +62,12 @@ class CurrentLocationList extends Component {
             this.setCardNums()
         })
     }
+
+    componentWillUnmount() {
+        window.removeEventListener("resize", (ev) => {
+            this.setCardNums()
+        })
+    }
     render() {
 
         if (!this.props.placesList || this.props.placesList.length === 0)
