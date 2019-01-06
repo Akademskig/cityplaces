@@ -20,20 +20,14 @@ class Navigation extends Component {
               </Dropdown.Item>
             <Dropdown.Item >Saved Places</Dropdown.Item>
             <Dropdown.Item>My Places</Dropdown.Item>
-            <Dropdown.Item as={Link} to="/login">
-              Logout
-              </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
-        <Menu.Menu position="right">
-          <div className='ui right aligned category search item'>
-            <div className='ui transparent icon input'>
-              <input className='prompt' type='text' placeholder='Search..' />
-              <i className='search link icon' />
-            </div>
-            <div className='results' />
-          </div>
-        </Menu.Menu>
+        <Menu.Item
+          position="right"
+          as={Link} to="/login"
+        >
+          Logout
+        </Menu.Item>
       </Menu>
 
     );
