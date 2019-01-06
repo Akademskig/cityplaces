@@ -159,9 +159,12 @@ const infoContent = (place) => {
             </div>      
                 <div class="ui segment basic vertical">
                     ${openingHours}
+                </div>       
+                <div class="ui segment basic vertical">
+                    <a target="_blank" href=${place.url}><div>View on Google maps <div><a>
                 </div>                         
-        </div>     
-    </div>`
+            </div>     
+         </div>`
 }
 
 export default GoogleApiWrapper({

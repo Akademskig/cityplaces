@@ -41,9 +41,10 @@ class CurrentLocation extends Component {
             .then((data) => {
                 let placesList = data.data.data
                 placesList.forEach(p => {
-                    this.gma.getDetails(p.place_id, "opening_hours")
+                    this.gma.getDetails(p.place_id, "opening_hours,url")
                         .then(d => {
-                            p["opening_hours"] = d.data.data.opening_hours
+                            p["opening_hours"] = d.data && d.data.data ? d.data.data.opening_hours : null
+                            p["url"] = d.data && d.data.data ? d.data.data.url : null
                         })
                 })
                 this.setState({
