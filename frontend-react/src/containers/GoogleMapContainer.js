@@ -84,7 +84,7 @@ export class GoogleMapContainer extends Component {
         })
         this.createMarker(null, this.props.currentPosition, map)
         this.pIds = []
-        map.controls[this.props.google.maps.ControlPosition.TOP_CENTER].push(closeButton(this.props.closeMap));
+        map.controls[this.props.google.maps.ControlPosition.TOP_RIGHT].push(closeButton(this.props.closeMap));
     }
 
     render() {
@@ -116,9 +116,11 @@ const closeButton = (closeMap) => {
     let content = document.createElement("i")
     content.classList = "window close outline icon"
     content.style.color = "black"
-    controlBtn.classList = "ui button standard icon"
+    controlBtn.classList = "ui button big icon"
     controlBtn.style.margin = "10px"
+    controlBtn.style.padding = "10px"
     controlBtn.style.backgroundColor = "white"
+    controlBtn.style.borderRadius = "0"
     controlBtn.appendChild(content)
     controlBtn.addEventListener("click", closeMap)
     return (
