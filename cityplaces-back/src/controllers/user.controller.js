@@ -2,7 +2,7 @@ import User from '../db/model/user.model'
 import _ from 'lodash'
 import errorHandler from '../db/errorHandler'
 
-export class UserCtrl {
+export default class UserCtrl {
 	constructor() { }
 
 	async create(req, res, next) {
@@ -13,7 +13,6 @@ export class UserCtrl {
 			res.status(200).json({
 				message: 'Successfully signed up!'
 			})
-
 		}
 		catch (err) {
 			res.status(400).json({
@@ -32,7 +31,7 @@ export class UserCtrl {
 			res.json(users)
 		}).select('name email updated created')
 	}
-	getById(req, res, next) {
+	userByID(req, res, next) {
 
 	}
 	read(req, res, next) {
@@ -42,6 +41,14 @@ export class UserCtrl {
 
 	}
 	remove(req, res, next) {
+
+	}
+
+	getOne(req, res, next) {
+
+	}
+
+	delete(req, res, next) {
 
 	}
 }

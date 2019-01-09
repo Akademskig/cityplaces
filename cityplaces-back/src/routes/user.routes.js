@@ -1,17 +1,17 @@
 import express from 'express'
 
-import userCtrl from '../controllers/user.controller'
+import UserCtrl from '../controllers/user.controller'
 
-const router = express.router()
-
-router.route('/api/users')
+const router = express.Router()
+const userCtrl = new UserCtrl()
+router.route('/users')
 	.get(userCtrl.list)
 	.post(userCtrl.create)
 
-router.route('/api/users/:userId')
-	.get(userCtrl.get)
+router.route('/users/:userId')
+	.get(userCtrl.getOne)
 	.put(userCtrl.update)
-	.delete(userCtrl.update)
+	.delete(userCtrl.delete)
 
 router.param('userId', userCtrl.userByID)
 
