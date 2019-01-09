@@ -4,9 +4,7 @@ export default class MapsApi {
     constructor() {
         window.openMap = this.openMap
     }
-    openMap() {
 
-    }
     initMap(lat, lng, place) {
         this.lat = lat
         this.long = lng
