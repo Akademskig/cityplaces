@@ -3,7 +3,7 @@ import { Container } from 'semantic-ui-react';
 import Navigation from '../components/Navigation';
 import { NavigationRoutes } from '../routes'
 import { withRouter } from 'react-router';
-
+import { NotificationContainer } from 'react-notifications'
 
 class App extends Component {
     render() {
@@ -11,6 +11,7 @@ class App extends Component {
             <Container>
                 <Navigation></Navigation>
                 <NavigationRoutes></NavigationRoutes>
+                <NotificationContainer />
             </Container>
         );
     }

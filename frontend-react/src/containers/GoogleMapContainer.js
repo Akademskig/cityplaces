@@ -112,9 +112,15 @@ export class GoogleMapContainer extends Component {
     }
 
     prepareMarkers = (map) => {
-        this.state.places.forEach(p => {
-            this.createMarker(p, null, map)
-        })
+        if (this.state.places)
+            this.state.places.forEach(p => {
+                this.createMarker(p, null, map)
+            })
+        else
+            this.props.places.forEach(p => {
+                this.createMarker(p, null, map)
+            })
+
         this.pIds = []
     }
     prepareAutocomplete = (map) => {
@@ -142,9 +148,9 @@ export class GoogleMapContainer extends Component {
     }
 
     componentDidUpdate = () => {
-        if (this.props.visible)
+        if (this.props.visible) {
             this.prepareMarkers(this.map)
-
+        }
     }
 
     render() {

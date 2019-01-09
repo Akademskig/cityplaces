@@ -47,16 +47,14 @@ export default class PlacesApi {
         let url = `http://localhost:5000/api/google-api/nearby-search?lat=${lat}&lng=${lng}&rankby=distance&keyword=${keyword}&key=${googleApi.apiKey}`
         if (radius && keyword)
             url = `http://localhost:5000/api/google-api/nearby-search?lat=${lat}&lng=${lng}&radius=${radius}&keyword=${keyword}&key=${googleApi.apiKey}`
-        const data = await axios.get(url, {
+        return axios.get(url, {
             dataType: "application/json"
         })
-        return data
     }
     async getDetails(placeId, fields) {
         const url = `http://localhost:5000/api/google-api/details-search?place_id=${placeId}&fields=${fields}`
-        const data = await axios.get(url, {
+        return await axios.get(url, {
             dataType: "application/json"
         })
-        return data
     }
 }

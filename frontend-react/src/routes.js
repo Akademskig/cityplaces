@@ -22,7 +22,7 @@ export const NavigationRoutes = (props) => (
 )
 
 const authGuard = (props) => {
-    return <Redirect to="/locations" ></Redirect>
+    return <Redirect to="/locations/current" ></Redirect>
 }
 
 export default MainRoutes
