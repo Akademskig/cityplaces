@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Segment, Form, Input, Button, Grid, GridColumn, Icon, Header } from 'semantic-ui-react'
 import PlacesList from '../components/PlacesList'
-import PlacesApi from '../google-maps-api/places'
+import PlacesApi from '../services/places'
 
+import { notify } from '../services/notifications'
 class OtherLocations extends Component {
     constructor() {
         super()
@@ -18,8 +19,9 @@ class OtherLocations extends Component {
                 lat: data.lat,
                 lng: data.lng
             })
-
-
+        }).catch(err => {
+            notify("error", err.message)
+            this.setState({ loadingPlaces: false })
         })
     }
     setNewLoc = (loc, newPlace) => {
@@ -43,6 +45,9 @@ class OtherLocations extends Component {
                         .then(d => {
                             p["opening_hours"] = d.data && d.data.data ? d.data.data.opening_hours : null
                             p["url"] = d.data && d.data.data ? d.data.data.url : null
+                        }).catch(err => {
+                            notify("error", err.message)
+                            this.setState({ loadingPlaces: false })
                         })
                 })
                 this.setState({
@@ -50,6 +55,9 @@ class OtherLocations extends Component {
                     placesList: placesList,
                     filteredPlaces: placesList
                 })
+            }).catch(err => {
+                notify("error", err.message)
+                this.setState({ loadingPlaces: false })
             })
         this.setState({
             query: data
@@ -57,7 +65,7 @@ class OtherLocations extends Component {
     }
 
     handleSearch = (value) => {
-        const filteredPlaces = this.state.placesList.filter((pl) => pl.name.toLowerCase().match(value.toLowerCase()))
+        const filteredPlaces = this.state.placesList ? this.state.placesList.filter((pl) => pl.name.toLowerCase().match(value.toLowerCase())) : null
         this.setState({
             filteredPlaces: filteredPlaces
         })
@@ -71,9 +79,7 @@ class OtherLocations extends Component {
     componentWillMount() {
         this.getPosition(false)
     }
-    componentDidMount = () => {
 
-    }
     onKeyword = (keyword) => {
         this.setState({ query: { keyword: keyword } })
     }
@@ -98,9 +104,7 @@ class OtherLocations extends Component {
                         getPlaces={this.getPlacesFromMap}
                         currentPosition={{ lat: this.state.lat, lng: this.state.lng }}
                     ></PlacesList>
-
                 </Segment>
-
             </Segment.Group >
         );
     }
@@ -111,7 +115,7 @@ class SearchOtherForm extends Component {
 
     state = {
         city: "",
-        keyword: "library"
+        keyword: "karaoke"
     }
 
     handleSearch = (e) => {
@@ -149,7 +153,7 @@ class SearchOtherForm extends Component {
                             type="text"
                             ref={ref => (this.autocomplete = ref)}
                             placeholder='Search cities'
-                            value={this.state.city} />
+                        />
 
                     </Form.Field>
                     <div id="infowindow-content"></div>

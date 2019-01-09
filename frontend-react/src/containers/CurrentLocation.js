@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Segment, Input, Icon, Form, Grid, GridColumn, Button, Header } from 'semantic-ui-react';
 import PlacesList from '../components/PlacesList';
-import PlacesApi from "../google-maps-api/places"
-
-
+import PlacesApi from "../services/places"
+import { notify } from '../services/notifications'
+import { NotificationContainer } from 'react-notifications'
 class CurrentLocation extends Component {
 
     state = {
@@ -31,6 +31,9 @@ class CurrentLocation extends Component {
                 lat: data.lat,
                 lng: data.lng
             })
+        }).catch(err => {
+            notify("error", err.message)
+            this.setState({ loading: false })
         })
     }
     getPlacesFromMap = (places) => {
@@ -50,6 +53,9 @@ class CurrentLocation extends Component {
                         .then(d => {
                             p["opening_hours"] = d.data && d.data.data ? d.data.data.opening_hours : null
                             p["url"] = d.data && d.data.data ? d.data.data.url : null
+                        }).catch(err => {
+                            notify("error", err.message)
+                            this.setState({ loadingPlaces: false })
                         })
                 })
                 this.setState({
@@ -57,14 +63,18 @@ class CurrentLocation extends Component {
                     placesList: placesList,
                     filteredPlaces: placesList
                 })
+            }).catch(err => {
+                notify("error", err.message)
+                this.setState({ loadingPlaces: false })
             })
         this.setState({
             query: data
         })
     }
 
+
     handleSearch = (value) => {
-        const filteredPlaces = this.state.placesList.filter((pl) => pl.name.toLowerCase().match(value.toLowerCase()))
+        let filteredPlaces = this.state.placesList ? this.state.placesList.filter((pl) => pl.name.toLowerCase().match(value.toLowerCase())) : null
         this.setState({
             filteredPlaces: filteredPlaces
         })
@@ -125,7 +135,7 @@ class CurrentPositionView extends Component {
 class SearchCurrentForm extends Component {
 
     state = {
-        keyword: "library",
+        keyword: "karaoke",
         radius: "300"
     }
 
