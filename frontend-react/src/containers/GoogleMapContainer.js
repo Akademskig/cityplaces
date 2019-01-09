@@ -124,7 +124,7 @@ export class GoogleMapContainer extends Component {
             return
         var autocomplete
 
-        autocomplete = new this.props.google.maps.places.Autocomplete(input)
+        autocomplete = new this.props.google.maps.places.Autocomplete(input, { types: ['(cities)'] })
         autocomplete.bindTo('bounds', map);
         var infowindow = new this.props.google.maps.InfoWindow();
         var infowindowContent = document.getElementById('infowindow-content');
