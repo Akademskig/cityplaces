@@ -125,7 +125,7 @@ class CurrentPositionView extends Component {
 class SearchCurrentForm extends Component {
 
     state = {
-        keyword: "bar",
+        keyword: "library",
         radius: "300"
     }
 
@@ -173,7 +173,7 @@ class SearchCurrentForm extends Component {
                 </Form.Group>
                 <Grid columns={2}>
                     <GridColumn>
-                        <Button icon color="purple" labelPosition='left'>
+                        <Button icon color="purple" labelPosition='left' disabled={!this.state.keyword}>
                             <Icon name='location arrow' />
                             Go
                 </Button>

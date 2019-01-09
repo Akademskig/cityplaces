@@ -111,7 +111,7 @@ class SearchOtherForm extends Component {
 
     state = {
         city: "",
-        keyword: ""
+        keyword: "library"
     }
 
     handleSearch = (e) => {
@@ -140,7 +140,7 @@ class SearchOtherForm extends Component {
                             icon='building'
                             iconPosition='left'
                             placeholder='Search city places'
-                            defaultValue={this.state.input} />
+                            value={this.state.keyword} />
                     </Form.Field>
 
                     <Form.Field>
@@ -149,14 +149,14 @@ class SearchOtherForm extends Component {
                             type="text"
                             ref={ref => (this.autocomplete = ref)}
                             placeholder='Search cities'
-                            defaultValue={this.state.inputCity} />
+                            value={this.state.city} />
 
                     </Form.Field>
                     <div id="infowindow-content"></div>
                 </Form.Group>
                 <Grid columns={2}>
                     <GridColumn>
-                        <Button icon color="purple" labelPosition='left'>
+                        <Button icon color="purple" labelPosition='left' disabled={!this.state.keyword}>
                             <Icon name='location arrow' />
                             Go
                 </Button>
