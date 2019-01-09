@@ -10,7 +10,7 @@ export default class GoogleApiCtrl {
         const lat = req.query.lat
         const lng = req.query.lng
         const radius = req.query.radius
-        const keyword = req.query.keyword
+        const keyword = encodeURIComponent(req.query.keyword)
         let url = `${config.googleApi.nearbySearchUrl}location=${lat},${lng}&rankby=distance&keyword=${keyword}&key=${config.googleApi.key}`
 
         if (radius && keyword)
@@ -19,7 +19,7 @@ export default class GoogleApiCtrl {
             dataType: "application/json"
         }, (err, resp, body) => {
             if (err) {
-                return res.status(400).json({ error: err })
+                return res.status(400).json({ error: { code: err.code, message: err.message } })
             }
             res.status(200).json({
                 data: JSON.parse(body).results
@@ -35,7 +35,7 @@ export default class GoogleApiCtrl {
             dataType: "application/json"
         }, (err, resp, body) => {
             if (err) {
-                return res.status(400).json({ error: err })
+                return res.status(400).json({ error: { code: err.code, message: err.message } })
             }
             res.status(200).json({
                 data: JSON.parse(body).results
