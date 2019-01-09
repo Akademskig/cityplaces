@@ -2,16 +2,18 @@ import React, { Component } from 'react';
 import { Segment, Icon, Grid, Image, Card } from 'semantic-ui-react';
 import * as _ from 'lodash'
 import { googleApi } from "../config"
+import { Map } from 'google-maps-react'
 import GoogleMapContainer from '../containers/GoogleMapContainer';
 
-class CurrentLocationList extends Component {
+export default class PlacesList extends Component {
     colors = ["blue", "purple", "orange", "red", "yellow"]
     items = 3
     state = {
         items: 3,
         lat: this.props.currentPosition.lat,
         lng: this.props.currentPosition.lng,
-        mapVisible: false
+        mapVisible: false,
+        close: false
     }
     async showMap(lat, lng, place) {
         if (typeof lat == "function") {
@@ -27,19 +29,18 @@ class CurrentLocationList extends Component {
                 lat: lat,
                 lng: lng,
                 mapVisible: true,
-                place: place
+                place: place,
+                close: false
             })
         }
     }
-    resetMap = (map, markers) => {
+
+    closeMap = (e, map) => {
+
         map = null
-        markers.setMap(null)
-        markers = []
-        this.closeMap()
-    }
-    closeMap = () => {
         this.setState({
-            mapVisible: false
+            mapVisible: false,
+            close: true
         })
     }
     setCardNums = () => {
@@ -55,7 +56,9 @@ class CurrentLocationList extends Component {
         else
             this.setState({ items: 3 })
     }
-
+    setNewLoc = (loc) => {
+        this.props.setNewLoc({ lat: loc.lat, lng: loc.lng })
+    }
     componentWillMount = () => {
         this.setCardNums()
         window.addEventListener("resize", (ev) => {
@@ -72,7 +75,28 @@ class CurrentLocationList extends Component {
 
         if (!this.props.placesList || this.props.placesList.length === 0)
             return (
-                <div style={{ textAlign: "center" }}>No places found.</div>
+                <div>
+                    <div style={{ textAlign: "center" }}>No places found.</div>
+
+                    <div hidden={!this.state.mapVisible} className="map-container ">
+
+                        <GoogleMapContainer
+                            visible={this.state.mapVisible}
+                            center={{ lat: this.state.lat, lng: this.state.lng, place: this.state.place }}
+                            places={this.props.placesList}
+                            currentPosition={this.props.currentPosition}
+                            resetMap={this.resetMap}
+                            loading={true}
+                            closeMap={this.closeMap}
+                            getPlaces={this.props.getPlaces}
+                            query={this.props.query}
+                            close={this.state.close}
+                            autocomplete={this.props.autocomplete}
+                            setNewLoc={this.props.setNewLoc}
+                        >
+                        </GoogleMapContainer>
+                    </div>
+                </div>
             );
         else
             return (
@@ -89,6 +113,8 @@ class CurrentLocationList extends Component {
                             closeMap={this.closeMap}
                             getPlaces={this.props.getPlaces}
                             query={this.props.query}
+                            close={this.state.close}
+                            setNewLoc={this.props.setNewLoc}
                         >
 
                         </GoogleMapContainer>
@@ -164,12 +190,10 @@ class CurrentLocationList extends Component {
 }
 
 const CurrentStatus = (props) => {
-    if (props.hasOwnProperty("opened") && props.opened == "OPENED")
+    if (props.hasOwnProperty("opened") && props.opened === "OPENED")
         return (<p style={{ color: "green" }}>OPENED</p>)
-    else if (props.hasOwnProperty("opened") && props.opened == "CLOSED")
+    else if (props.hasOwnProperty("opened") && props.opened === "CLOSED")
         return (<p style={{ color: "red" }}>CLOSED</p>)
     else return (<p>?</p>)
 }
-
-export default CurrentLocationList
 

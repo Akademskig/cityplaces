@@ -11,7 +11,10 @@ export default class GoogleApiCtrl {
         const lng = req.query.lng
         const radius = req.query.radius
         const keyword = req.query.keyword
-        const url = `${config.googleApi.nearbySearchUrl}location=${lat},${lng}&radius=${radius}&keyword=${keyword}&key=${config.googleApi.key}`
+        let url = `${config.googleApi.nearbySearchUrl}location=${lat},${lng}&rankby=distance&keyword=${keyword}&key=${config.googleApi.key}`
+
+        if (radius && keyword)
+            url = `${config.googleApi.nearbySearchUrl}location=${lat},${lng}&radius=${radius}&keyword=${keyword}&key=${config.googleApi.key}`
         request.get(url, {
             dataType: "application/json"
         }, (err, resp, body) => {
@@ -48,7 +51,6 @@ export default class GoogleApiCtrl {
             if (err) {
                 return res.status(400).json({ error: err })
             }
-            console.log(body.result)
             res.status(200).json({
                 data: JSON.parse(body).result
             })

@@ -44,7 +44,9 @@ export default class PlacesApi {
             lat = this.latitude
             lng = this.longitude
         }
-        const url = `http://localhost:5000/api/google-api/nearby-search?lat=${lat}&lng=${lng}&radius=${radius}&keyword=${keyword}&key=${googleApi.apiKey}`
+        let url = `http://localhost:5000/api/google-api/nearby-search?lat=${lat}&lng=${lng}&rankby=distance&keyword=${keyword}&key=${googleApi.apiKey}`
+        if (radius && keyword)
+            url = `http://localhost:5000/api/google-api/nearby-search?lat=${lat}&lng=${lng}&radius=${radius}&keyword=${keyword}&key=${googleApi.apiKey}`
         const data = await axios.get(url, {
             dataType: "application/json"
         })

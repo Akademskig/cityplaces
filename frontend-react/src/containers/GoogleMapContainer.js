@@ -1,19 +1,17 @@
 import { googleApi } from '../config'
 import { GoogleApiWrapper } from 'google-maps-react';
 import React, { Component } from 'react'
-import { Map, InfoWindow, Marker, MapControl } from 'google-maps-react';
-import { Segment, Button, Container, Card, CardHeader, Icon } from 'semantic-ui-react';
+import { Map } from 'google-maps-react';
 import { mapStyles } from '../config/map-styles'
-// ...
 
 export class GoogleMapContainer extends Component {
     pIds = []
     state = {
         places: this.props.places,
-        placesIds: []
+        placesIds: [],
     }
     map
-
+    input = document.getElementById("searchCityField")
     currentInfoShow = (props, marker, e) => {
         if (this.state.currentInfoVisible && marker === this.state.currentMarker)
             this.setState({ currentInfoVisible: false })
@@ -35,10 +33,19 @@ export class GoogleMapContainer extends Component {
             center: newCenter
         })
         const service = new this.props.google.maps.places.PlacesService(map);
-        const requestPlaces = {
+
+        let requestPlaces = {
             location: this.state.center,
             radius: this.props.query.radius,
             keyword: this.props.query.keyword
+        }
+
+        if (!this.props.query.radius) {
+            requestPlaces = {
+                location: this.state.center,
+                rankBy: this.props.google.maps.places.RankBy.DISTANCE,
+                keyword: this.props.query.keyword
+            }
         }
 
         const callbackPlaces = (data) => {
@@ -81,7 +88,7 @@ export class GoogleMapContainer extends Component {
             draggable: draggable,
             icon: place ? {
                 url: place.icon, scaledSize: place.id !== this.props.center.place.id ?
-                    new this.props.google.maps.Size(25, 25) : new this.props.google.maps.Size(34, 34)
+                    new this.props.google.maps.Size(25, 25) : new this.props.google.maps.Size(35, 35)
             } : null,
         });
         var infowindow = new window.google.maps.InfoWindow();
@@ -95,36 +102,72 @@ export class GoogleMapContainer extends Component {
     }
 
     prepareMap = (mapProps, map) => {
+        this.map = map
         this.setState({
             places: this.props.places
         })
+        map.controls[this.props.google.maps.ControlPosition.TOP_RIGHT].push(closeButton(this.props.closeMap));
+        this.prepareAutocomplete(map)
+        this.createMarker(null, this.props.currentPosition, map)
+    }
+
+    prepareMarkers = (map) => {
         this.state.places.forEach(p => {
             this.createMarker(p, null, map)
         })
-        this.createMarker(null, this.props.currentPosition, map)
         this.pIds = []
-        map.controls[this.props.google.maps.ControlPosition.TOP_RIGHT].push(closeButton(this.props.closeMap));
+    }
+    prepareAutocomplete = (map) => {
+
+        var input = document.getElementById('searchCityField');
+        if (!input)
+            return
+        var autocomplete
+
+        autocomplete = new this.props.google.maps.places.Autocomplete(input)
+        autocomplete.bindTo('bounds', map);
+        var infowindow = new this.props.google.maps.InfoWindow();
+        var infowindowContent = document.getElementById('infowindow-content');
+        infowindow.setContent(infowindowContent);
+        this.props.google.maps.event.addListener(autocomplete, 'place_changed', () => {
+            infowindow.close();
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+                return;
+            }
+            this.setState({ autoPlace: { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() } })
+            this.props.setNewLoc(this.state.autoPlace, place.formatted_address)
+
+        })
+    }
+
+    componentDidUpdate = () => {
+        if (this.props.visible)
+            this.prepareMarkers(this.map)
+
     }
 
     render() {
-        if (!this.props.visible) {
+        if (this.props.close) {
             return <div></div>
         }
         return (
             <div>
+                <div>
 
-                < Map
-                    google={this.props.google}
-                    zoom={16}
-                    visible={this.props.visible}
-                    initialCenter={this.props.center}
-                    center={this.state.center || this.props.center}
-                    onReady={this.prepareMap}
-                    styles={mapStyles}
-                >
+                    < Map
+                        google={this.props.google}
+                        zoom={16}
+                        visible={this.props.visible}
+                        initialCenter={this.props.center}
+                        center={this.state.center || this.props.center}
+                        onReady={this.prepareMap}
+                        styles={mapStyles}
+                    >
+                    </Map >
 
-                </Map >
-            </div >
+                </div >
+            </div>
         );
     }
 }
@@ -146,10 +189,10 @@ const closeButton = (closeMap) => {
 }
 const currentLocContent = () => {
     return `<div class="ui card" style="width:130px">
-    <div class="ui card content">
-        <div class="ui header">Your location</div>
-    </div>
-    </div>`
+                    <div class="ui card content">
+                        <div class="ui header">Your location</div>
+                    </div>
+                </div>`
 }
 const infoContent = (place) => {
     let src
@@ -171,22 +214,22 @@ const infoContent = (place) => {
         openingHours = `<div>No additional data</div>`
     }
     return `<div class="ui card">
-        <div class="ui card content">
-            <div class="ui header">${place.name}</div>
-        </div>
-        <div class="ui card content">   
-            <strong class="segment vertical basic">${place.vicinity}</strong>    
-            <div class="info-image ui segment vertical basic">
-            <img width="150px"src=${src}>
-            </div>      
-                <div class="ui segment basic vertical">
-                    ${openingHours}
-                </div>       
-                <div class="ui segment basic vertical">
-                    <a target="_blank" href=${place.url}><div>View on Google maps <div><a>
-                </div>                         
-            </div>     
-         </div>`
+                    <div class="ui card content">
+                        <div class="ui header">${place.name}</div>
+                    </div>
+                    <div class="ui card content">
+                        <strong class="segment vertical basic">${place.vicinity}</strong>
+                        <div class="info-image ui segment vertical basic">
+                            <img width="150px" src=${src}>
+            </div>
+                            <div class="ui segment basic vertical">
+                                ${openingHours}
+                            </div>
+                            <div class="ui segment basic vertical">
+                                <a target="_blank" href=${place.url}><div>View on Google maps <div><a>
+                </div>
+                                </div>
+                                </div>`
 }
 
 export default GoogleApiWrapper({

@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { Container, Menu, Segment, Input, Icon, Divider, SegmentInline, Form, Grid, GridColumn, Button, Header, HeaderSubheader } from 'semantic-ui-react';
-import CurrentLocationList from '../components/CurrentLocationList';
-import PlacesApi from "../googe-maps-api/places"
-import { GoogleMapContainer } from './GoogleMapContainer';
+import { Segment, Input, Icon, Form, Grid, GridColumn, Button, Header } from 'semantic-ui-react';
+import PlacesList from '../components/PlacesList';
+import PlacesApi from "../google-maps-api/places"
 
 
 class CurrentLocation extends Component {
@@ -87,12 +86,12 @@ class CurrentLocation extends Component {
                     <SearchCurrentForm getPlaces={this.getPlaces} onSearch={this.handleSearch}></SearchCurrentForm>
                 </Segment>
                 <Segment loading={this.state.loadingPlaces}>
-                    <CurrentLocationList
+                    <PlacesList
                         query={this.state.query}
                         placesList={this.state.filteredPlaces}
                         getPlaces={this.getPlacesFromMap}
                         currentPosition={{ lat: this.state.lat, lng: this.state.lng }}
-                    ></CurrentLocationList>
+                    ></PlacesList>
 
                 </Segment>
             </Segment.Group >
@@ -183,7 +182,7 @@ class SearchCurrentForm extends Component {
                         <div className='ui transparent icon input' >
                             <Input
                                 icon='search'
-                                iconPosition='right'
+                                iconPosition='left'
                                 placeholder='Search...'
                                 className='prompt'
                                 floated="right"
