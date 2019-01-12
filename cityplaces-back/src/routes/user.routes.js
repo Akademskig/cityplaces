@@ -1,17 +1,18 @@
 import express from 'express'
 
-import UserCtrl from '../controllers/user.controller'
-
+import userCtrl from '../controllers/user.controller'
+import authCtrl from '../controllers/auth.controller'
 const router = express.Router()
-const userCtrl = new UserCtrl()
 router.route('/users')
 	.get(userCtrl.list)
 	.post(userCtrl.create)
 
 router.route('/users/:userId')
-	.get(userCtrl.getOne)
-	.put(userCtrl.update)
-	.delete(userCtrl.delete)
+	.get(authCtrl.requireSignin, userCtrl.read)
+	.put(authCtrl.requireSignin, authCtrl.hasAuthorization,
+		userCtrl.update)
+	.delete(authCtrl.requireSignin, authCtrl.hasAuthorization,
+		userCtrl.remove)
 
 router.param('userId', userCtrl.userByID)
 
