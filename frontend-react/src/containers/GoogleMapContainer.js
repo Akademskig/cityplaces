@@ -93,7 +93,7 @@ export class GoogleMapContainer extends Component {
         });
         var infowindow = new window.google.maps.InfoWindow();
         window.google.maps.event.addListener(marker, 'click', function () {
-            infowindow.setContent(place ? infoContent(place) : currentLocContent());
+            infowindow.setContent(place ? infoContent(place) : currentLocContent("You are here"));
             infowindow.open(map, this);
         });
         window.google.maps.event.addListener(marker, 'dragend', (e) => {
@@ -193,10 +193,10 @@ const closeButton = (closeMap) => {
         controlBtn
     )
 }
-const currentLocContent = () => {
-    return `<div class="ui card" style="width:130px">
-                    <div class="ui card content">
-                        <div class="ui header">Your location</div>
+const currentLocContent = (text) => {
+    return `<div class="ui card" style="width:100px">
+                    <div class="ui card content" style="padding:3px">
+                        <div class="ui header">${text}</div>
                     </div>
                 </div>`
 }
