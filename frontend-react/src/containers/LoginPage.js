@@ -10,29 +10,82 @@ class LoginPage extends Component {
 
     constructor() {
         super()
-        this.LoginService = new LoginService()
+        this.loginService = new LoginService()
+    }
+
+    state = {
+        buttonColorCreateNew: "yellow",
+        buttonColorSignIn: "orange",
+        type: "signIn"
     }
     login = (username, password) => {
         const userCredentials = {
             username: username,
             password: password
         }
+        if (this.state.type == "signIn") {
+            this.loginService.signIn(userCredentials)
+                .then(
+                    data => {
+                        this.props.history.push("/")
+                        notify("success", `Welcome ${data.data.user.name}!`)
+                    },
+                ).catch(err => {
+                    notify("error", err.response.data.error || err.message)
+                })
+        }
+        else if (this.state.type == "createNew") {
+            this.loginService.createUser(userCredentials)
+                .then(
+                    data => {
 
-        this.LoginService.login(userCredentials)
-            .then(
-                data => {
-                    this.props.history.push("/")
-                    notify("success", data.message)
-                },
-            ).catch(err => {
-                notify("error", err.response.data.error)
-            })
+                        this.props.history.push("/")
+                        notify("success", data.data.message)
+                    },
+                ).catch(err => {
+                    notify("error", err.response.data.error || err.message)
+                })
+        }
     };
+
+    selectSignIn = (type) => {
+        this.setState({
+            buttonColorSignIn: "orange",
+            buttonColorCreateNew: "yellow",
+            type: "signIn"
+        })
+    }
+
+    selectLogIn = (type) => {
+        this.setState({
+            buttonColorSignIn: "yellow",
+            buttonColorCreateNew: "orange",
+            type: "createNew"
+        })
+    }
+
     render() {
         return (
             <Container text style={{ marginTop: "50px" }}>
-                <Segment size="tiny" padded textAlign="center">
-                    <Header size="large" >LOGIN</Header>
+                <Segment size="tiny" >
+                    <Grid columns={3}>
+                        <GridColumn>
+
+                        </GridColumn>
+                        <GridColumn>
+                            <Header textAlign="center" cleared size="large" >Welcome!
+
+                        </Header>
+                        </GridColumn>
+                        <GridColumn textAlign="right">
+                            <Button color={this.state.buttonColorSignIn} onClick={this.selectSignIn}>
+                                Sign In
+                            </Button >
+                            <Button color={this.state.buttonColorCreateNew} onClick={this.selectLogIn}>
+                                New User
+                            </Button>
+                        </GridColumn>
+                    </Grid>
                     <Divider></Divider>
                     <LoginForm login={this.login}></LoginForm>
                 </Segment>
@@ -74,31 +127,31 @@ class LoginForm extends Component {
     }
     render() {
         return (
+
             <Form onSubmit={this.handleSubmit.bind(this)} >
 
                 <Form.Field>
+                    <label basic >Username</label>
                     <Input
-                        label={{ basic: true, content: "Username" }}
                         onChange={this.handleUserChange.bind(this)}
                         icon='user circle'
                         placeholder='Choose username'
                         value={this.state.username} />
                 </Form.Field>
                 <Form.Field>
+                    <label basic>Password</label>
                     <Input
-                        label
                         onChange={this.handlePasswordChange.bind(this)}
                         type={this.state.passInputType}
                         value={this.state.password}
                         placeholder='Choose password' >
-                        <Label basic position="left">Password</Label>
                         <input />
-                        <Button type="button" onClick={this.changePassType} icon="eye"></Button>
+                        <Button basic type="button" onClick={this.changePassType} icon="eye"></Button>
 
                     </Input>
                 </Form.Field>
 
-                <Segment basic>
+                <Segment textAlign="center" basic>
                     <Button color="blue" basic disabled={!this.state.username || !this.state.password}>
 
                         LOGIN
@@ -106,6 +159,7 @@ class LoginForm extends Component {
 
                 </Segment>
             </Form>
+
         )
     }
 
