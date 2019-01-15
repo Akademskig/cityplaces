@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npm test",
-    "start": "nodemon",
+    "start": "cd frontend-react && npm run build && cd .. && npm run build && node dist/index.js",
     "build": "babel src -d dist"
   },
   "author": "",
@@ -24,7 +24,6 @@
     "compression": "^1.7.3",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.5",
-    "eslint": "^5.11.1",
     "express": "^4.16.4",
     "express-jwt": "^5.3.1",
     "helmet": "^3.15.0",
