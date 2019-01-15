@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Container } from 'semantic-ui-react';
 import Navigation from '../components/Navigation';
 import { NavigationRoutes } from '../routes'
-import { withRouter } from 'react-router';
 import { NotificationContainer } from 'react-notifications'
 
 class App extends Component {

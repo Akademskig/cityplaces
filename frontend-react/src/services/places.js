@@ -7,6 +7,7 @@ export default class PlacesApi {
     location
     constructor() {
         this.init()
+        this.placesUrl = "http://localhost:5000/api/user/places"
     }
     async init() {
         await this.getCurrentPosition()
@@ -56,5 +57,23 @@ export default class PlacesApi {
         return await axios.get(url, {
             dataType: "application/json"
         })
+    }
+    async savePlace(data) {
+        await axios.post(
+            this.placesUrl,
+            data,
+            {
+                dataType: "application/json"
+            })
+    }
+
+    async removePlace(userId, placeId) {
+        await axios.delete(`${this.placesUrl}/${userId}/${placeId}`, {
+            dataType: "application/json"
+        })
+    }
+
+    async getPlacesForUser(userId) {
+        return axios.get(`${this.placesUrl}/${userId}`, { dataType: "application/json" })
     }
 }

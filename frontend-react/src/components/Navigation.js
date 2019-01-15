@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import "semantic-ui-css/semantic.min.css"
-import { Menu, Dropdown, Icon } from "semantic-ui-react"
-import { Container } from 'semantic-ui-react';
+import { Menu, Dropdown } from "semantic-ui-react"
 import { Link } from 'react-router-dom'
-import { NavigationRoutes } from '../routes'
 
 
 class Navigation extends Component {
@@ -18,8 +16,7 @@ class Navigation extends Component {
             <Dropdown.Item as={Link} to="/locations/other">
               Other Locations
               </Dropdown.Item>
-            <Dropdown.Item >Saved Places</Dropdown.Item>
-            <Dropdown.Item>My Places</Dropdown.Item>
+            <Dropdown.Item as={Link} to="/locations/saved">Saved Places</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
         <Menu.Item

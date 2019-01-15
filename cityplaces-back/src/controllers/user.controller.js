@@ -4,17 +4,16 @@ import errorHandler from '../db/errorHandler'
 
 const create = (req, res, next) => {
 	const user = new User(req.body.userCredentials)
-	try {
-		user.save()
+
+	user.save().then((d) => {
 		res.status(200).json({
-			message: 'Successfully signed up!'
+			message: 'Successfully signed up!', data: d
 		})
-	}
-	catch (err) {
-		res.status(400).json({
+	}).catch(err => {
+		return res.status(400).json({
 			error: errorHandler.getErrorMessage(err)
 		})
-	}
+	})
 }
 
 const list = (req, res, next) => {

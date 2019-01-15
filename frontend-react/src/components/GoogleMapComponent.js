@@ -4,7 +4,7 @@ import React, { Component } from 'react'
 import { Map } from 'google-maps-react';
 import { mapStyles } from '../config/map-styles'
 
-export class GoogleMapContainer extends Component {
+export class GoogleMapComponent extends Component {
     pIds = []
     state = {
         places: this.props.places,
@@ -33,14 +33,15 @@ export class GoogleMapContainer extends Component {
             center: newCenter
         })
         const service = new this.props.google.maps.places.PlacesService(map);
-
-        let requestPlaces = {
-            location: this.state.center,
-            radius: this.props.query.radius,
-            keyword: this.props.query.keyword
+        let requestPlaces
+        if (this.props.query && this.props.query.radius) {
+            requestPlaces = {
+                location: this.state.center,
+                radius: this.props.query.radius,
+                keyword: this.props.query.keyword
+            }
         }
-
-        if (!this.props.query.radius) {
+        else {
             requestPlaces = {
                 location: this.state.center,
                 rankBy: this.props.google.maps.places.RankBy.DISTANCE,
@@ -80,7 +81,7 @@ export class GoogleMapContainer extends Component {
                 location = { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() }
         }
         let draggable = false
-        if (position)
+        if (position && !this.props.type)
             draggable = true
         var marker = new window.google.maps.Marker({
             map: map,
@@ -240,5 +241,5 @@ const infoContent = (place) => {
 
 export default GoogleApiWrapper({
     apiKey: (googleApi.apiKey)
-})(GoogleMapContainer)
+})(GoogleMapComponent)
 

@@ -3,7 +3,7 @@ import { Segment, Input, Icon, Form, Grid, GridColumn, Button, Header } from 'se
 import PlacesList from '../components/PlacesList';
 import PlacesApi from "../services/places"
 import { notify } from '../services/notifications'
-import { NotificationContainer } from 'react-notifications'
+
 class CurrentLocation extends Component {
 
     state = {

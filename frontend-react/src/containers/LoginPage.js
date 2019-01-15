@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Button, Header, Form, Segment, Divider, Input, Grid, GridColumn, Icon, Label } from 'semantic-ui-react';
-import { Route, Redirect, withRouter } from 'react-router';
+import { Container, Button, Header, Form, Segment, Divider, Input, Grid, GridColumn } from 'semantic-ui-react';
 import LoginService from '../services/login'
 import { notify } from '../services/notifications';
 import { NotificationContainer } from 'react-notifications'
@@ -23,24 +22,28 @@ class LoginPage extends Component {
             username: username,
             password: password
         }
-        if (this.state.type == "signIn") {
+        if (this.state.type === "signIn") {
             this.loginService.signIn(userCredentials)
                 .then(
                     data => {
                         this.props.history.push("/")
+                        localStorage.setItem("user_id", data.data.user._id)
+                        localStorage.setItem("user_name", data.data.user.name)
                         notify("success", `Welcome ${data.data.user.name}!`)
                     },
                 ).catch(err => {
                     notify("error", err.response.data.error || err.message)
                 })
         }
-        else if (this.state.type == "createNew") {
+        else if (this.state.type === "createNew") {
             this.loginService.createUser(userCredentials)
                 .then(
                     data => {
-
                         this.props.history.push("/")
-                        notify("success", data.data.message)
+                        localStorage.setItem("user_id", data.data.data.id)
+                        localStorage.setItem("user_name", data.data.data.username)
+
+                        notify("success", data.data.message, `Welcome ${data.data.data.username}!`)
                     },
                 ).catch(err => {
                     notify("error", err.response.data.error || err.message)
@@ -73,7 +76,7 @@ class LoginPage extends Component {
 
                         </GridColumn>
                         <GridColumn>
-                            <Header textAlign="center" cleared size="large" >Welcome!
+                            <Header textAlign="center" size="large" >Welcome!
 
                         </Header>
                         </GridColumn>
@@ -120,7 +123,7 @@ class LoginForm extends Component {
     }
 
     changePassType = () => {
-        if (this.state.passInputType == "password")
+        if (this.state.passInputType === "password")
             this.setState({ passInputType: "text" })
         else
             this.setState({ passInputType: "password" })

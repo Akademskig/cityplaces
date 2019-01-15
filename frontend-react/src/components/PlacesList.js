@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import { Segment, Icon, Grid, Image, Card } from 'semantic-ui-react';
-import { googleApi } from "../config"
-import { Map } from 'google-maps-react'
-import GoogleMapContainer from '../containers/GoogleMapContainer';
+import GoogleMapComponent from './GoogleMapComponent';
 import Cards from './Cards';
 
 export default class PlacesList extends Component {
+
     colors = ["blue", "purple", "orange", "red", "yellow"]
     items = 3
     state = {
@@ -52,7 +50,8 @@ export default class PlacesList extends Component {
                 <div>
                     <div hidden={!this.state.mapVisible} className="map-container ">
 
-                        <GoogleMapContainer
+                        <GoogleMapComponent
+                            type={this.props.type}
                             visible={this.state.mapVisible}
                             center={{ lat: this.state.lat, lng: this.state.lng, place: this.state.place }}
                             places={this.props.placesList}
@@ -66,11 +65,14 @@ export default class PlacesList extends Component {
                             setNewLoc={this.props.setNewLoc}
                         >
 
-                        </GoogleMapContainer>
+                        </GoogleMapComponent>
                     </div>
                     <Cards
+                        type={this.props.type}
                         placesList={this.props.placesList}
+                        userPlaces={this.state.userPlaces}
                         showMap={this.showMap}
+                        updatePlaces={this.props.updatePlaces}
                     ></Cards>
 
                 </div >
@@ -79,3 +81,4 @@ export default class PlacesList extends Component {
             return (<div></div>)
     }
 }
+

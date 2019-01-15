@@ -5,7 +5,7 @@ import cookieParser from 'cookie-parser'
 import compress from 'compression'
 import cors from 'cors'
 import helmet from 'helmet'
-import { googleApiRoutes, userRoutes, authRoutes } from './routes'
+import { googleApiRoutes, userRoutes, authRoutes, placesRoutes } from './routes'
 
 export class WebServer {
 
@@ -30,7 +30,7 @@ export class WebServer {
 		app.use(express.static(path.join(CURRENT_WORKING_DIR, '../frontend-react/build')))
 		app.use("/api", googleApiRoutes)
 		app.use("/api", userRoutes)
-		app.use("/api", authRoutes)
+		app.use("/api", authRoutes, placesRoutes)
 
 		app.listen(this.config.port, () => {
 			this.log.blue(`Web server started on port ${this.config.port}.`)
