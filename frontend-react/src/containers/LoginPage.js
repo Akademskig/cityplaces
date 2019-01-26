@@ -76,16 +76,18 @@ class LoginPage extends Component {
 
                         </GridColumn>
                         <GridColumn>
-                            <Header textAlign="center" size="large" >Welcome!
+                            <Header textAlign="center" size="large" >
 
-                        </Header>
+                                {this.state.type === "createNew" ? "Register" : "Sign In"}
+
+                            </Header>
                         </GridColumn>
                         <GridColumn textAlign="right">
                             <Button color={this.state.buttonColorSignIn} onClick={this.selectSignIn}>
                                 Sign In
                             </Button >
                             <Button color={this.state.buttonColorCreateNew} onClick={this.selectLogIn}>
-                                New User
+                                Register
                             </Button>
                         </GridColumn>
                     </Grid>
