@@ -72,7 +72,6 @@ class CurrentLocation extends Component {
         })
     }
 
-
     handleSearch = (value) => {
         let filteredPlaces = this.state.placesList ? this.state.placesList.filter((pl) => pl.name.toLowerCase().match(value.toLowerCase())) : null
         this.setState({
@@ -97,6 +96,7 @@ class CurrentLocation extends Component {
                 </Segment>
                 <Segment loading={this.state.loadingPlaces}>
                     <PlacesList
+                        {...this.props}
                         query={this.state.query}
                         placesList={this.state.filteredPlaces}
                         getPlaces={this.getPlacesFromMap}

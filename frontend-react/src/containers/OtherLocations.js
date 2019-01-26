@@ -98,6 +98,7 @@ class OtherLocations extends Component {
                 </Segment>
                 <Segment loading={this.state.loadingPlaces}>
                     <PlacesList
+                        {...this.props}
                         setNewLoc={this.setNewLoc}
                         query={this.state.query}
                         placesList={this.state.filteredPlaces}

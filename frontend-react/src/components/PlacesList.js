@@ -51,6 +51,7 @@ export default class PlacesList extends Component {
                     <div hidden={!this.state.mapVisible} className="map-container ">
 
                         <GoogleMapComponent
+                            {...this.props}
                             type={this.props.type}
                             visible={this.state.mapVisible}
                             center={{ lat: this.state.lat, lng: this.state.lng, place: this.state.place }}

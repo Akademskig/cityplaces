@@ -87,6 +87,7 @@ export class SavedPlaces extends Component {
                 </Segment>
                 <Segment loading={this.state.loadingPlaces}>
                     <PlacesList
+                        {...this.props}
                         updatePlaces={this.updatePlaces}
                         type={"save"}
                         setNewLoc={this.setNewLoc}
@@ -114,12 +115,10 @@ const SearchBar = (props) => {
             placeholder='Search...'
             className='prompt'
             floated="right"
-            onChange={handleSearch.bind()}
+            onChange={handleSearch}
         />
     )
 }
 
 
-export default GoogleApiWrapper({
-    apiKey: (googleApi.apiKey)
-})(SavedPlaces)
+export default SavedPlaces

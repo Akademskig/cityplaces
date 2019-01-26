@@ -239,7 +239,5 @@ const infoContent = (place) => {
                                 </div>`
 }
 
-export default GoogleApiWrapper({
-    apiKey: (googleApi.apiKey)
-})(GoogleMapComponent)
+export default GoogleMapComponent
 

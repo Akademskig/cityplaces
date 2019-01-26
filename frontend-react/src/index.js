@@ -5,7 +5,7 @@ import "semantic-ui-css/semantic.min.css"
 import 'react-notifications/lib/notifications.css';
 import './css/index.css';
 import * as serviceWorker from './serviceWorker';
-import MainRoutes from './routes';
+import { MainRoutes } from './routes';
 import ErrorHandler from './components/ErrorHandler';
 
 ReactDOM.render(

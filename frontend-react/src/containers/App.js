@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container } from 'semantic-ui-react';
 import Navigation from '../components/Navigation';
-import { NavigationRoutes } from '../routes'
+import NavigationRoutes from '../routes'
 import { NotificationContainer } from 'react-notifications'
 
 class App extends Component {
@@ -15,5 +15,5 @@ class App extends Component {
         );
     }
 }
-//@ts-ignore
+
 export default App
