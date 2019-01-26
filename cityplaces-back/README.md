@@ -1,6 +1,6 @@
 LINK TO APP: https://akg-myapps.herokuapp.com/
 
 Created using:
--frotend: React@16.7.0
+-frotend: HTML, CSS, JS, JQuery
 -backend: NodeJS
 -database: MongoDB/Mongoose
