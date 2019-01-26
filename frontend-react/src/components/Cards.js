@@ -18,6 +18,7 @@ export default class Cards extends Component {
         savedPlaces: [],
         placesList: this.props.placesList
     }
+    colors = ["yellow", "orange", "blue", "green", "red"]
     setCardNums = () => {
         if (window.innerWidth < 650)
             this.setState({
