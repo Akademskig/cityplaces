@@ -4,7 +4,7 @@ import { googleApi } from "../config"
 import * as _ from 'lodash'
 import PlacesApi from '../services/places';
 import { notify } from '../services/notifications';
-import PropTypes from 'prop-types';
+import { PropTypes } from 'prop-types';
 
 export default class Cards extends Component {
 
@@ -119,18 +119,24 @@ export default class Cards extends Component {
                                     }
                                 />
                             </div>
+
+                            <Label color="teal" size="large">{`Total items: ${this.placesListCount}`}</Label>
+
+
                         </GridColumn>
                         <GridColumn textAlign="right">
+
                             <Input
                                 name="rows"
                                 type="number"
-                                label={{ basic: true, content: "Displayed Items", color: "blue" }}
+                                label={{ content: "Displayed Items", color: "teal" }}
                                 value={this.state.itemsPerPage}
                                 min="1"
                                 max={this.placesListCount}
                                 onChange={this.handleItemsPerPageChange}
                             >
                             </Input>
+
                         </GridColumn>
                     </Grid>
 
@@ -254,8 +260,8 @@ const CardList = (props) => {
         </Card.Group >)
 }
 
-CardList.PropTypes = {
-    placesList: PropTypes.object.isRequired,
+CardList.propTypes = {
+    placesList: PropTypes.arrayOf(PropTypes.object).isRequired,
     items: PropTypes.number.isRequired,
     savedPlaces: PropTypes.arrayOf(PropTypes.string).isRequired,
     savePlace: PropTypes.func.isRequired,
