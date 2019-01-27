@@ -2,6 +2,11 @@ import axios from 'axios'
 
 
 export default class LoginService {
+
+    tokenPrefix = "Bearer"
+    token
+    username
+
     constructor() {
         this.url = "http://localhost:5000/api/"
     }
@@ -14,7 +19,13 @@ export default class LoginService {
 
     signIn(userCredentials) {
         return axios.post(this.url + "auth/signin", { userCredentials })
-            .then(data => data)
+            .then(data => {
+                localStorage.setItem("user_id", data.data.user.id)
+                localStorage.setItem("user_name", data.data.user.name)
+                this.username = data.data.user.name
+                this.token = data.data.token
+                return data
+            })
             .catch(err => Promise.reject(err))
     }
 }

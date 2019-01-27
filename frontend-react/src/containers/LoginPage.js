@@ -27,26 +27,26 @@ class LoginPage extends Component {
                 .then(
                     data => {
                         this.props.history.push("/")
-                        localStorage.setItem("user_id", data.data.user._id)
-                        localStorage.setItem("user_name", data.data.user.name)
                         notify("success", `Welcome ${data.data.user.name}!`)
                     },
                 ).catch(err => {
-                    notify("error", err.response.data.error || err.message)
+                    console.log(err)
+                    notify("error", err.response && err.response.data.error || err.message)
                 })
         }
         else if (this.state.type === "createNew") {
             this.loginService.createUser(userCredentials)
                 .then(
                     data => {
-                        this.props.history.push("/")
-                        localStorage.setItem("user_id", data.data.data.id)
-                        localStorage.setItem("user_name", data.data.data.username)
+                        this.setState({
+                            type: "signIn"
+                        })
 
-                        notify("success", data.data.message, `Welcome ${data.data.data.username}!`)
+                        notify("success", data.data.message)
                     },
                 ).catch(err => {
-                    notify("error", err.response.data.error || err.message)
+
+                    notify("error", err.response && err.response.data.error || err.message)
                 })
         }
     };
@@ -138,7 +138,7 @@ class LoginForm extends Component {
             <Form onSubmit={this.handleSubmit.bind(this)} >
 
                 <Form.Field>
-                    <label basic >Username</label>
+                    <label basic="true" >Username</label>
                     <Input
                         onChange={this.handleUserChange.bind(this)}
                         icon='user circle'
@@ -146,7 +146,7 @@ class LoginForm extends Component {
                         value={this.state.username} />
                 </Form.Field>
                 <Form.Field>
-                    <label basic>Password</label>
+                    <label basic="true">Password</label>
                     <Input
                         onChange={this.handlePasswordChange.bind(this)}
                         type={this.state.passInputType}
