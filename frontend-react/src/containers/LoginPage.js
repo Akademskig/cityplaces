@@ -66,6 +66,9 @@ class LoginPage extends Component {
             type: "createNew"
         })
     }
+    componentWillMount = () => {
+        localStorage.clear()
+    }
 
     render() {
         return (
@@ -76,16 +79,17 @@ class LoginPage extends Component {
 
                         </GridColumn>
                         <GridColumn>
-                            <Header textAlign="center" size="large" >Welcome!
+                            <Header textAlign="center" size="large" >
+                                {this.state.type === "signIn" ? "Sign In" : "Register"}
 
-                        </Header>
+                            </Header>
                         </GridColumn>
                         <GridColumn textAlign="right">
                             <Button color={this.state.buttonColorSignIn} onClick={this.selectSignIn}>
                                 Sign In
                             </Button >
                             <Button color={this.state.buttonColorCreateNew} onClick={this.selectLogIn}>
-                                New User
+                                Register
                             </Button>
                         </GridColumn>
                     </Grid>
