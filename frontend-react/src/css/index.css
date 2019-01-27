@@ -37,3 +37,6 @@
   margin-bottom: 10px;
   font-size: 16px;
 }
+.rightDropdown {
+  top: 25px !important;
+}
