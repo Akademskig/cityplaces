@@ -7,10 +7,11 @@ import LoginPage from './containers/LoginPage'
 import { SavedPlaces } from './containers/savedPlaces';
 import { googleApi } from './config'
 import { GoogleApiWrapper } from 'google-maps-react';
+
 export const MainRoutes = (props) => (
     <Switch>
-        <Route exact path="/" component={authGuard}></Route>
-        <Route path='/locations' component={App} />
+        <Route exact path="/" render={() => <Redirect to="/locations/current"></Redirect>}></Route>
+        <Route path='/locations' component={authGuard} />
         <Route path='/login' component={LoginPage} />
     </Switch>
 )
@@ -24,7 +25,11 @@ export const NavigationRoutes = (props) => (
 )
 
 const authGuard = (props) => {
-    return <Redirect to="/locations/current" ></Redirect>
+    if (localStorage.getItem("user_name"))
+        return <App></App>
+    else {
+        return <Redirect to="/login" ></Redirect>
+    }
 }
 export default GoogleApiWrapper({
     apiKey: (googleApi.apiKey)
