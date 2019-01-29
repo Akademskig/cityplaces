@@ -70,8 +70,8 @@ export default class Cards extends Component {
             this.setCardNums()
         })
         this.placesApi.getPlacesForUser(localStorage.getItem("user_id"))
-            .then(data => {
-                data.data.data.forEach(d => {
+            .then(res => {
+                res.data.forEach(d => {
                     this.state.savedPlaces.push(d.place_id)
                 })
             })
