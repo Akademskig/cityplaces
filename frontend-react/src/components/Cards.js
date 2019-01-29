@@ -87,6 +87,8 @@ export default class Cards extends Component {
         this.setState({
             itemsPerPage: e.target.value
         })
+        if (this.state.activePage > Math.ceil(this.placesListCount / parseInt(e.target.value)))
+            this.setState({ activePage: Math.ceil(this.placesListCount / parseInt(e.target.value)) })
     }
 
 
