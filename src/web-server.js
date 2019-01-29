@@ -25,12 +25,9 @@ export class WebServer {
 		app.use(helmet())
 		// enable CORS - Cross Origin Resource Sharing
 		app.use(cors())
-
 		const CURRENT_WORKING_DIR = process.cwd()
-		app.use(express.static(path.join(CURRENT_WORKING_DIR, './frontend-react/build')))
-		app.use('/api', googleApiRoutes)
-		app.use('/api', userRoutes)
-		app.use('/api', authRoutes, placesRoutes)
+		app.use("/", express.static(path.join(CURRENT_WORKING_DIR, 'frontend-react/build')))
+		app.use('/api', googleApiRoutes, userRoutes, authRoutes, placesRoutes)
 
 		app.listen(this.config.port, () => {
 			this.log.blue(`Web server started on port ${this.config.port}.`)
