@@ -12,16 +12,16 @@ export default class Cards extends Component {
         super(props)
 
         this.placesApi = new PlacesApi()
+        this.state = {
+            items: 3,
+            savedPlaces: [],
+            placesList: this.props.placesList,
+            pages: [],
+            activePage: 1,
+            itemsPerPage: 6
+        }
+    }
 
-    }
-    state = {
-        items: 3,
-        savedPlaces: [],
-        placesList: this.props.placesList,
-        pages: [],
-        activePage: 1,
-        itemsPerPage: 6
-    }
     placesListCount
     colors = ["yellow", "orange", "blue", "green", "red"]
     pages = []
@@ -89,15 +89,13 @@ export default class Cards extends Component {
         })
     }
 
-    componentDidMount = () => {
-        this.setState({ pages: this.props.placesList })
-    }
 
     componentWillUnmount() {
         window.removeEventListener("resize", (ev) => {
             this.setCardNums()
         })
     }
+
     render() {
         if (!this.props.placesList || this.props.placesList.length === 0)
             return (
@@ -121,15 +119,13 @@ export default class Cards extends Component {
                             </div>
 
                             <Label color="teal" size="large">{`Total items: ${this.placesListCount}`}</Label>
-
-
                         </GridColumn>
                         <GridColumn textAlign="right">
 
                             <Input
                                 name="rows"
                                 type="number"
-                                label={{ content: "Displayed Items", color: "teal" }}
+                                label={{ content: "Max Displayed Items", color: "teal" }}
                                 value={this.state.itemsPerPage}
                                 min="1"
                                 max={this.placesListCount}
