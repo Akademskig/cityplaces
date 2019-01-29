@@ -159,7 +159,7 @@ class LoginForm extends Component {
                 </Form.Field>
 
                 <Segment textAlign="center" basic>
-                    <Button color="blue" basic disabled={!this.state.username || !this.state.password}>
+                    <Button color="teal" disabled={!this.state.username || !this.state.password}>
 
                         LOGIN
                 </Button>
