@@ -161,7 +161,7 @@ class SearchOtherForm extends Component {
                 </Form.Group>
                 <Grid columns={2}>
                     <GridColumn>
-                        <Button icon color="purple" labelPosition='left' disabled={!this.state.keyword}>
+                        <Button icon color="orange" labelPosition='left' disabled={!this.state.keyword}>
                             <Icon name='location arrow' />
                             Go
                 </Button>

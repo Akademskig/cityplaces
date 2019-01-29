@@ -94,7 +94,7 @@ export class SavedPlaces extends Component {
     render() {
         return (
             <Segment.Group >
-                {this.state.citiesList.length > 0 ? <Segment >
+                {this.state.citiesList.length > 0 ? <Segment textAlign="center">
                     <SearchBar filterCities={this.filterCities} citiesList={this.state.citiesList} onSearch={this.handleSearch} />
                 </Segment> : null}
                 <Segment loading={this.state.loadingPlaces}>

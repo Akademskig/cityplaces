@@ -118,15 +118,11 @@ class CurrentPositionView extends Component {
     }
     render() {
         return (
-            <div>
-                <Header size="medium" icon>
+            <div >
+                <Header style={{ opacity: 1 }} size="medium" icon>
                     <Icon name="building" size="small"></Icon>
                     {this.props.location}
                 </Header>
-                <Header.Subheader>
-                    <Button icon="redo" circular onClick={this.reset} basic color="blue">
-                    </Button>
-                </Header.Subheader>
             </div>
         )
     }
@@ -183,7 +179,7 @@ class SearchCurrentForm extends Component {
                 </Form.Group>
                 <Grid columns={2}>
                     <GridColumn>
-                        <Button icon color="purple" labelPosition='left' disabled={!this.state.keyword}>
+                        <Button icon color="orange" labelPosition='left' disabled={!this.state.keyword}>
                             <Icon name='location arrow' />
                             Go
                 </Button>

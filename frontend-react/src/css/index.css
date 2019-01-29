@@ -40,3 +40,6 @@
 .rightDropdown {
   top: 25px !important;
 }
+.ui.center.aligned.segment {
+  background: url("../assets/cityimg.png") center;
+}
