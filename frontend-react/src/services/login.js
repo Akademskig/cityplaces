@@ -20,7 +20,7 @@ export default class LoginService {
     signIn(userCredentials) {
         return axios.post(this.url + "auth/signin", { userCredentials })
             .then(data => {
-                localStorage.setItem("user_id", data.data.user.id)
+                localStorage.setItem("user_id", data.data.user._id)
                 localStorage.setItem("user_name", data.data.user.name)
                 this.username = data.data.user.name
                 this.token = data.data.token
