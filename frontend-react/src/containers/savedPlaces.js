@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
-import { Segment, Input } from 'semantic-ui-react';
+import { Segment, Input, Select } from 'semantic-ui-react';
 import PlacesList from '../components/PlacesList';
 import PlacesApi from "../services/places"
 import { notify } from '../services/notifications'
-import { GoogleApiWrapper } from 'google-maps-react';
-import { googleApi } from '../config';
+import _ from "lodash"
+
 export class SavedPlaces extends Component {
 
     state = {
         loadingPlaces: true,
         filteredPlaces: [],
-        placesList: []
+        placesList: [],
+        citiesList: []
     }
     constructor() {
         super()
@@ -36,6 +37,13 @@ export class SavedPlaces extends Component {
             filteredPlaces: filteredPlaces
         })
     }
+
+    filterCities = ($e, $e2) => {
+        let filteredPlaces = this.state.placesList ? this.state.placesList.filter((pl) => pl.city.match($e2.value)) : null
+        this.setState({
+            filteredPlaces: filteredPlaces
+        })
+    }
     updatePlaces = (pid) => {
         let filteredPlaces = this.state.filteredPlaces.filter(fp => fp.place_id !== pid)
         this.setState({
@@ -47,6 +55,7 @@ export class SavedPlaces extends Component {
         this.gma.getPlacesForUser(localStorage.getItem("user_id"))
             .then(data => {
                 let placesList = []
+                let citiesList = []
                 if (data.data.data.length === 0) {
                     this.setState({
                         placesList: placesList,
@@ -62,12 +71,17 @@ export class SavedPlaces extends Component {
                         fields: []
                     }
                     this.gma.getDetails(requestDetails.placeId, requestDetails.fields).then((det) => {
-                        placesList.push(det.data.data)
+
+                        const city = det.data.data.address_components.find(ac => ac.types.includes("locality")).long_name
+                        const country = det.data.data.address_components.find(ac => ac.types.includes("country")).long_name.toLowerCase()
+                        citiesList.push({ "key": i, "text": city, "flag": country, "value": city })
+                        placesList.push(Object.assign(det.data.data, { city: city }))
                         if (placesList.length === data.data.data.length) {
                             this.setState({
                                 placesList: placesList,
                                 filteredPlaces: placesList,
-                                loadingPlaces: false
+                                loadingPlaces: false,
+                                citiesList: _.uniqBy(citiesList, "text")
                             })
                         }
                     })
@@ -80,11 +94,9 @@ export class SavedPlaces extends Component {
     render() {
         return (
             <Segment.Group >
-
-
-                <Segment>
-                    <SearchBar onSearch={this.handleSearch} />
-                </Segment>
+                {this.state.citiesList.length > 0 ? <Segment >
+                    <SearchBar filterCities={this.filterCities} citiesList={this.state.citiesList} onSearch={this.handleSearch} />
+                </Segment> : null}
                 <Segment loading={this.state.loadingPlaces}>
                     <PlacesList
                         {...this.props}
@@ -103,20 +115,22 @@ export class SavedPlaces extends Component {
 }
 
 const SearchBar = (props) => {
-
     const handleSearch = (e) => {
         props.onSearch(e.target.value)
     }
 
     return (
-        <Input
-            icon='search'
-            iconPosition='left'
-            placeholder='Search...'
-            className='prompt'
-            floated="right"
-            onChange={handleSearch}
-        />
+        <Segment basic vertical textAlign="right">
+            <Select onChange={props.filterCities} style={{ marginRight: "14px" }} placeholder="Select City" options={props.citiesList}></Select>
+            <Input
+                icon='search'
+                iconPosition='left'
+                placeholder='Search...'
+                className='prompt'
+                floated="right"
+                onChange={handleSearch}
+            />
+        </Segment>
     )
 }
 
