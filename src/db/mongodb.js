@@ -14,7 +14,7 @@ export class Db {
 		})
 		this.log.purple(`Connected to mongo on url ${this.config.mongoUri}`)
 		db.connection.on('error', () => {
-			throw new Error('Unable to connect to the database.')
+			this.log.red('Unable to connect to the database.')
 		})
 	}
 }
