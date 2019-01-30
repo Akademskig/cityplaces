@@ -1,5 +1,4 @@
 import { googleApi } from '../config'
-import { GoogleApiWrapper } from 'google-maps-react';
 import React, { Component } from 'react'
 import { Map } from 'google-maps-react';
 import { mapStyles } from '../config/map-styles'

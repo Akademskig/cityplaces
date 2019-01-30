@@ -31,7 +31,7 @@ class LoginPage extends Component {
                     },
                 ).catch(err => {
                     console.log(err)
-                    notify("error", err.response && err.response.data.error || err.message)
+                    notify("error", (err.response && err.response.data.error) || err.message)
                 })
         }
         else if (this.state.type === "createNew") {
@@ -46,7 +46,7 @@ class LoginPage extends Component {
                     },
                 ).catch(err => {
 
-                    notify("error", err.response && err.response.data.error || err.message)
+                    notify("error", (err.response && err.response.data.error) || err.message)
                 })
         }
     };

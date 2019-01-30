@@ -79,7 +79,7 @@ export default class Cards extends Component {
                     this.state.savedPlaces.push(d.place_id)
                 })
             })
-        if (this.props.type == "save")
+        if (this.props.type === "save")
             this.setState({ placesList: this.state.savedPlaces })
     }
     handlePageChange = (p, e) => {
@@ -188,7 +188,6 @@ const CardList = (props) => {
                     let openedNow = "?"
                     let src = ""
                     let saveButtonColor = "orange"
-                    let removeButtonColor = "red"
                     let disabled = false
                     if (props.savedPlaces.includes(p.place_id)) {
                         disabled = true
