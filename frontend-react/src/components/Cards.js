@@ -40,12 +40,14 @@ export default class Cards extends Component {
     }
 
     savePlace = (pid, e) => {
+        const savedPlaces = this.state.savedPlaces
         this.placesApi.savePlace({ user_id: localStorage.getItem("user_id"), place_id: pid })
             .then(() => notify("success", "Place saved."))
-        this.state.savedPlaces.push(pid)
-        e.target.classList.add("orange")
+        savedPlaces.push(pid)
+        this.setState({
+            savedPlaces: savedPlaces
+        })
         e.target.disabled = true
-        e.target.classList.remove("yellow")
 
     }
 
@@ -53,6 +55,8 @@ export default class Cards extends Component {
         this.placesApi.removePlace(localStorage.getItem("user_id"), pid)
             .then(() => notify("success", "Place removed."))
         this.props.updatePlaces(pid)
+        if (this.state.activePage > Math.ceil(this.placesListCount / parseInt(this.state.itemsPerPage)))
+            this.setState({ activePage: Math.ceil(this.placesListCount / parseInt(this.state.itemsPerPage)) })
     }
 
     paginate = (list, activePage, offset) => {
@@ -162,10 +166,10 @@ const CurrentStatus = (props) => {
 
 const SaveOrRemoveBut = (props) => {
     if (props.type !== "save") {
-        return (<Button compact disabled={props.disabled} color={props.saveButtonColor} onClick={props.savePlace}>Save</Button>)
+        return (<Button compact icon={{ name: "save", color: "white" }} disabled={props.disabled} color={props.saveButtonColor} onClick={props.savePlace}></Button>)
     }
     else {
-        return (<Button compact color="red" onClick={props.removePlace}>Remove</Button>)
+        return (<Button compact icon={{ name: "circle remove", color: "white" }} color="red" onClick={props.removePlace}></Button>)
     }
 }
 
@@ -183,11 +187,10 @@ const CardList = (props) => {
                     const imageSize = 100
                     let openedNow = "?"
                     let src = ""
-                    let saveButtonColor = "yellow"
-
+                    let saveButtonColor = "orange"
+                    let removeButtonColor = "red"
                     let disabled = false
                     if (props.savedPlaces.includes(p.place_id)) {
-                        saveButtonColor = "orange"
                         disabled = true
                     }
                     if (p.photos) {
@@ -238,23 +241,17 @@ const CardList = (props) => {
                                     <Grid.Column>
                                         <span style={{ borderRadius: "5px", height: imageSize + "px", float: "right", overflow: "hidden" }} >
                                             <Image src={src} size="small" rounded></Image>
-
                                         </span>
-
                                     </Grid.Column>
                                 </Grid>
                                 <Segment basic vertical textAlign="right" style={{ marginBottom: 0 }}>
                                     <SaveOrRemoveBut placeId={p.place_id} removePlace={props.removePlace.bind(this, p.place_id)} savePlace={props.savePlace.bind(this, p.place_id)} type={props.type} saveButtonColor={saveButtonColor} disabled={disabled}></SaveOrRemoveBut>
-
                                 </Segment>
-
-
                             </Card.Content>
                         </Card>)
                 }
                 )
             }
-
         </Card.Group >)
 }
 
@@ -264,5 +261,4 @@ CardList.propTypes = {
     savedPlaces: PropTypes.arrayOf(PropTypes.string).isRequired,
     savePlace: PropTypes.func.isRequired,
     removePlace: PropTypes.func.isRequired
-
 }

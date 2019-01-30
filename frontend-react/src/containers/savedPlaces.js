@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Segment, Input, Select } from 'semantic-ui-react';
+import { Segment, Input, Select, Header } from 'semantic-ui-react';
 import PlacesList from '../components/PlacesList';
 import PlacesApi from "../services/places"
 import { notify } from '../services/notifications'
@@ -32,16 +32,24 @@ export class SavedPlaces extends Component {
         })
     }
     handleSearch = (value) => {
-        let filteredPlaces = this.state.placesList ? this.state.placesList.filter((pl) => pl.name.toLowerCase().match(value.toLowerCase())) : null
+        let filteredPlaces = this.state.filteredCities ? this.state.filteredCities.filter((pl) => pl.name.toLowerCase().match(value.toLowerCase())) : null
         this.setState({
             filteredPlaces: filteredPlaces
         })
     }
 
     filterCities = ($e, $e2) => {
-        let filteredPlaces = this.state.placesList ? this.state.placesList.filter((pl) => pl.city.match($e2.value)) : null
+        if ($e2.value === "all") {
+            this.setState({
+                filteredPlaces: this.state.placesList,
+                filteredCities: this.state.placesList,
+            })
+            return
+        }
+        let filteredCities = this.state.placesList ? this.state.placesList.filter((pl) => pl.city.match($e2.value)) : null
         this.setState({
-            filteredPlaces: filteredPlaces
+            filteredPlaces: filteredCities,
+            filteredCities: filteredCities
         })
     }
     updatePlaces = (pid) => {
@@ -55,7 +63,7 @@ export class SavedPlaces extends Component {
         this.gma.getPlacesForUser(localStorage.getItem("user_id"))
             .then(data => {
                 let placesList = []
-                let citiesList = []
+                let citiesList = [{ "key": "all", "text": "All", "flag": "eu", "value": "all" }]
                 if (data.data.data.length === 0) {
                     this.setState({
                         placesList: placesList,
@@ -80,6 +88,7 @@ export class SavedPlaces extends Component {
                             this.setState({
                                 placesList: placesList,
                                 filteredPlaces: placesList,
+                                filteredCities: placesList,
                                 loadingPlaces: false,
                                 citiesList: _.uniqBy(citiesList, "text")
                             })
@@ -94,6 +103,10 @@ export class SavedPlaces extends Component {
     render() {
         return (
             <Segment.Group >
+                <Segment textAlign="center" >
+
+                    <Header>  Your places</Header>
+                </Segment>
                 {this.state.citiesList.length > 0 ? <Segment textAlign="center">
                     <SearchBar filterCities={this.filterCities} citiesList={this.state.citiesList} onSearch={this.handleSearch} />
                 </Segment> : null}
