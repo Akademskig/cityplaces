@@ -105,7 +105,7 @@ export class SavedPlaces extends Component {
             <Segment.Group >
                 <Segment textAlign="center" >
 
-                    <Header>  Your places</Header>
+                    <Header> Saved Places</Header>
                 </Segment>
                 {this.state.citiesList.length > 0 ? <Segment textAlign="center">
                     <SearchBar filterCities={this.filterCities} citiesList={this.state.citiesList} onSearch={this.handleSearch} />
