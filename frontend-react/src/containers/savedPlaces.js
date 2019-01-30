@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Segment, Input, Select, Header } from 'semantic-ui-react';
+import { Segment, Input, Select, Header, Icon } from 'semantic-ui-react';
 import PlacesList from '../components/PlacesList';
 import PlacesApi from "../services/places"
 import { notify } from '../services/notifications'
@@ -104,10 +104,12 @@ export class SavedPlaces extends Component {
         return (
             <Segment.Group >
                 <Segment textAlign="center" >
-
-                    <Header> Saved Places</Header>
+                    <Header size="medium" icon>
+                        <Icon name="save" size="small"></Icon>
+                        Saved Places
+                </Header>
                 </Segment>
-                {this.state.citiesList.length > 0 ? <Segment textAlign="center">
+                {this.state.citiesList.length > 0 ? <Segment >
                     <SearchBar filterCities={this.filterCities} citiesList={this.state.citiesList} onSearch={this.handleSearch} />
                 </Segment> : null}
                 <Segment loading={this.state.loadingPlaces}>
