@@ -6,7 +6,7 @@
   "scripts": {
     "test": "npm test",
     "start": "npm run build  && node dist ",
-    "build": "babel src -d dist && lessc client/src/less/index.less client/src/css/index.css && cd client && react-scripts build"
+    "build": "babel src -d dist"
   },
   "author": "",
   "license": "ISC",
