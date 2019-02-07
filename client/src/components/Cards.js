@@ -166,10 +166,10 @@ const CurrentStatus = (props) => {
 
 const SaveOrRemoveBut = (props) => {
     if (props.type !== "save") {
-        return (<Button compact icon={{ name: "save", color: "white" }} disabled={props.disabled} color={props.saveButtonColor} onClick={props.savePlace}></Button>)
+        return (<Button compact icon={{ name: "save" }} disabled={props.disabled} color={props.saveButtonColor} onClick={props.savePlace}></Button>)
     }
     else {
-        return (<Button compact icon={{ name: "circle remove", color: "white" }} color="red" onClick={props.removePlace}></Button>)
+        return (<Button compact icon={{ name: "circle remove" }} color="red" onClick={props.removePlace}></Button>)
     }
 }
 
