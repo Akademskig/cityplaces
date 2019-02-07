@@ -26,7 +26,10 @@ export class WebServer {
 		// enable CORS - Cross Origin Resource Sharing
 		app.use(cors())
 		const CURRENT_WORKING_DIR = process.cwd()
-		app.use("/", express.static(path.join(CURRENT_WORKING_DIR, 'frontend-react/build')))
+		app.use(express.static(path.join(CURRENT_WORKING_DIR, 'client/build')));
+		app.get('*', (req, res) => {
+			res.sendFile(path.join(CURRENT_WORKING_DIR, 'client/build', 'index.html'));
+		});
 		app.use('/api', googleApiRoutes, userRoutes, authRoutes, placesRoutes)
 
 		app.listen(this.config.port, () => {
