@@ -14,13 +14,13 @@ export default class LoginService {
     }
 
     createUser(userCredentials) {
-        return axios.post(this.url + "users", { userCredentials })
+        return axios.post(this.url + "/users", { userCredentials })
             .then(data => data)
             .catch(err => Promise.reject(err))
     }
 
     signIn(userCredentials) {
-        return axios.post(this.url + "auth/signin", { userCredentials })
+        return axios.post(this.url + "/auth/signin", { userCredentials })
             .then(data => {
                 localStorage.setItem("user_id", data.data.user._id)
                 localStorage.setItem("user_name", data.data.user.name)
