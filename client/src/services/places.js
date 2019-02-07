@@ -10,7 +10,7 @@ export default class PlacesApi {
         this.url = new Config().url
         this.placesUrl = `${this.url}/user/places`
         this.googleApiNearby = `${this.url}/google-api/nearby-search`
-        this.googleApiDetails = `${this.url}/google-api/details`
+        this.googleApiDetails = `${this.url}/google-api/details-search`
     }
     async init() {
         await this.getCurrentPosition()
