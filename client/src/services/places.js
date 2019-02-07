@@ -1,13 +1,16 @@
 import axios from 'axios'
 import { googleApi } from '../config'
-
+import Config from './config'
 export default class PlacesApi {
     latitude
     longitude
     location
     constructor() {
         this.init()
-        this.placesUrl = "http://localhost:5000/api/user/places"
+        this.url = new Config().url
+        this.placesUrl = `${this.url}/user/places`
+        this.googleApiNearby = `${this.url}/google-api/nearby-search`
+        this.googleApiDetails = `${this.url}/google-api/details`
     }
     async init() {
         await this.getCurrentPosition()
@@ -45,15 +48,15 @@ export default class PlacesApi {
             lat = this.latitude
             lng = this.longitude
         }
-        let url = `http://localhost:5000/api/google-api/nearby-search?lat=${lat}&lng=${lng}&rankby=distance&keyword=${keyword}&key=${googleApi.apiKey}`
+        let url = `${this.googleApiNearby}?lat=${lat}&lng=${lng}&rankby=distance&keyword=${keyword}&key=${googleApi.apiKey}`
         if (radius && keyword)
-            url = `http://localhost:5000/api/google-api/nearby-search?lat=${lat}&lng=${lng}&radius=${radius}&keyword=${keyword}&key=${googleApi.apiKey}`
+            url = `${this.googleApiNearby}?lat=${lat}&lng=${lng}&radius=${radius}&keyword=${keyword}&key=${googleApi.apiKey}`
         return axios.get(url, {
             dataType: "application/json"
         })
     }
     async getDetails(placeId, fields) {
-        const url = `http://localhost:5000/api/google-api/details-search?place_id=${placeId}&fields=${fields}`
+        const url = `${this.googleApiDetails}?place_id=${placeId}&fields=${fields}`
         return await axios.get(url, {
             dataType: "application/json"
         })

@@ -1,6 +1,8 @@
 import axios from 'axios'
 
 
+import Config from "./config"
+
 export default class LoginService {
 
     tokenPrefix = "Bearer"
@@ -8,7 +10,7 @@ export default class LoginService {
     username
 
     constructor() {
-        this.url = "http://localhost:5000/api/"
+        this.url = new Config().url
     }
 
     createUser(userCredentials) {
