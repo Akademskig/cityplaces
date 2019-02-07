@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "npm test",
-    "start": "npm run build && cd client && lessc src/less/index.less src/css/index.css && npm run build && cd .. && node dist ",
-    "build": "babel src -d dist"
+    "start": "npm run build  && node dist ",
+    "build": "babel src -d dist && lessc client/src/less/index.less client/src/css/index.css && cd client && react-scripts build"
   },
   "author": "",
   "license": "ISC",
@@ -15,7 +15,8 @@
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.2.3",
     "@babel/preset-stage-2": "^7.0.0",
-    "nodemon": "^1.18.9"
+    "nodemon": "^1.18.9",
+    "less": "^3.9.0"
   },
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
@@ -32,6 +33,26 @@
     "lodash": "^4.17.11",
     "mongodb": "^3.1.10",
     "mongoose": "^5.4.1",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "@types/jest": "^23.3.10",
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.12.18",
+    "@types/react": "^16.7.18",
+    "@types/react-dom": "^16.0.11",
+    "@types/react-router-dom": "^4.3.1",
+    "axios": "^0.18.0",
+    "eslint": "5.6.0",
+    "google-maps-react": "^2.0.2",
+    "prop-types": "^15.6.2",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "react-js-pagination": "^3.0.2",
+    "react-notifications": "^1.4.3",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "2.1.2",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.84.0",
+    "typescript": "^3.2.2"
   }
 }
