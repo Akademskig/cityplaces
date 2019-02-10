@@ -1,7 +1,7 @@
 import { googleApi } from '../config'
 import React, { Component } from 'react'
 import { Map } from 'google-maps-react';
-import { mapStyles } from '../config/map-styles'
+import { mapStyles } from '../styles/map-styles'
 
 export class GoogleMapComponent extends Component {
     pIds = []
