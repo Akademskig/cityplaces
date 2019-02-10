@@ -1,16 +1,11 @@
 import axios from 'axios'
-import { googleApi } from '../config'
-import Config from './config'
+import { googleApi, localApi } from '../config'
 export default class PlacesApi {
     latitude
     longitude
     location
     constructor() {
         this.init()
-        this.url = new Config().url
-        this.placesUrl = `${this.url}/user/places`
-        this.googleApiNearby = `${this.url}/google-api/nearby-search`
-        this.googleApiDetails = `${this.url}/google-api/details`
     }
     async init() {
         await this.getCurrentPosition()
@@ -48,22 +43,22 @@ export default class PlacesApi {
             lat = this.latitude
             lng = this.longitude
         }
-        let url = `${this.googleApiNearby}?lat=${lat}&lng=${lng}&rankby=distance&keyword=${keyword}&key=${googleApi.apiKey}`
+        let url = `${localApi.googleApiNearby}?lat=${lat}&lng=${lng}&rankby=distance&keyword=${keyword}&key=${googleApi.apiKey}`
         if (radius && keyword)
-            url = `${this.googleApiNearby}?lat=${lat}&lng=${lng}&radius=${radius}&keyword=${keyword}&key=${googleApi.apiKey}`
+            url = `${localApi.googleApiNearby}?lat=${lat}&lng=${lng}&radius=${radius}&keyword=${keyword}&key=${googleApi.apiKey}`
         return axios.get(url, {
             dataType: "application/json"
         })
     }
     async getDetails(placeId, fields) {
-        const url = `${this.googleApiDetails}?place_id=${placeId}&fields=${fields}`
+        const url = `${localApi.googleApiDetails}?place_id=${placeId}&fields=${fields}`
         return await axios.get(url, {
             dataType: "application/json"
         })
     }
     async savePlace(data) {
         await axios.post(
-            this.placesUrl,
+            localApi.placesUrl,
             data,
             {
                 dataType: "application/json"
@@ -71,12 +66,12 @@ export default class PlacesApi {
     }
 
     async removePlace(userId, placeId) {
-        await axios.delete(`${this.placesUrl}/${userId}/${placeId}`, {
+        await axios.delete(`${localApi.placesUrl}/${userId}/${placeId}`, {
             dataType: "application/json"
         })
     }
 
     async getPlacesForUser(userId) {
-        return axios.get(`${this.placesUrl}/${userId}`, { dataType: "application/json" })
+        return axios.get(`${localApi.placesUrl}/${userId}`, { dataType: "application/json" })
     }
 }

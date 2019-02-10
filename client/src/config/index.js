@@ -5,7 +5,11 @@ export const googleApi = {
     mapsUrl: "https://maps.googleapis.com/maps/api/js?",
     apiKey: "AIzaSyA_h5tnlq-qjVqJVDT8NrusM8eJJ_YTF6s"
 }
-
-// exmaples:
-// https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=1500&type=restaurant&keyword=cruise&key=YOUR_API_KEY
-// https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&key=YOUR_API_KEY
+const url = window.location.protocol + "//" + window.location.hostname + ":" + process.env.REACT_APP_PORT + "/api"
+export const localApi = {
+    loginUrl: `${url}/auth/signIn`,
+    registerUrl: `${url}/users`,
+    placesUrl: `${url}/user/places`,
+    googleApiNearby: `${url}/google-api/nearby-search`,
+    googleApiDetails: `${url}/google-api/details-search`
+}
