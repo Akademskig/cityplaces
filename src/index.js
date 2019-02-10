@@ -5,8 +5,6 @@ import { WebServer } from './web-server'
 import { Db } from './db/mongodb'
 import config from './config/config'
 
-
-
 const log = new ColorConsole()
 
 async function init() {
