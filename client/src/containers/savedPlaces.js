@@ -65,13 +65,13 @@ export class SavedPlaces extends Component {
                 let placesList = []
                 let citiesList = [{ "key": "all", "text": "All", "flag": "eu", "value": "all" }]
                 if (data.data.data.length === 0) {
-                    this.setState({
+                    return this.setState({
                         placesList: placesList,
                         filteredPlaces: placesList,
                         loadingPlaces: false,
 
                     })
-                    return
+
                 }
                 data.data.data.forEach((d, i) => {
                     let requestDetails = {
@@ -80,7 +80,8 @@ export class SavedPlaces extends Component {
                     }
                     this.gma.getDetails(requestDetails.placeId, requestDetails.fields).then((det) => {
 
-                        const city = det.data.data.address_components.find(ac => ac.types.includes("locality")).long_name
+                        const city = det.data.data.address_components.find(ac =>
+                            ac.types.includes("locality") || ac.types.includes("postal_town")).long_name
                         const country = det.data.data.address_components.find(ac => ac.types.includes("country")).long_name.toLowerCase()
                         citiesList.push({ "key": i, "text": city, "flag": country, "value": city })
                         placesList.push(Object.assign(det.data.data, { city: city }))
