@@ -95,11 +95,16 @@ export default class Cards extends Component {
             this.setState({ activePage: Math.ceil(this.placesListCount / parseInt(e.target.value)) })
     }
 
-
     componentWillUnmount() {
         window.removeEventListener("resize", (ev) => {
             this.setCardNums()
         })
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.placesList.length / this.state.itemsPerPage <= 1) {
+            this.setState({ activePage: 1 })
+        }
     }
 
     render() {
@@ -113,17 +118,16 @@ export default class Cards extends Component {
             this.totalPages = Math.ceil(this.placesListCount / this.state.itemsPerPage)
             return (
                 <div>
-                    <Grid stackable columns={2}>
+                    <div style={{ marginBottom: "14px" }}>
+                        <Pagination
+                            activePage={this.state.activePage}
+                            totalPages={this.totalPages}
+                            onPageChange={this.handlePageChange.bind(this)
+                            }
+                        />
+                    </div>
+                    <Grid columns={2}>
                         <GridColumn>
-                            <div style={{ marginBottom: "14px" }}>
-                                <Pagination
-                                    activePage={this.state.activePage}
-                                    totalPages={this.totalPages}
-                                    onPageChange={this.handlePageChange.bind(this)
-                                    }
-                                />
-                            </div>
-
                             <Label color="teal" size="large">{`Total items: ${this.placesListCount}`}</Label>
                         </GridColumn>
                         <GridColumn textAlign="right" >
@@ -135,6 +139,7 @@ export default class Cards extends Component {
                                 min="1"
                                 max={this.placesListCount}
                                 onChange={this.handleItemsPerPageChange}
+                                float="right"
                             >
                             </Input>
 
