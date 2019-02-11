@@ -126,12 +126,11 @@ export default class Cards extends Component {
 
                             <Label color="teal" size="large">{`Total items: ${this.placesListCount}`}</Label>
                         </GridColumn>
-                        <GridColumn textAlign="right">
-
+                        <GridColumn textAlign="right" >
                             <Input
                                 name="rows"
                                 type="number"
-                                label={{ content: "Max Displayed Items", color: "teal" }}
+                                label={{ content: "Max Items", color: "teal" }}
                                 value={this.state.itemsPerPage}
                                 min="1"
                                 max={this.placesListCount}
