@@ -102,7 +102,8 @@ export default class Cards extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.placesList.length / this.state.itemsPerPage <= 1) {
+        if (nextProps.placesList &&
+            nextProps.placesList.length / this.state.itemsPerPage <= 1) {
             this.setState({ activePage: 1 })
         }
     }
