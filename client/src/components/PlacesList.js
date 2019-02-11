@@ -61,7 +61,6 @@ export default class PlacesList extends Component {
                             loading={true}
                             closeMap={this.closeMap}
                             getPlaces={this.props.getPlaces}
-                            query={this.props.query}
                             close={this.state.close}
                             setNewLoc={this.props.setNewLoc}
                         >
