@@ -40,11 +40,10 @@ export class SavedPlaces extends Component {
 
     filterCities = ($e, $e2) => {
         if ($e2.value === "all") {
-            this.setState({
+            return this.setState({
                 filteredPlaces: this.state.placesList,
                 filteredCities: this.state.placesList,
             })
-            return
         }
         let filteredCities = this.state.placesList ? this.state.placesList.filter((pl) => pl.city.match($e2.value)) : null
         this.setState({
