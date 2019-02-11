@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Segment, Input, Select, Header, Icon } from 'semantic-ui-react';
+import { Segment, Input, Select, Header, Icon, Form } from 'semantic-ui-react';
 import PlacesList from '../components/PlacesList';
 import PlacesApi from "../services/places"
 import { notify } from '../services/notifications'
@@ -96,9 +96,7 @@ export class SavedPlaces extends Component {
                         }
                     })
                 })
-
             })
-
     }
 
     render() {
@@ -136,17 +134,24 @@ const SearchBar = (props) => {
     }
 
     return (
-        <Segment basic vertical textAlign="right">
-            <Select onChange={props.filterCities} style={{ marginRight: "14px" }} placeholder="Select City" options={props.citiesList}></Select>
-            <Input
-                icon='search'
-                iconPosition='left'
-                placeholder='Search...'
-                className='prompt'
-                floated="right"
-                onChange={handleSearch}
-            />
-        </Segment>
+        <Form>
+            <Form.Group widths="2">
+                <Form.Field>
+                    <Select onChange={props.filterCities} style={{ marginRight: "14px" }} placeholder="Select City" options={props.citiesList}></Select>
+                </Form.Field>
+                <Form.Field>
+                    <Input
+                        icon='search'
+                        iconPosition='left'
+                        placeholder='Search...'
+                        className='prompt'
+                        floated="right"
+                        onChange={handleSearch}
+                    />
+                </Form.Field>
+            </Form.Group>
+        </Form>
+
     )
 }
 
