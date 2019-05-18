@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npm test",
+    "start-dev": "nodemon",
     "start": "npm run build && cd client && lessc src/less/index.less src/css/index.css && npm run build && cd .. && node dist ",
     "build": "babel src -d dist"
   },

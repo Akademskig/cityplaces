@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom'
 import "semantic-ui-css/semantic.min.css"
 import 'react-notifications/lib/notifications.css';
-import './css/index.css';
+import './styles/index.scss';
 import * as serviceWorker from './serviceWorker';
 import { MainRoutes } from './routes';
 import ErrorHandler from './components/ErrorHandler';
