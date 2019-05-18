@@ -7,7 +7,7 @@ import { NotificationContainer } from 'react-notifications'
 class App extends Component {
     render() {
         return (
-            <Container>
+            <Container className="main-container">
                 <Navigation></Navigation>
                 <NavigationRoutes></NavigationRoutes>
                 <NotificationContainer />
