@@ -46,6 +46,7 @@ export class SavedPlaces extends Component {
             })
             return
         }
+        console.log(this.state.placesList)
         let filteredCities = this.state.placesList ? this.state.placesList.filter((pl) => pl.city.match($e2.value)) : null
         this.setState({
             filteredPlaces: filteredCities,
@@ -80,7 +81,12 @@ export class SavedPlaces extends Component {
                     }
                     this.gma.getDetails(requestDetails.placeId, requestDetails.fields).then((det) => {
 
-                        const city = det.data.data.address_components.find(ac => ac.types.includes("locality")).long_name
+                        const city = det.data.data.address_components.find(ac => {
+                            if (ac.types.includes("locality"))
+                                return ac
+                            else if (ac.types.includes("postal_town"))
+                                return ac
+                        }).long_name
                         const country = det.data.data.address_components.find(ac => ac.types.includes("country")).long_name.toLowerCase()
                         citiesList.push({ "key": i, "text": city, "flag": country, "value": city })
                         placesList.push(Object.assign(det.data.data, { city: city }))
