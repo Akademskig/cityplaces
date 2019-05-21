@@ -116,7 +116,7 @@ class SearchOtherForm extends Component {
 
     state = {
         city: "",
-        keyword: "karaoke"
+        keyword: ""
     }
 
     handleSearch = (e) => {
@@ -144,7 +144,7 @@ class SearchOtherForm extends Component {
                             onChange={this.handlePlaceChange.bind(this)}
                             icon='building'
                             iconPosition='left'
-                            placeholder='Search city places'
+                            placeholder='keyword (e.g. karaoke, library...)'
                             value={this.state.keyword} />
                     </Form.Field>
 

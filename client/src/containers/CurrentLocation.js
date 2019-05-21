@@ -131,7 +131,7 @@ class CurrentPositionView extends Component {
 class SearchCurrentForm extends Component {
 
     state = {
-        keyword: "karaoke",
+        keyword: "",
         radius: "300"
     }
 
@@ -160,7 +160,7 @@ class SearchCurrentForm extends Component {
                             onChange={this.handlePlaceChange.bind(this)}
                             icon='building'
                             iconPosition='left'
-                            placeholder='Search places'
+                            placeholder='keyword (e.g. karaoke, library...)'
                             value={this.state.keyword} />
                     </Form.Field>
                     <Form.Field>
