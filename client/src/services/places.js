@@ -23,7 +23,9 @@ export default class PlacesApi {
                     this.longitude = position.coords.longitude;
                     this.location = await this.getByCurrentLocation()
                     resolve({ location: this.location, lat: this.latitude, lng: this.longitude })
-                })
+                },
+                    (err) => reject(err),
+                    { enableHighAccuracy: true, timeout: 5000 })
             })
         }
     }
