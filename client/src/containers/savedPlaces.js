@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Segment, Input, Select, Header, Icon, Form } from 'semantic-ui-react';
 import PlacesList from '../components/PlacesList';
 import PlacesApi from "../services/places"
-import { notify } from '../services/notifications'
 import _ from "lodash"
 
 export class SavedPlaces extends Component {
@@ -17,20 +16,7 @@ export class SavedPlaces extends Component {
         super()
         this.gma = new PlacesApi()
     }
-    getPosition = (reset) => {
-        this.setState({ loading: true })
-        this.gma.getCurrentPosition(reset).then(data => {
-            this.setState({
-                loading: false,
-                position: data.location,
-                lat: data.lat,
-                lng: data.lng
-            })
-        }).catch(err => {
-            notify("error", err.message)
-            this.setState({ loading: false })
-        })
-    }
+
     handleSearch = (value) => {
         let filteredPlaces = this.state.filteredCities ? this.state.filteredCities.filter((pl) => pl.name.toLowerCase().match(value.toLowerCase())) : null
         this.setState({
@@ -60,7 +46,6 @@ export class SavedPlaces extends Component {
         })
     }
     componentWillMount = () => {
-        this.getPosition()
         this.gma.getPlacesForUser(localStorage.getItem("user_id"))
             .then(data => {
                 let placesList = []
@@ -116,6 +101,7 @@ export class SavedPlaces extends Component {
                         {...this.props}
                         updatePlaces={this.updatePlaces}
                         type={"save"}
+                        componentType={"SAVED"}
                         setNewLoc={this.setNewLoc}
                         query={this.state.query}
                         placesList={this.state.filteredPlaces}

@@ -21,7 +21,7 @@ class OtherLocations extends Component {
             })
         }).catch(err => {
             notify("error", err.message)
-            this.setState({ loadingPlaces: false })
+            this.setState({ loading: false })
         })
     }
     setNewLoc = (loc, newPlace) => {
@@ -31,8 +31,7 @@ class OtherLocations extends Component {
     }
     state = {
         loading: false,
-        loadingPlaces: false,
-        location: "!"
+        location: "Unknown"
     }
 
     getPlaces = (data) => {
@@ -99,6 +98,7 @@ class OtherLocations extends Component {
                 <Segment loading={this.state.loadingPlaces}>
                     <PlacesList
                         {...this.props}
+                        componentType={"OTHER"}
                         setNewLoc={this.setNewLoc}
                         query={this.state.query}
                         placesList={this.state.filteredPlaces}
@@ -116,7 +116,7 @@ class SearchOtherForm extends Component {
 
     state = {
         city: "",
-        keyword: "karaoke"
+        keyword: ""
     }
 
     handleSearch = (e) => {
@@ -144,7 +144,7 @@ class SearchOtherForm extends Component {
                             onChange={this.handlePlaceChange.bind(this)}
                             icon='building'
                             iconPosition='left'
-                            placeholder='Search city places'
+                            placeholder='keyword (e.g. karaoke, library...)'
                             value={this.state.keyword} />
                     </Form.Field>
 

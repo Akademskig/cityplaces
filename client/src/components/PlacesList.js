@@ -45,7 +45,7 @@ export default class PlacesList extends Component {
     }
 
     render() {
-        if (this.props.currentPosition.lat)
+        if (this.props.currentPosition.lat ||  (this.props.componentType==="SAVED" || this.props.componentType==="OTHER") )
             return (
                 <div>
                     <div hidden={!this.state.mapVisible} className="map-container ">
@@ -78,7 +78,7 @@ export default class PlacesList extends Component {
                 </div >
             )
         else
-            return (<div></div>)
+            return (<p style={{textAlign:"center"}}>Unable to list places</p>)
     }
 }
 

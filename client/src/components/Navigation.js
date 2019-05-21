@@ -31,9 +31,6 @@ class Navigation extends Component {
         <Menu.Item position="right">
           <Dropdown text={this.state.username ? <div><Icon name="user"></Icon>{` ${this.state.username}`}</div> : null}>
             <Dropdown.Menu className="rightDropdown">
-              <Dropdown.Item >
-                View Profile
-            </Dropdown.Item>
               <Dropdown.Item
                 as={Link} to="/login">
                 Logout
