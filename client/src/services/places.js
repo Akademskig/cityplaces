@@ -1,11 +1,15 @@
 import axios from 'axios'
 import { googleApi } from '../config'
+import Config from './config'
 export default class PlacesApi {
     latitude
     longitude
     location
     constructor() {
-        this.placesUrl = "http://localhost:5000/api/user/places"
+        this.url = new Config().url
+        this.placesUrl = `${this.url}/user/places`
+        this.googleApiNearby = `${this.url}/google-api/nearby-search`
+        this.googleApiDetails = `${this.url}/google-api/details-search`
     }
 
     async getCurrentPosition(reset) {
