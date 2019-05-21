@@ -21,7 +21,7 @@ class OtherLocations extends Component {
             })
         }).catch(err => {
             notify("error", err.message)
-            this.setState({ loadingPlaces: false })
+            this.setState({ loading: false })
         })
     }
     setNewLoc = (loc, newPlace) => {
@@ -98,6 +98,7 @@ class OtherLocations extends Component {
                 <Segment loading={this.state.loadingPlaces}>
                     <PlacesList
                         {...this.props}
+                        componentType={"OTHER"}
                         setNewLoc={this.setNewLoc}
                         query={this.state.query}
                         placesList={this.state.filteredPlaces}
