@@ -35,16 +35,12 @@ class Navigation extends Component {
                 View Profile
             </Dropdown.Item>
               <Dropdown.Item
-
-                as={Link} to="/login"
-              >
+                as={Link} to="/login">
                 Logout
           </Dropdown.Item>
             </Dropdown.Menu>
-
           </Dropdown>
         </Menu.Item>
-
       </Menu >
 
     );
