@@ -94,7 +94,7 @@ class LoginPage extends Component {
                         </GridColumn>
                     </Grid>
                     <Divider></Divider>
-                    <LoginForm login={this.login}></LoginForm>
+                    <LoginForm login={this.login} type={this.state.type}></LoginForm>
                 </Segment>
                 <NotificationContainer></NotificationContainer>
             </Container>
@@ -161,7 +161,7 @@ class LoginForm extends Component {
                 <Segment textAlign="center" basic>
                     <Button color="teal" disabled={!this.state.username || !this.state.password}>
 
-                        LOGIN
+                    {this.props.type === "signIn" ? "Sign In" : "Register"}
                 </Button>
 
                 </Segment>
