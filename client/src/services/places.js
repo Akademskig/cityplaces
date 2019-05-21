@@ -6,12 +6,9 @@ export default class PlacesApi {
     longitude
     location
     constructor() {
-        this.init()
         this.placesUrl = "http://localhost:5000/api/user/places"
     }
-    async init() {
-        await this.getCurrentPosition()
-    }
+
     async getCurrentPosition(reset) {
         if (!reset && this.location) {
             return this.location
