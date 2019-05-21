@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Segment, Input, Select, Header, Icon } from 'semantic-ui-react';
 import PlacesList from '../components/PlacesList';
 import PlacesApi from "../services/places"
-import { notify } from '../services/notifications'
 import _ from "lodash"
 
 export class SavedPlaces extends Component {
