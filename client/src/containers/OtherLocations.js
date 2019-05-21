@@ -31,8 +31,7 @@ class OtherLocations extends Component {
     }
     state = {
         loading: false,
-        loadingPlaces: false,
-        location: "!"
+        location: "Unknown"
     }
 
     getPlaces = (data) => {

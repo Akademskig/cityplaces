@@ -8,7 +8,7 @@ class CurrentLocation extends Component {
 
     state = {
         loading: true,
-        position: "",
+        position: "Unknown",
         mapVisible: false,
         lat: null,
         lng: null
